@@ -6,13 +6,13 @@ import java.util.concurrent.TimeUnit;
 import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.common.constants.CacheKey;
+import cn.abtion.neuqercc.network.convert.ResponseConverterFactory;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * @author abtion.
@@ -46,7 +46,7 @@ public final class RestClient {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(Config.APP_SERVER_BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(ResponseConverterFactory.create())
                     .client(getClient())
                     .build();
         }

@@ -1,6 +1,7 @@
 package cn.abtion.neuqercc.network;
 
 import cn.abtion.neuqercc.common.exceptions.ResultException;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,12 +33,12 @@ public abstract class DataCallback<T> implements Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
+        onDataFailure(call, t);
+        dismissDialog();
         if (t instanceof ResultException) {
-            dismissDialog();
             GlobalAPIErrorHandler.handler((ResultException) t);
         } else {
-            dismissDialog();
-            onDataFailure(call, t);
+            ToastUtil.showToast("网络连接失败，请稍后再试");
         }
     }
 }

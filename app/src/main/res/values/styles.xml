@@ -9,6 +9,7 @@
     </style>
 
     <style name="AppTheme" parent="@style/BaseAppTheme"/>
+
     <!--toolbar style-->
     <style name="toolbar" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <item name="android:paddingTop">25dp</item>

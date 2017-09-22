@@ -2,4 +2,6 @@
     <string name="app_name">NEUQerCC</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
+    <string name="msg_input_identifier">请输入oj账号/id/邮箱</string>
+    <string name="msg_input_password">请输入密码</string>
 </resources>
