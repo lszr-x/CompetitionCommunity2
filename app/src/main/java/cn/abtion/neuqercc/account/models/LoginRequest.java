@@ -27,6 +27,7 @@ public class LoginRequest extends BaseModel {
 
     public String getPassword() {
         return password;
+
     }
 
     public void setPassword(String password) {
