@@ -1,6 +1,7 @@
 package cn.abtion.neuqercc;
 
 import android.support.v4.app.Fragment;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import cn.abtion.neuqercc.home.HomeFragment;
 import cn.abtion.neuqercc.message.MessageFragment;
 import cn.abtion.neuqercc.mine.MineFragment;
 import cn.abtion.neuqercc.team.TeamFragment;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 public class MainActivity extends ToolBarActivity {
 
@@ -22,7 +24,7 @@ public class MainActivity extends ToolBarActivity {
     @BindView(R.id.img_tab_menu_order)
     ImageView imgTabMenuOrder;
     @BindView(R.id.txt_tab_menu_order)
-    TextView txtTabMenuOrder;
+    TextView txtTabMenuTeam;
     @BindView(R.id.img_tab_menu_message)
     ImageView imgTabMenuMessage;
     @BindView(R.id.txt_tab_menu_message)
@@ -44,12 +46,12 @@ public class MainActivity extends ToolBarActivity {
 
     @Override
     protected void initVariable() {
-        homeFragment = new HomeFragment();
     }
 
     @Override
     protected void initView() {
-
+        onLyTabMenuHomeClicked();
+        getToolbar().setNavigationIcon(R.drawable.ic_nav);
     }
 
     @Override
@@ -57,6 +59,16 @@ public class MainActivity extends ToolBarActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ToastUtil.showToast("home");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     private void hideFragment(Fragment fragment) {
 
@@ -91,7 +103,10 @@ public class MainActivity extends ToolBarActivity {
      * 清除选中状态
      */
     private void clearChoiceStatus() {
-
+        txtTabMenuHome.setTextColor(getResources().getColor(R.color.subtitle));
+        txtTabMenuTeam.setTextColor(getResources().getColor(R.color.subtitle));
+        txtTabMenuMessage.setTextColor(getResources().getColor(R.color.subtitle));
+        txtTabMenuMine.setTextColor(getResources().getColor(R.color.subtitle));
 
     }
 
@@ -100,7 +115,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeHomeMenuStatus() {
         clearChoiceStatus();
-
+        txtTabMenuHome.setTextColor(getResources().getColor(R.color.white));
     }
 
     /**
@@ -108,6 +123,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeTeamMenuStatus() {
         clearChoiceStatus();
+        txtTabMenuTeam.setTextColor(getResources().getColor(R.color.white));
 
     }
 
@@ -116,6 +132,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeMessageMenuStatus() {
         clearChoiceStatus();
+        txtTabMenuMessage.setTextColor(getResources().getColor(R.color.white));
 
     }
 
@@ -124,7 +141,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeMineMenuStatus() {
         clearChoiceStatus();
-
+        txtTabMenuMine.setTextColor(getResources().getColor(R.color.white));
     }
 
 

@@ -1,4 +1,4 @@
-package cn.abtion.neuqercc.account;
+package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
@@ -83,6 +83,8 @@ public class LoginActivity extends NoBarActivity {
                 //跳转至MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+
+                finish();
             }
 
             //请求失败时回调
