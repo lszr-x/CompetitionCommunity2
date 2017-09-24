@@ -1,4 +1,4 @@
-package cn.abtion.neuqercc;
+package cn.abtion.neuqercc.main;
 
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.home.HomeFragment;
 import cn.abtion.neuqercc.message.MessageFragment;

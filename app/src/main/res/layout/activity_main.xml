@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cn.abtion.neuqercc.MainActivity">
+    tools:context="cn.abtion.neuqercc.main.MainActivity">
 
     <LinearLayout
         android:id="@+id/ly_tab_menu"

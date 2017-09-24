@@ -5,7 +5,7 @@ import android.support.design.widget.TextInputEditText;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.abtion.neuqercc.MainActivity;
+import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.models.LoginRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
