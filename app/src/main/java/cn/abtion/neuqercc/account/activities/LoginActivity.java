@@ -1,7 +1,10 @@
 package cn.abtion.neuqercc.account.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
+import android.transition.Explode;
+import android.transition.Slide;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,7 +45,15 @@ public class LoginActivity extends NoBarActivity {
 
     @Override
     protected void initView() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Explode explode = new Explode();
+            explode.setDuration(3000);
+            getWindow().setEnterTransition(explode);
 
+            Slide slide = new Slide();
+            slide.setDuration(3000);
+            getWindow().setExitTransition(slide);
+        }
     }
 
     @Override
@@ -59,9 +70,13 @@ public class LoginActivity extends NoBarActivity {
         loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
         loginRequest.setPassword(editPassword.getText().toString().trim());
 
-        if (isDataTrue()){
-            login();
-        }
+//        if (isDataTrue()){
+//            login();
+//        }
+
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
@@ -83,7 +98,6 @@ public class LoginActivity extends NoBarActivity {
                 //跳转至MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
-
                 finish();
             }
 

@@ -1,7 +1,9 @@
-package cn.abtion.neuqercc.home;
+package cn.abtion.neuqercc.home.fragments;
+
 
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+
 
 /**
  * @author abtion.
@@ -10,6 +12,8 @@ import cn.abtion.neuqercc.base.fragments.BaseFragment;
  */
 
 public class HomeFragment extends BaseFragment {
+
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_home;
@@ -29,4 +33,5 @@ public class HomeFragment extends BaseFragment {
     protected void loadData() {
 
     }
+
 }

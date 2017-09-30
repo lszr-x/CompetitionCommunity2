@@ -1,7 +1,10 @@
 package cn.abtion.neuqercc.main;
 
+import android.support.transition.Fade;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,7 +12,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
-import cn.abtion.neuqercc.home.HomeFragment;
+import cn.abtion.neuqercc.home.fragments.HomeFragment;
 import cn.abtion.neuqercc.message.MessageFragment;
 import cn.abtion.neuqercc.mine.MineFragment;
 import cn.abtion.neuqercc.team.TeamFragment;
@@ -51,6 +54,7 @@ public class MainActivity extends ToolBarActivity {
 
     @Override
     protected void initView() {
+        TransitionManager.beginDelayedTransition((ViewGroup) findViewById(android.R.id.content),new Fade());
         onLyTabMenuHomeClicked();
         getToolbar().setNavigationIcon(R.drawable.ic_nav);
     }
