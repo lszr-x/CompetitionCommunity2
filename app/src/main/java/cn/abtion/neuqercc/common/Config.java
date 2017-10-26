@@ -21,7 +21,10 @@ public class Config {
     /**
      * APP Server 网络请求BaseUrl
      */
-    public static final String APP_SERVER_BASE_URL = "http://oj.marklux.cn/";
+    /**
+     * public static final String APP_SERVER_BASE_URL = "http://oj.marklux.cn/";
+     */
+    public static final String APP_SERVER_BASE_URL = "http://www.thmaoqiu.cn/";
 
     /**
      * APP Server 网络请求连接超时时间，单位：s

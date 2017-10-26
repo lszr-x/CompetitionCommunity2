@@ -1,17 +1,19 @@
 package cn.abtion.neuqercc.account.activities;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.transition.Explode;
 import android.transition.Slide;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.models.LoginRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
@@ -26,12 +28,19 @@ import retrofit2.Response;
  */
 
 public class LoginActivity extends NoBarActivity {
+
+
     @BindView(R.id.edit_identifier)
     TextInputEditText editIdentifier;
     @BindView(R.id.edit_password)
     TextInputEditText editPassword;
 
     private LoginRequest loginRequest;
+
+    private int PASSWORD_LOW_LIMIT=6;
+    private int PASSWORD_HIGH_LIMIT=16;
+    private int PHONE_NUMBER=11;
+
 
     @Override
     protected int getLayoutId() {
@@ -45,13 +54,13 @@ public class LoginActivity extends NoBarActivity {
 
     @Override
     protected void initView() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Explode explode = new Explode();
-            explode.setDuration(3000);
+            explode.setDuration(300);
             getWindow().setEnterTransition(explode);
 
             Slide slide = new Slide();
-            slide.setDuration(3000);
+            slide.setDuration(300);
             getWindow().setExitTransition(slide);
         }
     }
@@ -61,7 +70,6 @@ public class LoginActivity extends NoBarActivity {
 
     }
 
-
     /**
      * 登录按钮点击事件
      */
@@ -70,14 +78,32 @@ public class LoginActivity extends NoBarActivity {
         loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
         loginRequest.setPassword(editPassword.getText().toString().trim());
 
-//        if (isDataTrue()){
-//            login();
-//        }
+        if (isDataTrue()) {
+            login();
+        }
+    }
 
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+    /**
+     * 注册点击事件
+     */
+    @OnClick(R.id.btn_register)
+    public void onBtnRegisterClicked() {
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
         finish();
     }
+
+    /**
+     * 忘记密码点击事件
+     */
+    @OnClick(R.id.txt_forget_password)
+    public void onTxtForgetPasswordClicked() {
+        Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+        startActivity(intent);
+        finish();
+
+    }
+
 
     /**
      * 进行登录的相关操作的方法
@@ -104,12 +130,13 @@ public class LoginActivity extends NoBarActivity {
             //请求失败时回调
             @Override
             public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
             }
 
             //无论成功或者失败时都回调，用于dismissDialog或隐藏其他控件
             @Override
             public void dismissDialog() {
-                if (progressDialog.isShowing()){
+                if (progressDialog.isShowing()) {
                     disMissProgressDialog();
                 }
             }
@@ -119,8 +146,9 @@ public class LoginActivity extends NoBarActivity {
 
     /**
      * 用于TextInputEditText控件显示错误信息
+     *
      * @param textInputEditText 控件对象
-     * @param error 错误信息
+     * @param error             错误信息
      */
     private void showError(TextInputEditText textInputEditText, String error) {
         textInputEditText.setError(error);
@@ -131,18 +159,26 @@ public class LoginActivity extends NoBarActivity {
 
     /**
      * 验证用户输入是否正确
+     *
      * @return 正确为true
      */
-    private boolean isDataTrue(){
+    private boolean isDataTrue() {
         boolean flag = true;
-        if (editIdentifier.getText().toString().trim().length()==0){
-            showError(editIdentifier,"账号不可为空");
+        if (editIdentifier.getText().toString().trim().length() == 0) {
+            showError(editIdentifier, "账号不可为空");
             flag = false;
-        }else if (editPassword.getText().toString().trim().length()<6){
-            showError(editPassword,"密码不得少于6位");
+        } else if (editIdentifier.getText().toString().trim().length() !=PHONE_NUMBER) {
+            showError(editIdentifier, "账号不可为空");
+            flag = false;
+        } else if (editPassword.getText().toString().trim().length() < PASSWORD_LOW_LIMIT) {
+            showError(editPassword, "密码不得少于6位");
+            flag = false;
+        } else if (editPassword.getText().toString().trim().length() > PASSWORD_HIGH_LIMIT) {
+            showError(editPassword, "密码不得多于16位");
             flag = false;
         }
         return flag;
     }
+
 
 }
