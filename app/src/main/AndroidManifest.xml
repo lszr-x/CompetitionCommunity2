@@ -35,7 +35,7 @@
             <!--</intent-filter>-->
         </activity>
 
-        <activity android:name=".account.activities.NewPasswordActivity">
+        <activity android:name=".account.activities.UpdatePasswordActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 

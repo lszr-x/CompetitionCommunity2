@@ -63,7 +63,7 @@
                 </LinearLayout>
 
             <Button
-                android:id="@+id/btn_captch"
+                android:id="@+id/btn_get_verify_code"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_btn"
