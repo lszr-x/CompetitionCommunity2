@@ -166,7 +166,7 @@ public class LoginActivity extends NoBarActivity {
             showError(editIdentifier, "账号不可为空");
             flag = false;
         } else if (RegexUtil.checkMobile(editIdentifier.getText().toString().trim())) {
-            showError(editIdentifier, "账号不可为空");
+            showError(editIdentifier, "手机号不合法");
             flag = false;
         } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, "密码不得少于6位");

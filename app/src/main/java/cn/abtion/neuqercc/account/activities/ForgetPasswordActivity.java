@@ -193,7 +193,7 @@ public class ForgetPasswordActivity extends NoBarActivity {
             showError(editPhone, "手机号不得为空");
             flag = false;
         } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
-            showError(editPhone, "手机号为11位");
+            showError(editPhone, "手机号不合法");
             flag = false;
         } else if (editCaptcha.getText().toString().trim().length() == 0) {
             showError(editCaptcha, "验证码不得为空");

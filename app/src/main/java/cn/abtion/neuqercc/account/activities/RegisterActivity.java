@@ -14,10 +14,12 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.models.RegisterRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -39,14 +41,13 @@ public class RegisterActivity extends NoBarActivity {
     @BindView(R.id.edit_repeat_password)
     TextInputEditText editRepeatPassword;
     @BindView(R.id.btn_get_verify_code)
-    Button btnCaptch;
+    Button btnGetVerifyCode;
 
     private RegisterRequest registerRequest;
     private SmsRequest smsRequest;
 
-    private String captcha;
+    private String verifyCode;
 
-    private int PHONE_NUMBER = 11;
 
 
     @Override
@@ -57,8 +58,8 @@ public class RegisterActivity extends NoBarActivity {
     @Override
     protected void initVariable() {
 
-        registerRequest=new RegisterRequest();
-        smsRequest=new SmsRequest();
+        registerRequest = new RegisterRequest();
+        smsRequest = new SmsRequest();
     }
 
     @Override
@@ -102,8 +103,8 @@ public class RegisterActivity extends NoBarActivity {
         if (editPhone.getText().toString().trim().length() == 0) {
             showError(editPhone, "手机号不得为空");
             flag = false;
-        } else if (editPhone.getText().toString().trim().length() != PHONE_NUMBER) {
-            showError(editPhone, "手机号为11位");
+        } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
+            showError(editPhone, "手机号不合法");
             flag = false;
         }
         return flag;
@@ -111,7 +112,6 @@ public class RegisterActivity extends NoBarActivity {
 
     /**
      * 注册按钮点击事件
-     *
      */
     @OnClick(R.id.btn_register)
     public void onBtnRegisterClicked() {
@@ -128,7 +128,7 @@ public class RegisterActivity extends NoBarActivity {
     /**
      * 注册按钮相关方法
      */
-    public void register(){
+    public void register() {
 
         //弹出progressDialog
         progressDialog.setMessage("请稍候");
@@ -167,10 +167,9 @@ public class RegisterActivity extends NoBarActivity {
 
 
     /**
-     *  获取验证码相关方法
-     *
+     * 获取验证码相关方法
      */
-    public void captch(){
+    public void captch() {
 
         //网络请求
 
@@ -180,7 +179,7 @@ public class RegisterActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-                captcha=response.body().getData().toString().trim();
+                verifyCode = response.body().getData().toString().trim();
                 ToastUtil.showToast("发送成功,请注意查收验证码");
 
             }
@@ -210,28 +209,20 @@ public class RegisterActivity extends NoBarActivity {
     private boolean isDataTrue() {
         boolean flag = true;
 
-        if(editCaptcha.getText().toString().trim().length() == 0){
-            showError(editCaptcha,"验证码不得为空");
-            flag=false;
-        }else if(!editCaptcha.getText().toString().trim().equals(captcha)){
-            showError(editCaptcha,"验证码不正确");
-            flag=false;
-        }
-        else if (editPassword.getText().toString().trim().length() == 0) {
-            showError(editPassword, "密码不得为空");
+        if (editCaptcha.getText().toString().trim().length() == 0) {
+            showError(editCaptcha, "验证码不得为空");
             flag = false;
-        } else if (editPassword.getText().toString().trim().length() < 6) {
+        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+            showError(editCaptcha, "验证码不正确");
+            flag = false;
+        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, "密码不得少于6位");
             flag = false;
-        } else if (editPassword.getText().toString().trim().length() > 16) {
+        } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {
             showError(editPassword, "密码不得多与16位");
             flag = false;
-        }else if (editRepeatPassword.getText().toString().trim().length() == 0) {
-            showError(editRepeatPassword, "重复密码不得为空");
-            flag = false;
-        }
-        else if (!editRepeatPassword.getText().toString().trim().equals(editPassword.getText().toString().trim())) {
-            showError(editRepeatPassword, "两次输入密码需要一致");
+        } else if (!editRepeatPassword.getText().toString().trim().equals(editPassword.getText().toString().trim())) {
+            showError(editRepeatPassword, "两次输入密码不一致");
             flag = false;
         }
         return flag;
@@ -255,19 +246,19 @@ public class RegisterActivity extends NoBarActivity {
     /**
      * 获取验证码相关方法（倒计时）
      */
-    CountDownTimer timer =new CountDownTimer(6000,1000) {
+    CountDownTimer timer = new CountDownTimer(6000, 1000) {
         @Override
         public void onTick(long millisUntilFinished) {
 
-            btnCaptch.setEnabled(false);
-            btnCaptch.setText((millisUntilFinished/1000)+" s");
+            btnGetVerifyCode.setEnabled(false);
+            btnGetVerifyCode.setText((millisUntilFinished / 1000) + " s");
         }
 
         @Override
         public void onFinish() {
 
-            btnCaptch.setEnabled(true);
-            btnCaptch.setText("获取验证码");
+            btnGetVerifyCode.setEnabled(true);
+            btnGetVerifyCode.setText("获取验证码");
         }
     };
 
