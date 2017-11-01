@@ -9,45 +9,42 @@ import android.transition.Slide;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.account.models.LoginRequest;
+import cn.abtion.neuqercc.account.models.NewPasswordRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
-import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Response;
 
+
 /**
- * @author abtion.
- * @since 17/9/22 17:59.
- * email caiheng@hrsoft.net
+ * @author lszr
+ * @since 2017/10/16 下午9:29
+ * email wsyglszr@gmail.com
  */
 
-public class LoginActivity extends NoBarActivity {
+public class UpdatePasswordActivity extends NoBarActivity {
 
-
-    @BindView(R.id.edit_identifier)
-    TextInputEditText editIdentifier;
     @BindView(R.id.edit_password)
     TextInputEditText editPassword;
+    @BindView(R.id.edit_repeat_password)
+    TextInputEditText editRepeatPassword;
 
-    private LoginRequest loginRequest;
-
-
+    private NewPasswordRequest newPasswordRequest;
 
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_login;
+        return R.layout.activity_new_password;
     }
 
     @Override
     protected void initVariable() {
-        loginRequest = new LoginRequest();
+        newPasswordRequest = new NewPasswordRequest();
     }
 
     @Override
@@ -68,61 +65,51 @@ public class LoginActivity extends NoBarActivity {
 
     }
 
+
     /**
-     * 登录按钮点击事件
+     * 点击事件
      */
-    @OnClick(R.id.btn_login)
-    public void onBtnLoginClicked() {
-        loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
-        loginRequest.setPassword(editPassword.getText().toString().trim());
+    @OnClick(R.id.btn_over)
+    public void onBtnOverClicked() {
+
+        newPasswordRequest.setPhone(getIntent().getStringExtra("phoneNumber"));
+        newPasswordRequest.setPassword(editPassword.getText().toString().trim());
 
         if (isDataTrue()) {
-            login();
+            newPassword();
         }
     }
 
-    /**
-     * 注册点击事件
-     */
-    @OnClick(R.id.btn_register)
-    public void onBtnRegisterClicked() {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+    @OnClick(R.id.btn_return)
+    public void onBtnReturnClicked() {
+        Intent intent = new Intent(UpdatePasswordActivity.this, ForgetPasswordActivity.class);
         startActivity(intent);
         finish();
     }
 
     /**
-     * 忘记密码点击事件
+     * 注册按钮相关方法
      */
-    @OnClick(R.id.txt_forget_password)
-    public void onTxtForgetPasswordClicked() {
-        Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-        startActivity(intent);
-        finish();
+    public void newPassword() {
 
-    }
-
-
-    /**
-     * 进行登录的相关操作的方法
-     */
-    private void login() {
         //弹出progressDialog
         progressDialog.setMessage("请稍候");
         progressDialog.show();
 
         //网络请求
-        RestClient.getService().login(loginRequest).enqueue(new DataCallback<APIResponse>() {
+
+        RestClient.getService().newPassword(newPasswordRequest).enqueue(new DataCallback<APIResponse>() {
 
             //请求成功时回调
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
-                ToastUtil.showToast("登录成功");
 
-                //跳转至MainActivity
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                ToastUtil.showToast("修改成功");
+
+                Intent intent = new Intent(UpdatePasswordActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+
             }
 
             //请求失败时回调
@@ -139,8 +126,8 @@ public class LoginActivity extends NoBarActivity {
                 }
             }
         });
-
     }
+
 
     /**
      * 用于TextInputEditText控件显示错误信息
@@ -162,17 +149,14 @@ public class LoginActivity extends NoBarActivity {
      */
     private boolean isDataTrue() {
         boolean flag = true;
-        if (editIdentifier.getText().toString().trim().length() == 0) {
-            showError(editIdentifier, "账号不可为空");
-            flag = false;
-        } else if (RegexUtil.checkMobile(editIdentifier.getText().toString().trim())) {
-            showError(editIdentifier, "账号不可为空");
-            flag = false;
-        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+        if (editPassword.getText().toString().trim().length() <= Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, "密码不得少于6位");
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {
             showError(editPassword, "密码不得多于16位");
+            flag = false;
+        }  else if (!editRepeatPassword.getText().toString().trim().equals(editPassword.getText().toString().trim())) {
+            showError(editRepeatPassword, "两次输入密码不一致");
             flag = false;
         }
         return flag;

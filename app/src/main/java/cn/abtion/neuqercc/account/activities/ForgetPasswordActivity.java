@@ -1,11 +1,8 @@
 package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.design.widget.TextInputEditText;
-import android.transition.Explode;
-import android.transition.Slide;
 import android.widget.Button;
 
 import butterknife.BindView;
@@ -16,6 +13,7 @@ import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -33,13 +31,12 @@ public class ForgetPasswordActivity extends NoBarActivity {
     TextInputEditText editPhone;
     @BindView(R.id.edit_captcha)
     TextInputEditText editCaptcha;
-    @BindView(R.id.btn_captch)
-    Button btnCaptch;
+    @BindView(R.id.btn_get_verify_code)
+    Button btnGetVerifyCode;
 
     private SmsRequest smsRequest;
-    private String captcha;
+    private String verifyCode;
 
-    private int PHONE_NUMBER = 11;
 
 
     @Override
@@ -54,15 +51,7 @@ public class ForgetPasswordActivity extends NoBarActivity {
 
     @Override
     protected void initView() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Explode explode = new Explode();
-            explode.setDuration(300);
-            getWindow().setEnterTransition(explode);
 
-            Slide slide = new Slide();
-            slide.setDuration(300);
-            getWindow().setExitTransition(slide);
-        }
     }
 
     @Override
@@ -74,14 +63,14 @@ public class ForgetPasswordActivity extends NoBarActivity {
     /**
      * 获取验证码按钮点击事件
      */
-    @OnClick(R.id.btn_captch)
-    public void onBtnCaptchClicked() {
+    @OnClick(R.id.btn_get_verify_code)
+    public void onBtnGetVerifyCodeClicked() {
 
         smsRequest.setPhone(editPhone.getText().toString().trim());
         timer.start();
 
         if (isPhoneTrue()) {
-            captch();
+            getVerifyCode();
         }
 
     }
@@ -89,7 +78,7 @@ public class ForgetPasswordActivity extends NoBarActivity {
     /**
      * 短信验证码
      */
-    public void captch() {
+    public void getVerifyCode() {
 
         //网络请求
 
@@ -99,7 +88,7 @@ public class ForgetPasswordActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-                captcha = response.body().getData().toString().trim();
+                verifyCode = response.body().getData().toString().trim();
                 ToastUtil.showToast("发送成功,请注意查收验证码");
 
             }
@@ -125,15 +114,15 @@ public class ForgetPasswordActivity extends NoBarActivity {
         @Override
         public void onTick(long millisUntilFinished) {
 
-            btnCaptch.setEnabled(false);
-            btnCaptch.setText((millisUntilFinished / 1000) + "秒后可重发");
+            btnGetVerifyCode.setEnabled(false);
+            btnGetVerifyCode.setText((millisUntilFinished / 1000) + "秒后可重发");
         }
 
         @Override
         public void onFinish() {
 
-            btnCaptch.setEnabled(true);
-            btnCaptch.setText("获取验证码");
+            btnGetVerifyCode.setEnabled(true);
+            btnGetVerifyCode.setText("获取验证码");
         }
     };
 
@@ -150,7 +139,7 @@ public class ForgetPasswordActivity extends NoBarActivity {
         if (isDataTrue()) {
             ToastUtil.showToast("手机号验证成功，请重新输入密码");
 
-            Intent intent = new Intent(ForgetPasswordActivity.this, NewPasswordActivity.class);
+            Intent intent = new Intent(ForgetPasswordActivity.this, UpdatePasswordActivity.class);
             intent.putExtra("phoneNumber",editPhone.getText().toString().trim());
             startActivity(intent);
             finish();
@@ -186,8 +175,8 @@ public class ForgetPasswordActivity extends NoBarActivity {
         if (editPhone.getText().toString().trim().length() == 0) {
             showError(editPhone, "手机号不得为空");
             flag = false;
-        } else if (editPhone.getText().toString().trim().length() != PHONE_NUMBER) {
-            showError(editPhone, "手机号为11位");
+        } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
+            showError(editPhone, "手机号不合法");
             flag = false;
         }
         return flag;
@@ -203,13 +192,13 @@ public class ForgetPasswordActivity extends NoBarActivity {
         if (editPhone.getText().toString().trim().length() == 0) {
             showError(editPhone, "手机号不得为空");
             flag = false;
-        } else if (editPhone.getText().toString().trim().length() != PHONE_NUMBER) {
+        } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
             showError(editPhone, "手机号为11位");
             flag = false;
         } else if (editCaptcha.getText().toString().trim().length() == 0) {
             showError(editCaptcha, "验证码不得为空");
             flag = false;
-        } else if (!editCaptcha.getText().toString().trim().equals(captcha)) {
+        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
             showError(editCaptcha, "验证码不正确");
             flag = false;
         }

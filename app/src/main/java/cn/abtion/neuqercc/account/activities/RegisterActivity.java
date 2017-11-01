@@ -2,7 +2,6 @@ package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.TextInputEditText;
 import android.transition.Explode;
@@ -10,11 +9,9 @@ import android.transition.Slide;
 import android.widget.Button;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.models.RegisterRequest;
-import cn.abtion.neuqercc.account.models.RegisterResponse;
 import cn.abtion.neuqercc.account.models.SmsRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.main.MainActivity;
@@ -41,7 +38,7 @@ public class RegisterActivity extends NoBarActivity {
     TextInputEditText editPassword;
     @BindView(R.id.edit_repeat_password)
     TextInputEditText editRepeatPassword;
-    @BindView(R.id.btn_captch)
+    @BindView(R.id.btn_get_verify_code)
     Button btnCaptch;
 
     private RegisterRequest registerRequest;
@@ -86,7 +83,7 @@ public class RegisterActivity extends NoBarActivity {
     /**
      * 验证码按钮点击事件
      */
-    @OnClick(R.id.btn_captch)
+    @OnClick(R.id.btn_get_verify_code)
     public void onBtnCaptchClicked() {
 
         smsRequest.setPhone(editPhone.getText().toString().trim());

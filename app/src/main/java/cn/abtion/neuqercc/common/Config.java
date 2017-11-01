@@ -35,4 +35,7 @@ public class Config {
      * 启动页面到首页启动延时，单位：毫秒
      */
     public static final int SPLASH_GO_MAIN_DELAY = 1500;
+
+    public static final int PASSWORD_MIN_LIMIT =6;
+    public static final int PASSWORD_MAX_LIMIT =16;
 }

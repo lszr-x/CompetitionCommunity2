@@ -38,18 +38,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         // 禁止APP横屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
-        // 设置切换动画
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//            Explode explode = new Explode();
-//            explode.setDuration(1000L);
-//            getWindow().setEnterTransition(explode);
-//
-//            Slide slide = new Slide();
-//            slide.setDuration(1000);
-//            getWindow().setExitTransition(slide);
-//        }
-
     }
 
     /**
@@ -186,14 +174,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    public void startActivity(Intent intent) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        }else {
-            super.startActivity(intent);
-        }
 
-    }
 }
 
