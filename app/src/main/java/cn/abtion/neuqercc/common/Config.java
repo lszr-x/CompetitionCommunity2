@@ -21,7 +21,10 @@ public class Config {
     /**
      * APP Server 网络请求BaseUrl
      */
-    public static final String APP_SERVER_BASE_URL = "http://oj.marklux.cn/";
+    /**
+     * public static final String APP_SERVER_BASE_URL = "http://oj.marklux.cn/";
+     */
+    public static final String APP_SERVER_BASE_URL = "http://www.thmaoqiu.cn/";
 
     /**
      * APP Server 网络请求连接超时时间，单位：s
@@ -32,4 +35,7 @@ public class Config {
      * 启动页面到首页启动延时，单位：毫秒
      */
     public static final int SPLASH_GO_MAIN_DELAY = 1500;
+
+    public static final int PASSWORD_MIN_LIMIT =6;
+    public static final int PASSWORD_MAX_LIMIT =16;
 }

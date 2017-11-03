@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "net.hrsoft.transparent_factory_manager"
+        applicationId "cn.abtion.neuqercc"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1

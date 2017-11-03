@@ -10,7 +10,7 @@ import cn.abtion.neuqercc.base.models.BaseModel;
 
 
 public class LoginRequest extends BaseModel {
-    private String identifier;
+    private String phone;
     private String password;
 
     public LoginRequest() {
@@ -18,19 +18,21 @@ public class LoginRequest extends BaseModel {
     }
 
     public String getIdentifier() {
-        return identifier;
+
+        return phone;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setIdentifier(String phone) {
+
+        this.phone = phone;
     }
 
     public String getPassword() {
         return password;
-
     }
 
     public void setPassword(String password) {
+
         this.password = password;
     }
 
