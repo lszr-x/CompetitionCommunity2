@@ -17,5 +17,9 @@
     <string name="input_password">请输入6-16位数字、字母密码</string>
     <string name="repeat_password">请再次输入密码</string>
     <string name="input_new_password">设置新密码</string>
+    <string name="contest_list_title">数学建模</string>
+    <string name="contest_list_summary">前端、热血、创意</string>
+    <string name="contest_list_time_upper">比赛时间：2017.10.15-2017.10.18</string>
+    <string name="contest_list_time_lower">报名时间：2017.10.15-2017.10.18</string>
 
 </resources>
