@@ -12,7 +12,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
@@ -44,6 +48,8 @@ public class HomeFragment extends BaseFragment {
     ViewFlipper vfContest;
     Unbinder unbinder;
     private ArrayList<ContestListModel> contestListModels;
+
+    private GestureDetector gestureDetector;
 
 
     @BindView(R.id.spinner_home)
@@ -80,67 +86,38 @@ public class HomeFragment extends BaseFragment {
         vfContest.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return HomeFragment.this.gestureDetector.onTouchEvent(event);
-            }
-        });
+                vfContest.getParent().requestDisallowInterceptTouchEvent(true);
 
-        gestureDetector = new GestureDetector(this.getContext(), new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                vfContest.stopFlipping();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        vfContest.startFlipping();
-                    }
-                }, 3000);
+                int downX=0;
+                int x;
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        downX=(int)event.getRawX();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        x=(int)event.getRawX();
+                        if(x-downX>FLING_MIN_DISTANCE){
+                            vfContest.setInAnimation(inFromRightAnimation());
+                            vfContest.setOutAnimation(outToLeftAnimation());
+                            vfContest.showNext();
+                        }
+                        else if(downX-x>FLING_MIN_DISTANCE){
+                            vfContest.setInAnimation(inFromLeftAnimation());
+                            vfContest.setOutAnimation(outToRightAnimation());
+                            vfContest.showPrevious();
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+
+
+
                 return true;
             }
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-
-            }
-
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-                if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE &&
-                        Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-                    vfContest.setInAnimation(inFromRightAnimation());
-                    vfContest.setOutAnimation(outToLeftAnimation());
-                    vfContest.showNext();
-                    vfContest.setInAnimation(inFromRightAnimation());
-                    vfContest.setOutAnimation(outToLeftAnimation());
-                    vfContest.startFlipping();
-                } else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE &&
-                        Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-                    vfContest.setInAnimation(inFromLeftAnimation());
-                    vfContest.setOutAnimation(outToRightAnimation());
-                    vfContest.showPrevious();
-                    vfContest.setInAnimation(inFromRightAnimation());
-                    vfContest.setOutAnimation(outToLeftAnimation());
-                    vfContest.startFlipping();
-                }
-                return false;
-            }
         });
+
 
 
         recHome.setNestedScrollingEnabled(false);
@@ -183,4 +160,82 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    private ImageView getImageView(int id) {
+        ImageView imageView =new ImageView(this.getContext());
+        imageView.setImageResource(id);
+        return imageView;
+    }
+
+
+    /**
+     *
+     * 轮播图进入退出动画效果
+     *
+     */
+
+    /**
+     * 定义从右侧进入的动画效果
+     *
+     * @return
+     */
+    protected Animation inFromRightAnimation() {
+        Animation inFromRight = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, +1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        inFromRight.setDuration(200);
+        inFromRight.setInterpolator(new AccelerateInterpolator());
+        return inFromRight;
+    }
+
+    /**
+     * 定义从左侧退出的动画效果
+     *
+     * @return
+     */
+    protected Animation outToLeftAnimation() {
+        Animation outtoLeft = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, -1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        outtoLeft.setDuration(200);
+        outtoLeft.setInterpolator(new AccelerateInterpolator());
+        return outtoLeft;
+    }
+
+    /**
+     * 定义从左侧进入的动画效果
+     *
+     * @return
+     */
+    protected Animation inFromLeftAnimation() {
+        Animation inFromLeft = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, -1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        inFromLeft.setDuration(200);
+        inFromLeft.setInterpolator(new AccelerateInterpolator());
+        return inFromLeft;
+    }
+
+    /**
+     * 定义从右侧退出时的动画效果
+     *
+     * @return
+     */
+    protected Animation outToRightAnimation() {
+        Animation outtoRight = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, +1.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f);
+        outtoRight.setDuration(200);
+        outtoRight.setInterpolator(new AccelerateInterpolator());
+        return outtoRight;
+    }
+
 }

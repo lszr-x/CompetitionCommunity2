@@ -36,8 +36,17 @@ public class Config {
      */
     public static final int SPLASH_GO_MAIN_DELAY = 1500;
 
+    /**
+     * 密码长度限制
+     */
     public static final int PASSWORD_MIN_LIMIT =6;
     public static final int PASSWORD_MAX_LIMIT =16;
 
+
     public static final String KEY_MAIN_FLAG = "keyMainFlag";
+
+
+    public static final int FLING_MIN_DISTANCE=100;
+    public static final int FLING_MIN_VELOCITY=10;
+
 }
