@@ -128,6 +128,8 @@ public class HomeFragment extends BaseFragment {
                     vfContest.setInAnimation(inFromRightAnimation());
                     vfContest.setOutAnimation(outToLeftAnimation());
                     vfContest.showNext();
+                    vfContest.setInAnimation(inFromRightAnimation());
+                    vfContest.setOutAnimation(outToLeftAnimation());
                     vfContest.startFlipping();
                 } else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE &&
                         Math.abs(velocityX) > FLING_MIN_VELOCITY) {
