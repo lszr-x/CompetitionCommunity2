@@ -38,4 +38,6 @@ public class Config {
 
     public static final int PASSWORD_MIN_LIMIT =6;
     public static final int PASSWORD_MAX_LIMIT =16;
+
+    public static final String KEY_MAIN_FLAG = "keyMainFlag";
 }

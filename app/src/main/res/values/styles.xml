@@ -16,7 +16,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/text_warning</item>
         <item name="titleTextColor">@color/white</item>
         <item name="android:textSize">@dimen/bar_text</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -27,7 +27,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">#212121</item>
+        <item name="android:background">@color/gray_primary</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:orientation">vertical</item>
@@ -39,5 +39,14 @@
         <item name="android:paddingRight">@dimen/padding_left_right</item>
         <item name="android:paddingTop">8dp</item>
     </style>
+
+    <!--赛事顶部导航字体 样式-->
+    <style name="tab_text_size"
+        parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">18sp</item>
+
+    </style>
+    <!--<item name="android:textAllCaps">false</item>-->
+
 
 </resources>

@@ -13,18 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".account.activities.LoginActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".account.activities.RegisterActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+        <activity android:name=".account.activities.RegisterActivity">
+
         </activity>
 
 
@@ -37,7 +35,22 @@
             <!--</intent-filter>-->
         </activity>
 
-        <activity android:name=".main.MainActivity" />
+        <activity android:name=".main.MainActivity" >
+
+
+        </activity>
+
+
+        <activity android:name=".home.activities.CompetitionActivity">
+
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+
+        </activity>
+
 
     </application>
 
