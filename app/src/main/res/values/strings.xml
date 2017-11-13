@@ -21,5 +21,7 @@
     <string name="contest_list_summary">前端、热血、创意</string>
     <string name="contest_list_time_upper">比赛时间：2017.10.15-2017.10.18</string>
     <string name="contest_list_time_lower">报名时间：2017.10.15-2017.10.18</string>
+    <string name="btn_search_team">寻找队伍</string>
+    <string name="find_competition_name">查找比赛名称</string>
 
 </resources>

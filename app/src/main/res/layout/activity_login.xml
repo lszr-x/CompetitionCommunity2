@@ -30,16 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"
-                android:text="@string/account"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,25 +53,20 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:background="@null"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp"
+                    android:hint="@string/account"
+                    />
             </LinearLayout>
 
         </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/liner_password"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="15dp"
-                android:text="@string/password"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -106,7 +91,8 @@
                     android:background="@null"
                     android:inputType="textPassword"
                     android:layout_marginRight="5dp"
-                    android:textSize="15dp"/>
+                    android:textSize="15dp"
+                    android:hint="@string/password"/>
             </LinearLayout>
 
 
@@ -125,23 +111,23 @@
 
         <Button
             android:id="@+id/btn_login"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
             android:layout_marginTop="50dp"
             android:background="@drawable/bg_full_btn"
             android:text="@string/login"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="16sp" />
 
         <Button
             android:id="@+id/btn_register"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/bg_full_btn"
             android:text="@string/register"
             android:textColor="@color/white"
-            android:textSize="22sp" />
+            android:textSize="16sp" />
 
 
     </LinearLayout>

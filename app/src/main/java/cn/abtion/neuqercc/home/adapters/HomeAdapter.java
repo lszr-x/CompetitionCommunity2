@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,8 +21,6 @@ import cn.abtion.neuqercc.home.models.ContestListModel;
  */
 
 public class HomeAdapter extends BaseRecyclerViewAdapter<ContestListModel> {
-
-
 
 
     public HomeAdapter(Context context, List<ContestListModel> contestListModel) {
@@ -47,7 +46,7 @@ public class HomeAdapter extends BaseRecyclerViewAdapter<ContestListModel> {
         TextView txtContestListTimeLower;
 
 
-        public ItemHolder(View itemView) {
+        ItemHolder(View itemView) {
             super(itemView);
         }
 
@@ -55,10 +54,9 @@ public class HomeAdapter extends BaseRecyclerViewAdapter<ContestListModel> {
         protected void onBind(ContestListModel contestListModel) {
             txtContestListTitle.setText(contestListModel.getTitle() == null ? "N/A" : contestListModel.getTitle());
             txtContestListSummary.setText(contestListModel.getSummary() == null ? "N/A" : contestListModel.getSummary());
-            txtContestListTimeUpper.setText(contestListModel.getContestTime()==null?"N/A":contestListModel.getContestTime());
+            txtContestListTimeUpper.setText(contestListModel.getContestTime() == null ? "N/A" : contestListModel.getContestTime());
             txtContestListTimeLower.setText(contestListModel.getSignTime() == null ? "N/A" : contestListModel.getSignTime());
-
         }
     }
-
 }
+

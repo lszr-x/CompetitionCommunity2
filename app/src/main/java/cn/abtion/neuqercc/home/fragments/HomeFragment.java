@@ -11,18 +11,24 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.content.Intent;
+import android.provider.ContactsContract;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
-
+import android.widget.Toast;
 import java.util.ArrayList;
-
+import java.util.Date;
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+import cn.abtion.neuqercc.home.activities.CompetitionActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
+import cn.abtion.neuqercc.main.MainActivity;
 
 import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
 import static cn.abtion.neuqercc.common.Config.FLING_MIN_VELOCITY;
@@ -68,9 +74,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-
         
-
         vfContest.addView(getImageView(R.drawable.img_home_view));
         vfContest.addView(getImageView(R.drawable.ic_register_password));
         vfContest.addView(getImageView(R.drawable.ic_back));
@@ -150,14 +154,27 @@ public class HomeFragment extends BaseFragment {
          * home界面recylerview
          *
          */
+
         recHome.setNestedScrollingEnabled(false);
         contestListModels = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             contestListModels.add(new ContestListModel("数学建模", "前端、热血、创意", "比赛时间：2017.10.15-2017.10.18", "报名时间：2017.10.15-2017.10.18"));
         }
+
         HomeAdapter homeAdapter = new HomeAdapter(getContext(), contestListModels);
         recHome.setAdapter(homeAdapter);
         recHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        //点击事件
+        homeAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<ContestListModel>() {
+
+            @Override
+            public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
+                Intent intent=new Intent(getContext(),CompetitionActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
