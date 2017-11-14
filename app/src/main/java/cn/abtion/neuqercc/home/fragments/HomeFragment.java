@@ -3,11 +3,9 @@ package cn.abtion.neuqercc.home.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,8 +30,8 @@ import cn.abtion.neuqercc.home.activities.CompetitionActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
 
+import static android.view.MotionEvent.ACTION_UP;
 import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
-import static cn.abtion.neuqercc.common.Config.FLING_MIN_VELOCITY;
 
 
 /**
@@ -44,12 +42,14 @@ import static cn.abtion.neuqercc.common.Config.FLING_MIN_VELOCITY;
 
 public class HomeFragment extends BaseFragment {
 
+
+    Unbinder unbinder;
     @BindView(R.id.vf_contest)
     ViewFlipper vfContest;
-    Unbinder unbinder;
+
     private ArrayList<ContestListModel> contestListModels;
 
-    private GestureDetector gestureDetector;
+    private int downX = 0;
 
 
     @BindView(R.id.spinner_home)
@@ -74,71 +74,10 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initView() {
 
+        initViewFlipper();
 
-        vfContest.addView(getImageView(R.drawable.img_home_view));
-        vfContest.addView(getImageView(R.drawable.ic_register_password));
-        vfContest.addView(getImageView(R.drawable.ic_back));
-        vfContest.addView(getImageView(R.drawable.ic_contest_before_title));
-        vfContest.setInAnimation(inFromRightAnimation());
-        vfContest.setOutAnimation(outToLeftAnimation());
-        vfContest.setFlipInterval(2000);
-        vfContest.startFlipping();
-        vfContest.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                vfContest.getParent().requestDisallowInterceptTouchEvent(true);
+        initContestRecylerview();
 
-                int downX=0;
-                int x;
-                switch (event.getAction()){
-                    case MotionEvent.ACTION_DOWN:
-                        downX=(int)event.getRawX();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        x=(int)event.getRawX();
-                        if(x-downX>FLING_MIN_DISTANCE){
-                            vfContest.setInAnimation(inFromRightAnimation());
-                            vfContest.setOutAnimation(outToLeftAnimation());
-                            vfContest.showNext();
-                        }
-                        else if(downX-x>FLING_MIN_DISTANCE){
-                            vfContest.setInAnimation(inFromLeftAnimation());
-                            vfContest.setOutAnimation(outToRightAnimation());
-                            vfContest.showPrevious();
-                        }
-
-                        break;
-                    default:
-                        break;
-                }
-
-
-
-                return true;
-            }
-        });
-
-
-
-        recHome.setNestedScrollingEnabled(false);
-        contestListModels = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            contestListModels.add(new ContestListModel("数学建模", "前端、热血、创意", "比赛时间：2017.10.15-2017.10.18", "报名时间：2017.10.15-2017.10.18"));
-        }
-
-        HomeAdapter homeAdapter = new HomeAdapter(getContext(), contestListModels);
-        recHome.setAdapter(homeAdapter);
-        recHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
-        //点击事件
-        homeAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<ContestListModel>() {
-
-            @Override
-            public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
-                Intent intent = new Intent(getContext(), CompetitionActivity.class);
-                startActivity(intent);
-            }
-        });
 
     }
 
@@ -162,11 +101,73 @@ public class HomeFragment extends BaseFragment {
     }
 
     private ImageView getImageView(int id) {
-        ImageView imageView =new ImageView(this.getContext());
+        ImageView imageView = new ImageView(this.getContext());
         imageView.setImageResource(id);
         return imageView;
     }
 
+    public void initContestRecylerview(){
+        recHome.setNestedScrollingEnabled(false);
+        contestListModels = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            contestListModels.add(new ContestListModel("数学建模", "前端、热血、创意", "比赛时间：2017.10.15-2017.10.18", "报名时间：2017.10.15-2017.10.18"));
+        }
+
+        HomeAdapter homeAdapter = new HomeAdapter(getContext(), contestListModels);
+        recHome.setAdapter(homeAdapter);
+        recHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+
+        //点击事件
+        homeAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<ContestListModel>() {
+
+            @Override
+            public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
+                Intent intent = new Intent(getContext(), CompetitionActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+
+    public void initViewFlipper() {
+        vfContest.addView(getImageView(R.drawable.img_home_view));
+        vfContest.addView(getImageView(R.drawable.ic_register_password));
+        vfContest.addView(getImageView(R.drawable.ic_back));
+        vfContest.addView(getImageView(R.drawable.ic_contest_before_title));
+        vfContest.setInAnimation(inFromRightAnimation());
+        vfContest.setOutAnimation(outToLeftAnimation());
+        vfContest.setFlipInterval(7000);
+        vfContest.startFlipping();
+        vfContest.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                vfContest.getParent().requestDisallowInterceptTouchEvent(true);
+                int x;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        downX = (int) event.getRawX();
+                        break;
+                    case ACTION_UP:
+                        x = (int) event.getRawX();
+                        if (x - downX < FLING_MIN_DISTANCE) {
+                            vfContest.setInAnimation(inFromRightAnimation());
+                            vfContest.setOutAnimation(outToLeftAnimation());
+                            vfContest.showNext();
+                        } else if (downX - x < FLING_MIN_DISTANCE) {
+                            vfContest.setOutAnimation(outToRightAnimation());
+                            vfContest.setInAnimation(inFromLeftAnimation());
+                            vfContest.showPrevious();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+    }
 
     /**
      *

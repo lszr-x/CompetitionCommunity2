@@ -1,4 +1,4 @@
-package cn.abtion.neuqercc.team;
+package cn.abtion.neuqercc.team.fragments;
 
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;

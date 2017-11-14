@@ -3,14 +3,10 @@ package cn.abtion.neuqercc.main;
 import android.content.Intent;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -23,7 +19,7 @@ import cn.abtion.neuqercc.home.adapters.HomeViewPagerAdapter;
 import cn.abtion.neuqercc.home.fragments.HomeFragment;
 import cn.abtion.neuqercc.message.MessageFragment;
 import cn.abtion.neuqercc.mine.MineFragment;
-import cn.abtion.neuqercc.team.TeamFragment;
+import cn.abtion.neuqercc.team.fragments.TeamFragment;
 import cn.abtion.neuqercc.utils.ToastUtil;
 
 public class MainActivity extends ToolBarActivity {

@@ -1,29 +1,20 @@
 package cn.abtion.neuqercc.home.activities;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
-import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.CompetitionViewPagerAdapter;
-import cn.abtion.neuqercc.home.fragments.DetailsFragment;
-import cn.abtion.neuqercc.home.fragments.RaidersFragment;
 import cn.abtion.neuqercc.main.MainActivity;
-import cn.abtion.neuqercc.team.TeamFragment;
 
 /**
  * @author abtion.
