@@ -21,6 +21,9 @@ public class Config {
     /**
      * APP Server 网络请求BaseUrl
      */
+    /**
+     * public static final String APP_SERVER_BASE_URL = "http://oj.marklux.cn/";
+     */
     public static final String APP_SERVER_BASE_URL = "http://www.thmaoqiu.cn/";
 
     /**
@@ -34,19 +37,16 @@ public class Config {
     public static final int SPLASH_GO_MAIN_DELAY = 1500;
 
     /**
-     * 密码位数限定
+     * 密码长度限制
      */
     public static final int PASSWORD_MIN_LIMIT =6;
     public static final int PASSWORD_MAX_LIMIT =16;
 
-    /**
-     * 最小滑动像素
-     */
-    public static final float FLING_MIN_DISTANCE = 1;
-    /**
-     * 最小滑动速度
-     */
-    public static final float FLING_MIN_VELOCITY = 1;
 
+    public static final String KEY_MAIN_FLAG = "keyMainFlag";
+
+
+    public static final int FLING_MIN_DISTANCE=100;
+    public static final int FLING_MIN_VELOCITY=10;
 
 }
