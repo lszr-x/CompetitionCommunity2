@@ -78,7 +78,7 @@
                 android:id="@+id/vf_contest"
                 android:layout_width="match_parent"
                 android:layout_height="132dp"
-                android:flipInterval="2000">
+                android:flipInterval="5000">
             </ViewFlipper>
 
             <View

@@ -39,7 +39,6 @@ public class Config {
     public static final int PASSWORD_MIN_LIMIT =6;
     public static final int PASSWORD_MAX_LIMIT =16;
 
-<<<<<<< HEAD
     /**
      * 最小滑动像素
      */
@@ -50,7 +49,6 @@ public class Config {
     public static final float FLING_MIN_VELOCITY = 1;
 
 
-=======
     public static final String KEY_MAIN_FLAG = "keyMainFlag";
->>>>>>> test
+
 }

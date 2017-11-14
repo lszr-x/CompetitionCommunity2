@@ -44,8 +44,6 @@ public class HomeFragment extends BaseFragment {
 
 
     private GestureDetector gestureDetector;    //手势检测
-//    private ViewFlipper vfContest;
-
 
     private ArrayList<ContestListModel> contestListModels;
 
@@ -74,86 +72,21 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        
-        vfContest.addView(getImageView(R.drawable.img_home_view));
-        vfContest.addView(getImageView(R.drawable.ic_register_password));
-        vfContest.addView(getImageView(R.drawable.ic_back));
-        vfContest.addView(getImageView(R.drawable.ic_contest_before_title));
-        vfContest.setInAnimation(inFromRightAnimation());
-        vfContest.setOutAnimation(outToLeftAnimation());
-        vfContest.setFlipInterval(2000);
-        vfContest.startFlipping();
-        vfContest.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return HomeFragment.this.gestureDetector.onTouchEvent(event);
-            }
-        });
+        initViewFlipper();
+        initRecylerview();
 
-        gestureDetector = new GestureDetector(this.getContext(), new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                vfContest.stopFlipping();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        vfContest.startFlipping();
-                    }
-                }, 3000);
-                return true;
-            }
+    }
 
-            @Override
-            public void onShowPress(MotionEvent e) {
+    @Override
+    protected void loadData() {
 
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-
-            }
+    }
 
 
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-                if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE &&
-                        Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-                    vfContest.setInAnimation(inFromRightAnimation());
-                    vfContest.setOutAnimation(outToLeftAnimation());
-                    vfContest.showNext();
-                    vfContest.setInAnimation(inFromRightAnimation());
-                    vfContest.setOutAnimation(outToLeftAnimation());
-                    vfContest.startFlipping();
-                } else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE &&
-                        Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-                    vfContest.setInAnimation(inFromLeftAnimation());
-                    vfContest.setOutAnimation(outToRightAnimation());
-                    vfContest.showPrevious();
-                    vfContest.setInAnimation(inFromRightAnimation());
-                    vfContest.setOutAnimation(outToLeftAnimation());
-                    vfContest.startFlipping();
-                }
-                return false;
-            }
-        });
 
 
-        /**
-         *
-         * home界面recylerview
-         *
-         */
+
+    public void initRecylerview() {
 
         recHome.setNestedScrollingEnabled(false);
         contestListModels = new ArrayList<>();
@@ -174,19 +107,51 @@ public class HomeFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-
     }
-
-    @Override
-    protected void loadData() {
-
-    }
-
 
     private ImageView getImageView(int id) {
         ImageView imageView =new ImageView(this.getContext());
         imageView.setImageResource(id);
         return imageView;
+    }
+
+
+    public void initViewFlipper() {
+
+        //给viewfilpper添加图片
+        vfContest.addView(getImageView(R.drawable.img_home_view));
+        vfContest.addView(getImageView(R.drawable.ic_register_password));
+        vfContest.addView(getImageView(R.drawable.ic_back));
+        vfContest.addView(getImageView(R.drawable.ic_contest_before_title));
+
+
+
+        //显示新view，隐藏旧view
+        vfContest.setInAnimation(inFromRightAnimation());
+        vfContest.setOutAnimation(outToLeftAnimation());
+
+        vfContest.setFlipInterval(5000);
+        vfContest.startFlipping();
+
+        vfContest.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                vfContest.getParent().requestDisallowInterceptTouchEvent(true);
+
+
+
+                return HomeFragment.this.gestureDetector.onTouchEvent(event);
+                //return false;
+            }
+        });
+
+
+
+
+
+
+
     }
 
 
