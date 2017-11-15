@@ -1,6 +1,7 @@
 package cn.abtion.neuqercc.main;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
 
@@ -16,11 +17,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.BaseActivity;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
-import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.HomeViewPagerAdapter;
 import cn.abtion.neuqercc.home.fragments.HomeFragment;
@@ -52,6 +53,7 @@ public class MainActivity extends NoBarActivity {
     TextView txtTabMenuMine;
     @BindView(R.id.vp_main_container)
     ViewPager mainViewPager;
+
 
     private HomeViewPagerAdapter homeViewPagerAdapter;
     private HomeFragment homeFragment;
@@ -105,9 +107,7 @@ public class MainActivity extends NoBarActivity {
     @Override
     protected void initView() {
 
-
         onLyTabMenuHomeClicked();
-
 
         //从其他活动转入后指定显示的fragment
         Intent intent = getIntent();
@@ -124,7 +124,6 @@ public class MainActivity extends NoBarActivity {
     protected void loadData() {
 
     }
-
 
 
     @Override
@@ -167,8 +166,6 @@ public class MainActivity extends NoBarActivity {
 //            hideFragment(mineFragment);
 //        }
 //    }
-
-
 
 
     /**
@@ -305,7 +302,7 @@ public class MainActivity extends NoBarActivity {
     }
 
     /**
-     *Mine
+     * Mine
      */
     @OnClick(R.id.ly_tab_menu_mine)
     public void onLyTabMenuMineClicked() {
@@ -325,4 +322,11 @@ public class MainActivity extends NoBarActivity {
 
     }
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }
