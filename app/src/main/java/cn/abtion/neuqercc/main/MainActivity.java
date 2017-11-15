@@ -1,6 +1,7 @@
 package cn.abtion.neuqercc.main;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
 import android.support.v4.view.ViewPager;
@@ -10,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.BaseActivity;
-import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.HomeViewPagerAdapter;
 import cn.abtion.neuqercc.home.fragments.HomeFragment;
@@ -22,7 +24,7 @@ import cn.abtion.neuqercc.mine.MineFragment;
 import cn.abtion.neuqercc.team.fragments.TeamFragment;
 import cn.abtion.neuqercc.utils.ToastUtil;
 
-public class MainActivity extends ToolBarActivity {
+public class MainActivity extends NoBarActivity {
 
     public static final int FLAG_HOME = 0;
     public static final int FLAG_TEAM = 1;
@@ -45,6 +47,7 @@ public class MainActivity extends ToolBarActivity {
     TextView txtTabMenuMine;
     @BindView(R.id.vp_main_container)
     ViewPager mainViewPager;
+
 
     private HomeViewPagerAdapter homeViewPagerAdapter;
     private HomeFragment homeFragment;
@@ -99,11 +102,11 @@ public class MainActivity extends ToolBarActivity {
     protected void initView() {
 
 
-        setActivityTitle("赛事信息");
+//        setActivityTitle("赛事信息");
 
         onLyTabMenuHomeClicked();
 
-        getToolbar().setNavigationIcon(R.drawable.ic_nav);
+//        getToolbar().setNavigationIcon(R.drawable.ic_nav);
 
         //从其他活动转入后指定显示的fragment
         Intent intent = getIntent();
@@ -138,7 +141,6 @@ public class MainActivity extends ToolBarActivity {
     protected void loadData() {
 
     }
-
 
 
     @Override
@@ -181,8 +183,6 @@ public class MainActivity extends ToolBarActivity {
 //            hideFragment(mineFragment);
 //        }
 //    }
-
-
 
 
     /**
@@ -230,7 +230,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeHomeMenuStatus() {
         clearChoiceStatus();
-        setActivityTitle("赛事信息");
+//        setActivityTitle("赛事信息");
         imgTabMenuHome.setSelected(true);
         txtTabMenuHome.setTextColor(getResources().getColor(R.color.text_warning));
     }
@@ -240,7 +240,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeTeamMenuStatus() {
         clearChoiceStatus();
-        setActivityTitle("组队");
+//        setActivityTitle("组队");
         imgTabMenuOrder.setSelected(true);
         txtTabMenuTeam.setTextColor(getResources().getColor(R.color.text_warning));
 
@@ -251,7 +251,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeMessageMenuStatus() {
         clearChoiceStatus();
-        setActivityTitle("聊天");
+//        setActivityTitle("聊天");
         imgTabMenuMessage.setSelected(true);
         txtTabMenuMessage.setTextColor(getResources().getColor(R.color.text_warning));
 
@@ -262,7 +262,7 @@ public class MainActivity extends ToolBarActivity {
      */
     private void changeMineMenuStatus() {
         clearChoiceStatus();
-        setActivityTitle("我的");
+//        setActivityTitle("我的");
         imgTabMenuMine.setSelected(true);
         txtTabMenuMine.setTextColor(getResources().getColor(R.color.text_warning));
     }
@@ -323,7 +323,7 @@ public class MainActivity extends ToolBarActivity {
     }
 
     /**
-     *Mine
+     * Mine
      */
     @OnClick(R.id.ly_tab_menu_mine)
     public void onLyTabMenuMineClicked() {
@@ -343,4 +343,11 @@ public class MainActivity extends ToolBarActivity {
 
     }
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

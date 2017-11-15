@@ -103,7 +103,7 @@
         android:layout_alignParentTop="true"
         android:background="#f2f2f2"
         android:elevation="0dp"
-        android:fitsSystemWindows="false" >
+        android:fitsSystemWindows="false">
 
 
         <android.support.v4.view.ViewPager
@@ -113,6 +113,6 @@
 
         </android.support.v4.view.ViewPager>
 
-        </FrameLayout>
+    </FrameLayout>
 
 </RelativeLayout>

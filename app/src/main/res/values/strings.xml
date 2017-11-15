@@ -24,4 +24,9 @@
     <string name="btn_search_team">寻找队伍</string>
     <string name="find_competition_name">查找比赛名称</string>
 
+    <string name="organize_team">组队</string>
+    <string name="home_page">赛事信息</string>
+    <string name="message">聊天</string>
+
+
 </resources>
