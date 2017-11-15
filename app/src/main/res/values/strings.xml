@@ -24,4 +24,10 @@
     <string name="btn_search_team">寻找队伍</string>
     <string name="find_competition_name">查找比赛名称</string>
 
+    <string name="profession">专业</string>
+    <string name="grade">年级</string>
+    <string name="student_id">学号</string>
+    <string name="student_name">姓名</string>
+    <string name="phone_number">联系方式</string>
+
 </resources>

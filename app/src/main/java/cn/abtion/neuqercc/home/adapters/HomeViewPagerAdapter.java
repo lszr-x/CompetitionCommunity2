@@ -4,12 +4,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+
 import cn.abtion.neuqercc.home.fragments.DetailsFragment;
-import cn.abtion.neuqercc.home.fragments.HomeFragment;
 import cn.abtion.neuqercc.home.fragments.RaidersFragment;
+import cn.abtion.neuqercc.home.fragments.HomeFragment;
 import cn.abtion.neuqercc.message.MessageFragment;
 import cn.abtion.neuqercc.mine.MineFragment;
-import cn.abtion.neuqercc.team.TeamFragment;
+import cn.abtion.neuqercc.team.fragments.TeamFragment;
+
 
 /**
  * @author fhyPayaso

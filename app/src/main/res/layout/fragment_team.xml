@@ -4,10 +4,21 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="team"
-        android:textSize="24sp"/>
+        android:layout_height="73dp"
+        android:background="@color/text_warning"
+        android:orientation="vertical"
+        android:gravity="bottom|center"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="组队"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="15dp"
+            />
+    </LinearLayout>
+
 </LinearLayout>
