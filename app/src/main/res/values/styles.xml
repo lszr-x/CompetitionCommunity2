@@ -62,4 +62,79 @@
     </style>
 
 
+    <!--登陆注册输入框样式-->
+    <style name="account_edit_text">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginRight">5dp</item>
+
+    </style>
+
+    <!--个人信息字体-->
+    <style name="mine_txt_information">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!--编辑资料字体-->
+    <style name="mine_txt_update_information">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+    </style>
+
+
+    <!--荣誉部分样式-->
+    <style name="view_mine_honor">
+        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_rowWeight">1</item>
+        <item name="android:layout_margin">7dp</item>
+        <item name="android:background">@color/text_warning</item>
+    </style>
+
+
+
+
+
+    <!--底部弹窗样式-->
+
+    <style name="dialog_bottom">
+
+        <!--背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!--悬浮-->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- Dialog以外的区域模糊效果 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- Dialog进入及退出动画 -->
+        <item name="android:windowAnimationStyle">@style/dialog_action</item>
+
+    </style>
+
+    <!--底部弹窗动画-->
+    <style name="dialog_action">
+
+        <item name="android:windowEnterAnimation">@anim/dialog_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_bottom_out</item>
+
+    </style>
+
+
+
+
+
 </resources>

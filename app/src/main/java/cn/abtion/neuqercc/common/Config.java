@@ -49,4 +49,12 @@ public class Config {
     public static final int FLING_MIN_DISTANCE=100;
     public static final int FLING_MIN_VELOCITY=10;
 
+
+    /**
+     * 倒计时及每次回调时间
+     */
+
+    public static final int COUNT_DOWN_TIME_TOTAL=60000;
+    public static final int COUNT_DOWN_TIME_PER=1000;
+
 }
