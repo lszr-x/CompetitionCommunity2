@@ -34,6 +34,7 @@ import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.activities.CompetitionActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
@@ -60,7 +61,7 @@ public class HomeFragment extends BaseFragment {
 
     private ArrayList<ContestListModel> contestListModels;
 
-    private int downX = 0;
+    private int downX = Config.VIEW_FLIPPER_INITAIL_VALUE;
 
 
     @BindView(R.id.spinner_home)

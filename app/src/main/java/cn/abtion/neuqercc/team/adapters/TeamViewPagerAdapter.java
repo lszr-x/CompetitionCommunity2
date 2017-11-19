@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.fragments.DetailsFragment;
 import cn.abtion.neuqercc.home.fragments.RaidersFragment;
 import cn.abtion.neuqercc.team.fragments.AllTeamFragment;
@@ -18,7 +19,7 @@ import cn.abtion.neuqercc.team.fragments.RecommendTeamFragment;
 public class TeamViewPagerAdapter extends FragmentPagerAdapter {
 
 
-    private String[] titles = new String[]{"全部队伍", "推荐队伍"};
+    private String[] titles = new String[]{Config.ALL_TEAM, Config.RECOMMAND_TEAM};
     private AllTeamFragment allTeamFragment;
     private RecommendTeamFragment recommendTeamFragment;
     private android.support.v4.app.Fragment currentFragment;
@@ -30,13 +31,13 @@ public class TeamViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0:
+            case Config.TEAM_VIEW_PAGER_ITEME_ZERO:
                 if (allTeamFragment==null){
                     allTeamFragment = new AllTeamFragment();
                 }
                 currentFragment = allTeamFragment;
                 break;
-            case 1:
+            case Config.TEAM_VIEW_PAGER_ITEME_ONE:
                 if (recommendTeamFragment==null){
                     recommendTeamFragment=new RecommendTeamFragment();
                 }

@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.team.adapters.TeamViewPagerAdapter;
 
 /**
@@ -46,7 +47,7 @@ public class TeamFragment extends BaseFragment {
     protected void initView() {
 
         //修改tab指示器长度
-        setIndicator(tableHeaderNavigation, 50, 50);
+        setIndicator(tableHeaderNavigation, Config.TAB_INDICATOR_LENGTH, Config.TAB_INDICATOR_LENGTH);
 
     }
 

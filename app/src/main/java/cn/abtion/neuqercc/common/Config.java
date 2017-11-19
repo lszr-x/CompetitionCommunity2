@@ -72,4 +72,24 @@ public class Config {
     public static final long COUNT_DOWN_TIME_TOTAL=60000;
     public static final long COUNT_DOWN_TIME_PER=1000;
 
+    /**
+     * team主界面ViewPagerAdapter设置字符串
+     */
+    public static final String ALL_TEAM ="全部队伍" ;
+    public static final String RECOMMAND_TEAM ="推荐队伍" ;
+
+    /**
+     * team主界面ViewPager跳转switch不同case
+     */
+    public static final int TEAM_VIEW_PAGER_ITEME_ZERO=0;
+    public static final int TEAM_VIEW_PAGER_ITEME_ONE=1;
+
+    /**
+     * tab指示器长度
+     */
+    public static final int TAB_INDICATOR_LENGTH=50;
+    /**
+     * viewflipper的downX变量初值
+     */
+    public static final int VIEW_FLIPPER_INITAIL_VALUE=0;
 }

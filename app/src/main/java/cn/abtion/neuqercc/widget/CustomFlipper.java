@@ -11,6 +11,7 @@ import android.widget.ViewFlipper;
 
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.common.Config;
 
 import static android.view.MotionEvent.ACTION_UP;
 import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
@@ -24,7 +25,7 @@ import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
 public class CustomFlipper extends ViewFlipper {
     CustomFlipper vfContest;
 
-    private int downX = 0;
+    private int downX = Config.VIEW_FLIPPER_INITAIL_VALUE;
 
     public CustomFlipper(Context context) {
         super(context);
@@ -59,8 +60,6 @@ public class CustomFlipper extends ViewFlipper {
         }
         return false;
     }
-
-
     /**
      * 定义从右侧进入的动画效果
      *
@@ -76,7 +75,6 @@ public class CustomFlipper extends ViewFlipper {
         inFromRight.setInterpolator(new AccelerateInterpolator());
         return inFromRight;
     }
-
     /**
      * 定义从左侧退出的动画效果
      *
@@ -92,7 +90,6 @@ public class CustomFlipper extends ViewFlipper {
         outtoLeft.setInterpolator(new AccelerateInterpolator());
         return outtoLeft;
     }
-
     /**
      * 定义从左侧进入的动画效果
      *
@@ -108,7 +105,6 @@ public class CustomFlipper extends ViewFlipper {
         inFromLeft.setInterpolator(new AccelerateInterpolator());
         return inFromLeft;
     }
-
     /**
      * 定义从右侧退出时的动画效果
      *
