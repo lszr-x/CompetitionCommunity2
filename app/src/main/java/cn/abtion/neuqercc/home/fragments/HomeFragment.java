@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment {
 
     private ArrayList<ContestListModel> contestListModels;
 
-    private int downX = 0;
+    private int downX = Config.VIEW_FLIPPER_INITAIL_VALUE;
 
 
     @BindView(R.id.spinner_home)

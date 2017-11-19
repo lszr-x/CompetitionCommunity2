@@ -1,7 +1,11 @@
 package cn.abtion.neuqercc.team.activities;
 
+import android.view.View;
+
+import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
  * @author lszr
@@ -9,7 +13,7 @@ import cn.abtion.neuqercc.base.activities.ToolBarActivity;
  * email wsyglszr@gmail.com
  */
 
-public class TeamInformation extends ToolBarActivity {
+public class TeamInformationActivity extends ToolBarActivity {
 
     @Override
     protected int getLayoutId() {
@@ -23,6 +27,7 @@ public class TeamInformation extends ToolBarActivity {
 
     @Override
     protected void initView() {
+        this.setActivityTitle("队伍信息");
 
     }
 
@@ -30,4 +35,8 @@ public class TeamInformation extends ToolBarActivity {
     protected void loadData() {
 
     }
+
+
+
+
 }
