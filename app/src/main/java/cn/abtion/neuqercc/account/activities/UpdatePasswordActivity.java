@@ -1,13 +1,13 @@
 package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
-import android.os.CountDownTimer;
 import android.support.design.widget.TextInputEditText;
 import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.models.CaptchaCountDownTimer;
 import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;

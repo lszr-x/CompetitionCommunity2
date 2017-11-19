@@ -4,19 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray">
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-    <!--</ScrollView>-->
-
-    <WebView
-        android:id="@+id/web_test"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-    </WebView>
+    </ScrollView>
 
 
 </LinearLayout>

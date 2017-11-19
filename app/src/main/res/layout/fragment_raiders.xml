@@ -18,26 +18,26 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:text="test"/>
+                android:text="@string/test_sample"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:text="test"/>
+                android:text="@string/test_sample"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:text="test"/>
+                android:text="@string/test_sample"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:text="test"/>
+                android:text="@string/test_sample"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:text="test"/>
+                android:text="@string/test_sample"/>
 
 
         </LinearLayout>

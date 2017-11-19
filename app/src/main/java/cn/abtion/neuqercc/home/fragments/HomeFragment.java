@@ -2,42 +2,29 @@ package cn.abtion.neuqercc.home.fragments;
 
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.content.Intent;
-import android.provider.ContactsContract;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
-import android.widget.Toast;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.activities.CompetitionActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
-import cn.abtion.neuqercc.main.MainActivity;
 
 import static android.view.MotionEvent.ACTION_UP;
 import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
@@ -52,9 +39,6 @@ import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
 public class HomeFragment extends BaseFragment {
 
 
-
-    //private GestureDetector gestureDetector;    //手势检测
-    Unbinder unbinder;
     @BindView(R.id.vf_contest)
     ViewFlipper vfContest;
 
@@ -87,7 +71,7 @@ public class HomeFragment extends BaseFragment {
 
         initViewFlipper();
 
-        initContestRecylerview();
+        initContestRecyclerView();
 
     }
 
@@ -97,13 +81,14 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    public void initContestRecylerview(){
+    public void initContestRecyclerView(){
 
 
         recHome.setNestedScrollingEnabled(false);
         contestListModels = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            contestListModels.add(new ContestListModel("数学建模", "前端、热血、创意", "比赛时间：2017.10.15-2017.10.18", "报名时间：2017.10.15-2017.10.18"));
+            contestListModels.add(new ContestListModel(getString(R.string.contest_list_title), getString(R.string.contest_list_summary),
+                    getString(R.string.contest_list_time_upper), getString(R.string.contest_list_time_lower)));
         }
 
         HomeAdapter homeAdapter = new HomeAdapter(getContext(), contestListModels);
@@ -138,7 +123,7 @@ public class HomeFragment extends BaseFragment {
 
         vfContest.setInAnimation(inFromRightAnimation());
         vfContest.setOutAnimation(outToLeftAnimation());
-        vfContest.setFlipInterval(3000);
+        vfContest.setFlipInterval(Config.FLIPPER_TIME_INTERVAL);
         vfContest.startFlipping();
         vfContest.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -198,8 +183,6 @@ public class HomeFragment extends BaseFragment {
 
     /**
      * 定义从右侧进入的动画效果
-     *
-     * @return
      */
     protected Animation inFromRightAnimation() {
         Animation inFromRight = new TranslateAnimation(
@@ -207,15 +190,13 @@ public class HomeFragment extends BaseFragment {
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f);
-        inFromRight.setDuration(200);
+        inFromRight.setDuration(Config.FLIPPER_ACTION_SPEED);
         inFromRight.setInterpolator(new AccelerateInterpolator());
         return inFromRight;
     }
 
     /**
      * 定义从左侧退出的动画效果
-     *
-     * @return
      */
     protected Animation outToLeftAnimation() {
         Animation outtoLeft = new TranslateAnimation(
@@ -223,15 +204,13 @@ public class HomeFragment extends BaseFragment {
                 Animation.RELATIVE_TO_PARENT, -1.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f);
-        outtoLeft.setDuration(200);
+        outtoLeft.setDuration(Config.FLIPPER_ACTION_SPEED);
         outtoLeft.setInterpolator(new AccelerateInterpolator());
         return outtoLeft;
     }
 
     /**
      * 定义从左侧进入的动画效果
-     *
-     * @return
      */
     protected Animation inFromLeftAnimation() {
         Animation inFromLeft = new TranslateAnimation(
@@ -239,15 +218,13 @@ public class HomeFragment extends BaseFragment {
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f);
-        inFromLeft.setDuration(200);
+        inFromLeft.setDuration(Config.FLIPPER_ACTION_SPEED);
         inFromLeft.setInterpolator(new AccelerateInterpolator());
         return inFromLeft;
     }
 
     /**
      * 定义从右侧退出时的动画效果
-     *
-     * @return
      */
     protected Animation outToRightAnimation() {
         Animation outtoRight = new TranslateAnimation(
@@ -255,7 +232,7 @@ public class HomeFragment extends BaseFragment {
                 Animation.RELATIVE_TO_PARENT, +1.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f);
-        outtoRight.setDuration(200);
+        outtoRight.setDuration(Config.FLIPPER_ACTION_SPEED);
         outtoRight.setInterpolator(new AccelerateInterpolator());
         return outtoRight;
     }

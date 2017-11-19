@@ -1,11 +1,7 @@
 package cn.abtion.neuqercc.team.activities;
 
-import android.view.View;
-
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.base.activities.BaseActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
-import cn.abtion.neuqercc.base.activities.ToolBarActivity_ViewBinding;
 
 /**
  * @author lszr

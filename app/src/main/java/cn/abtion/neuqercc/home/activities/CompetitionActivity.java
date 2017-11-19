@@ -1,32 +1,19 @@
 package cn.abtion.neuqercc.home.activities;
 
-
-import android.content.Intent;
 import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.content.res.Resources;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import butterknife.BindView;
-import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
-
-import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.CompetitionViewPagerAdapter;
-
 import cn.abtion.neuqercc.main.MainActivity;
-import cn.abtion.neuqercc.team.fragments.TeamFragment;
-
-
-
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author abtion.
@@ -38,10 +25,8 @@ public class CompetitionActivity extends ToolBarActivity{
 
     @BindView(R.id.table_header_navigation)
     TabLayout headerTitleTable;
-    @BindView(R.id.vp_body)
+    @BindView(R.id.viewpager_body)
     ViewPager competitionViewPager;
-
-    private CompetitionViewPagerAdapter competitionPagerAdapter;
 
 
     @Override
@@ -53,7 +38,7 @@ public class CompetitionActivity extends ToolBarActivity{
     @Override
     protected  void initVariable(){
 
-        competitionPagerAdapter =new CompetitionViewPagerAdapter(getSupportFragmentManager());
+        CompetitionViewPagerAdapter competitionPagerAdapter =new CompetitionViewPagerAdapter(getSupportFragmentManager());
         competitionViewPager.setAdapter(competitionPagerAdapter);
         //tabLayout和ViewPager联动
         headerTitleTable.setupWithViewPager(competitionViewPager);
@@ -62,11 +47,10 @@ public class CompetitionActivity extends ToolBarActivity{
     @Override
     protected void initView() {
 
-        //给toolBar添加标题
-        this.setActivityTitle("赛事");
+        this.setActivityTitle(getString(R.string.title_competition));
 
         //修改tab指示器长度
-        setIndicator(headerTitleTable,50,50);
+        setIndicator(headerTitleTable,Config.TAB_INDICATOR_WIDTH,Config.TAB_INDICATOR_WIDTH);
     }
 
     @Override

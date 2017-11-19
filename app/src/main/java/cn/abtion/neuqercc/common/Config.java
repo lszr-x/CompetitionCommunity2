@@ -50,6 +50,17 @@ public class Config {
     public static final int FLAG_MINE = 3;
     public static final int PAGE_LIMIT = 4;
 
+    /**
+     * 赛事页面page标记
+     */
+
+    public static final int FLAG_DETAILS = 0;
+    public static final int FLAG_RAIDERS = 1;
+    public static final int PAGE_COMPETITION_LIMIT = 2;
+
+    public static final String TAB_TITLE_DETAILS="赛事详情";
+    public static final String TAB_TITLE_RAIDERS="大神攻略";
+
 
     /**
      * 密码长度限制
@@ -64,12 +75,26 @@ public class Config {
     public static final int FLING_MIN_DISTANCE=100;
     public static final int FLING_MIN_VELOCITY=10;
 
-
     /**
      * 倒计时及每次回调时间
      */
 
     public static final long COUNT_DOWN_TIME_TOTAL=60000;
     public static final long COUNT_DOWN_TIME_PER=1000;
+
+    /**
+     * tab指示器长度
+     */
+    public static final int TAB_INDICATOR_WIDTH=50;
+
+
+
+
+    /**
+     * 轮播图
+     */
+
+    public static final int FLIPPER_TIME_INTERVAL=5000;
+    public static final int FLIPPER_ACTION_SPEED=200;
 
 }

@@ -5,8 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 
-import cn.abtion.neuqercc.home.fragments.DetailsFragment;
-import cn.abtion.neuqercc.home.fragments.RaidersFragment;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.fragments.HomeFragment;
 import cn.abtion.neuqercc.message.MessageFragment;
 import cn.abtion.neuqercc.mine.MineFragment;
@@ -27,7 +26,6 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter{
     private MineFragment mineFragment;
     private Fragment currentFragment;
 
-
     public HomeViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -38,25 +36,25 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter{
 
         switch (position){
 
-            case 0:
+            case Config.FLAG_HOME:
                 if (homeFragment==null){
                     homeFragment = new HomeFragment();
                 }
                 currentFragment = homeFragment;
                 break;
-            case 1:
+            case Config.FLAG_TEAM:
                 if (teamFragment==null){
                     teamFragment=new TeamFragment();
                 }
                 currentFragment=teamFragment;
                 break;
-            case 2:
+            case Config.FLAG_MESSAGE:
                 if (messageFragment==null){
                     messageFragment = new MessageFragment();
                 }
                 currentFragment = messageFragment;
                 break;
-            case 3:
+            case Config.FLAG_MINE:
                 if (mineFragment==null){
                     mineFragment=new MineFragment();
                 }
@@ -73,7 +71,7 @@ public class HomeViewPagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public  int getCount(){
-        return 4;
+        return Config.PAGE_LIMIT;
     }
 
 

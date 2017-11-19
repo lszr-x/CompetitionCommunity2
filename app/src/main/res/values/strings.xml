@@ -45,6 +45,16 @@
     <string name="error_captcha_number_illegal">验证码不正确</string>
     <string name="error_passwords_inconsistent">两次输入密码不一致</string>
 
+    
+    <!--home页面-->
+    <string name="title_competition">赛事</string>
+    <string name="contest_list_title">数学建模</string>
+    <string name="contest_list_summary">前端、热血、创意</string>
+    <string name="contest_list_time_upper">比赛时间：2017.10.15-2017.10.18</string>
+    <string name="contest_list_time_lower">报名时间：2017.10.15-2017.10.18</string>
+    <string name="btn_search_team">寻找队伍</string>
+    
+    
     <!--个人页面-->
     <string name="title_update_information">资料编辑</string>
     <string name="txt_edit">编辑</string>
@@ -70,11 +80,7 @@
 
 
     <string name="btn_return">返回</string>
-    <string name="contest_list_title">数学建模</string>
-    <string name="contest_list_summary">前端、热血、创意</string>
-    <string name="contest_list_time_upper">比赛时间：2017.10.15-2017.10.18</string>
-    <string name="contest_list_time_lower">报名时间：2017.10.15-2017.10.18</string>
-    <string name="btn_search_team">寻找队伍</string>
+
     <string name="find_competition_name">查找比赛名称</string>
     <string name="setting">设置</string>
     <string name="organize_team">组队</string>

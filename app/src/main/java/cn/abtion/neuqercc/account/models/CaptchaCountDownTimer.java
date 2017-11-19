@@ -1,4 +1,4 @@
-package cn.abtion.neuqercc.account.activities;
+package cn.abtion.neuqercc.account.models;
 
 import android.os.CountDownTimer;
 
@@ -29,10 +29,7 @@ public class CaptchaCountDownTimer extends CountDownTimer{
     @Override
     public void onFinish() {
 
-
     }
-
-
 
     public void timerStart(boolean onClick){
 

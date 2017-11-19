@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.fragments.DetailsFragment;
 import cn.abtion.neuqercc.home.fragments.RaidersFragment;
 
@@ -18,7 +19,8 @@ import cn.abtion.neuqercc.home.fragments.RaidersFragment;
 
 public class CompetitionViewPagerAdapter extends FragmentPagerAdapter {
 
-    private String[] titles = new String[]{"赛事详情","大神攻略"};
+
+    private String[] titles = new String[]{Config.TAB_TITLE_DETAILS,Config.TAB_TITLE_RAIDERS};
     private DetailsFragment detailsFragment;
     private RaidersFragment raidersFragment;
     private android.support.v4.app.Fragment currentFragment;
@@ -32,13 +34,13 @@ public class CompetitionViewPagerAdapter extends FragmentPagerAdapter {
 
 
         switch (position){
-            case 0:
+            case Config.FLAG_DETAILS:
                 if (detailsFragment==null){
                     detailsFragment = new DetailsFragment();
                 }
                 currentFragment = detailsFragment;
                 break;
-            case 1:
+            case Config.FLAG_RAIDERS:
                 if (raidersFragment==null){
                     raidersFragment=new RaidersFragment();
                 }
@@ -54,7 +56,7 @@ public class CompetitionViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public  int getCount(){
-        return 2;
+        return Config.PAGE_COMPETITION_LIMIT;
     }
 
     @Override

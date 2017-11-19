@@ -32,7 +32,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/vp_body"
+            android:id="@+id/viewpager_body"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -51,6 +51,8 @@
         android:paddingTop="5dp"
         android:text="@string/btn_search_team"
         android:textColor="@color/text_no_selected"
-        android:textSize="10sp"></Button>
+        android:textSize="10sp">
+
+    </Button>
 
 </android.support.design.widget.CoordinatorLayout>

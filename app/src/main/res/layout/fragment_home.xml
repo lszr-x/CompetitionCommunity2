@@ -44,7 +44,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1.5"
-                android:queryHint="查找比赛名称"
                 android:layout_marginRight="17dp"
 
                 >
@@ -76,7 +75,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10px"
+                android:layout_height="10dp"
                 android:background="@color/divider" />
 
 

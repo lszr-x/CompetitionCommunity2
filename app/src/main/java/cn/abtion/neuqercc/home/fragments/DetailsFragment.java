@@ -15,9 +15,6 @@ import cn.abtion.neuqercc.base.fragments.BaseFragment;
 public class DetailsFragment extends BaseFragment {
 
 
-    @BindView(R.id.web_test)
-    WebView webView;
-
 
     @Override
     protected int getLayoutId(){
@@ -27,7 +24,7 @@ public class DetailsFragment extends BaseFragment {
     @Override
     protected void initVariable() {
 
-        //webView.loadUrl("https://nba.hupu.com/");
+
     }
 
     @Override
