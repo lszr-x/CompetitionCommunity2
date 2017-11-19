@@ -2,6 +2,7 @@ package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.widget.Button;
 
@@ -37,14 +38,14 @@ public class RegisterActivity extends NoBarActivity {
     TextInputEditText editPassword;
     @BindView(R.id.edit_repeat_password)
     TextInputEditText editRepeatPassword;
+
     @BindView(R.id.btn_get_verify_code)
     Button btnGetVerifyCode;
 
+    CaptchaCountDownTimer captchaTimer;
     private RegisterRequest registerRequest;
     private SmsRequest smsRequest;
     private String verifyCode;
-
-
 
     @Override
     protected int getLayoutId() {
@@ -56,6 +57,9 @@ public class RegisterActivity extends NoBarActivity {
 
         registerRequest = new RegisterRequest();
         smsRequest = new SmsRequest();
+
+        initCountDownTimer();
+
     }
 
     @Override
@@ -77,10 +81,10 @@ public class RegisterActivity extends NoBarActivity {
 
         smsRequest.setPhone(editPhone.getText().toString().trim());
 
-        if (isPhoneTrue()) {
+        captchaTimer.timerStart(true);
 
-            timer.start();
-            processCaptcha();
+        if (isPhoneTrue()) {
+            getVerifyCode();
         }
     }
 
@@ -88,7 +92,7 @@ public class RegisterActivity extends NoBarActivity {
     private boolean isPhoneTrue() {
 
         boolean flag = true;
-        if (editPhone.getText().toString().trim().length() == 0) {
+        if (editPhone.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editPhone, getString(R.string.error_phone_number_empty_illegal));
             flag = false;
         } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
@@ -132,9 +136,9 @@ public class RegisterActivity extends NoBarActivity {
                 ToastUtil.showToast(getString(R.string.toast_register_successful));
 
                 //跳转至MainActivity
-                timer.cancel();
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
+                captchaTimer.cancel();
                 finish();
             }
 
@@ -158,7 +162,7 @@ public class RegisterActivity extends NoBarActivity {
     /**
      * 获取验证码相关方法
      */
-    public void processCaptcha() {
+    public void getVerifyCode() {
 
         //网络请求
 
@@ -198,7 +202,7 @@ public class RegisterActivity extends NoBarActivity {
     private boolean isDataTrue() {
         boolean flag = true;
 
-        if (editCaptcha.getText().toString().trim().length() == 0) {
+        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
             flag = false;
         } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
@@ -230,25 +234,49 @@ public class RegisterActivity extends NoBarActivity {
         textInputEditText.requestFocus();
     }
 
-
     /**
-     * 获取验证码相关方法（倒计时）
+     * 倒计时相关方法
      */
-    CountDownTimer timer = new CountDownTimer(Config.COUNT_DOWN_TIME_TOTAL, Config.COUNT_DOWN_TIME_PER) {
-        @Override
-        public void onTick(long millisUntilFinished) {
 
-            btnGetVerifyCode.setEnabled(false);
-            btnGetVerifyCode.setText((millisUntilFinished / Config.COUNT_DOWN_TIME_PER) + " s");
+    public void initCountDownTimer() {
+
+        if(!CaptchaCountDownTimer.FLAG_FIRST_IN&&
+                CaptchaCountDownTimer.curMillis+Config.COUNT_DOWN_TIME_TOTAL>System.currentTimeMillis()) {
+
+            setCountDownTimer(CaptchaCountDownTimer.curMillis+Config.COUNT_DOWN_TIME_TOTAL-System.currentTimeMillis());
+            captchaTimer.timerStart(false);
+
+        } else {
+            setCountDownTimer(Config.COUNT_DOWN_TIME_TOTAL);
         }
+    }
 
-        @Override
-        public void onFinish() {
 
-            btnGetVerifyCode.setEnabled(true);
-            btnGetVerifyCode.setText(getString(R.string.btn_get_captcha));
-        }
-    };
+    public void setCountDownTimer(final long countDownTime) {
+
+        captchaTimer = new CaptchaCountDownTimer( countDownTime , Config.COUNT_DOWN_TIME_PER) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                btnGetVerifyCode.setEnabled(false);
+                btnGetVerifyCode.setText((millisUntilFinished / Config.COUNT_DOWN_TIME_PER) + " s");
+            }
+            @Override
+            public void onFinish() {
+
+                btnGetVerifyCode.setEnabled(true);
+                btnGetVerifyCode.setText(getString(R.string.btn_get_captcha));
+
+                if(countDownTime!=Config.COUNT_DOWN_TIME_TOTAL) {
+                    setCountDownTimer(Config.COUNT_DOWN_TIME_TOTAL);
+                }
+            }
+        };
+    }
+
+
+
+
+
 
 
     /**
@@ -257,9 +285,9 @@ public class RegisterActivity extends NoBarActivity {
     @OnClick(R.id.btn_return)
     public void onBtnReturnClicked() {
 
-        timer.cancel();
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
+        captchaTimer.cancel();
         finish();
     }
 

@@ -19,6 +19,11 @@ public class Config {
     public static final String EMAIL_REGEX = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
 
     /**
+     * 空字段
+     */
+    public static final String EMPTY_FIELD = "";
+
+    /**
      * APP Server 网络请求BaseUrl
      */
     /**
@@ -35,6 +40,16 @@ public class Config {
      * 启动页面到首页启动延时，单位：毫秒
      */
     public static final int SPLASH_GO_MAIN_DELAY = 1500;
+
+    /**
+     * MainActivity的page标记
+     */
+    public static final int FLAG_HOME = 0;
+    public static final int FLAG_TEAM = 1;
+    public static final int FLAG_MESSAGE = 2;
+    public static final int FLAG_MINE = 3;
+    public static final int PAGE_LIMIT = 4;
+
 
     /**
      * 密码长度限制
@@ -54,7 +69,7 @@ public class Config {
      * 倒计时及每次回调时间
      */
 
-    public static final int COUNT_DOWN_TIME_TOTAL=60000;
-    public static final int COUNT_DOWN_TIME_PER=1000;
+    public static final long COUNT_DOWN_TIME_TOTAL=60000;
+    public static final long COUNT_DOWN_TIME_PER=1000;
 
 }

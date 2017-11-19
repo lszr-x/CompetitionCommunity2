@@ -29,7 +29,7 @@
                 android:id="@+id/txt_tab_menu_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="首页"
+                android:text="@string/tab_bottom_home"
                 android:textColor="#9b9b9b" />
 
         </LinearLayout>
@@ -48,7 +48,7 @@
                 android:id="@+id/txt_tab_menu_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="队伍" />
+                android:text="@string/tab_bottom_team" />
 
         </LinearLayout>
 
@@ -66,7 +66,7 @@
                 android:id="@+id/txt_tab_menu_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="消息" />
+                android:text="@string/tab_bottom_message" />
 
         </LinearLayout>
 
@@ -86,7 +86,7 @@
                 android:id="@+id/txt_tab_menu_mine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我的" />
+                android:text="@string/tab_bottom_mine" />
 
         </LinearLayout>
 
@@ -101,7 +101,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="#f2f2f2"
+        android:background="@color/bg_frame_gray"
         android:elevation="0dp"
         android:fitsSystemWindows="false">
 

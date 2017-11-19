@@ -1,7 +1,9 @@
 package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
 import android.transition.Explode;
 import android.transition.Slide;
@@ -156,7 +158,7 @@ public class LoginActivity extends NoBarActivity {
      */
     private boolean isDataTrue() {
         boolean flag = true;
-        if (editIdentifier.getText().toString().trim().length() == 0) {
+        if (editIdentifier.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editIdentifier, getString(R.string.error_account_empty_illegal));
             flag = false;
         } else if (RegexUtil.checkMobile(editIdentifier.getText().toString().trim())) {

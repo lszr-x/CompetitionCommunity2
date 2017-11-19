@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appbarlayout_table"
-        android:background="@color/background_gray">
+        android:background="@color/bg_gray">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager_team"

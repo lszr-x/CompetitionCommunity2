@@ -27,7 +27,6 @@ public class MineFragment extends BaseFragment {
 
     @BindView(R.id.mine_edit)
     TextView txtEdit;
-    Unbinder unbinder;
 
     @Override
     protected int getLayoutId() {
@@ -52,9 +51,6 @@ public class MineFragment extends BaseFragment {
 
     @OnClick(R.id.mine_edit)
     public void onTxtEditClicked() {
-
-
-        //ToastUtil.showToast("dianji");
 
         Intent intent =new Intent(getContext(),UpdateInformationActivity.class);
         startActivity(intent);

@@ -1,39 +1,33 @@
 package cn.abtion.neuqercc.main;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.BaseActivity;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.HomeViewPagerAdapter;
-import cn.abtion.neuqercc.home.fragments.HomeFragment;
-import cn.abtion.neuqercc.message.MessageFragment;
-import cn.abtion.neuqercc.mine.MineFragment;
-import cn.abtion.neuqercc.team.fragments.TeamFragment;
 import cn.abtion.neuqercc.utils.ToastUtil;
+
+
+/**
+ * @author abtion.
+ * @since 17/9/22 17:59.
+ * email caiheng@hrsoft.net
+ */
 
 public class MainActivity extends NoBarActivity {
 
-    public static final int FLAG_HOME = 0;
-    public static final int FLAG_TEAM = 1;
 
     @BindView(R.id.img_tab_menu_home)
     ImageView imgTabMenuHome;
@@ -55,13 +49,6 @@ public class MainActivity extends NoBarActivity {
     ViewPager mainViewPager;
 
 
-    private HomeViewPagerAdapter homeViewPagerAdapter;
-    private HomeFragment homeFragment;
-    private TeamFragment teamFragment;
-    private MessageFragment messageFragment;
-    private MineFragment mineFragment;
-    private int flag;
-
     public static void start(BaseActivity context, int flag) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(Config.KEY_MAIN_FLAG, flag);
@@ -80,9 +67,9 @@ public class MainActivity extends NoBarActivity {
 
 
         //有关viewPager的初始化
-        homeViewPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager());
-        mainViewPager.setCurrentItem(0);
-        mainViewPager.setOffscreenPageLimit(4);
+        HomeViewPagerAdapter homeViewPagerAdapter = new HomeViewPagerAdapter(getSupportFragmentManager());
+        mainViewPager.setCurrentItem(Config.FLAG_HOME);
+        mainViewPager.setOffscreenPageLimit(Config.PAGE_LIMIT);
         mainViewPager.setAdapter(homeViewPagerAdapter);
 
         mainViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -111,12 +98,11 @@ public class MainActivity extends NoBarActivity {
 
         //从其他活动转入后指定显示的fragment
         Intent intent = getIntent();
-        flag = intent.getIntExtra(Config.KEY_MAIN_FLAG, -1);
+        int flag = intent.getIntExtra(Config.KEY_MAIN_FLAG, -1);
         mainViewPager.setCurrentItem(flag);
 
 
         TransitionManager.beginDelayedTransition((ViewGroup) findViewById(android.R.id.content), new Fade());
-
 
     }
 
@@ -126,63 +112,21 @@ public class MainActivity extends NoBarActivity {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                ToastUtil.showToast("home");
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-//    private void hideFragment(Fragment fragment) {
-//        getSupportFragmentManager().beginTransaction().hide(fragment).commit();
-//    }
-//
-//    private void showFragment(Fragment fragment) {
-//        //hideAllFragment();
-//        getSupportFragmentManager().beginTransaction().show(fragment).commit();
-//    }
-//
-//    private void addFragment(Fragment fragment) {
-//        getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container, fragment).commit();
-//    }
-//
-//
-//    private void hideAllFragment() {
-//        if (homeFragment != null) {
-//            hideFragment(homeFragment);
-//        }
-//        if (teamFragment != null) {
-//            hideFragment(teamFragment);
-//        }
-//        if (messageFragment != null) {
-//            hideFragment(messageFragment);
-//        }
-//        if (mineFragment != null) {
-//            hideFragment(mineFragment);
-//        }
-//    }
-
-
     /**
      * 用于viewPager更换pager
      */
     private void changePager(int position) {
         switch (position) {
-            case 0:
+            case Config.FLAG_HOME:
                 changeHomeMenuStatus();
                 break;
-            case 1:
+            case Config.FLAG_TEAM:
                 changeTeamMenuStatus();
                 break;
-            case 2:
+            case Config.FLAG_MESSAGE:
                 changeMessageMenuStatus();
                 break;
-            case 3:
+            case Config.FLAG_MINE:
                 changeMineMenuStatus();
                 break;
             default:
@@ -254,15 +198,8 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuHomeClicked() {
 
         changeHomeMenuStatus();
-        mainViewPager.setCurrentItem(0);
+        mainViewPager.setCurrentItem(Config.FLAG_HOME,false);
 
-//        hideAllFragment();
-//        if (homeFragment == null) {
-//            homeFragment = new HomeFragment();
-//            addFragment(homeFragment);
-//        } else {
-//            showFragment(homeFragment);
-//        }
     }
 
     /**
@@ -271,16 +208,8 @@ public class MainActivity extends NoBarActivity {
     @OnClick(R.id.ly_tab_menu_order)
     public void onLyTabMenuOrderClicked() {
         changeTeamMenuStatus();
-        mainViewPager.setCurrentItem(1);
+        mainViewPager.setCurrentItem(Config.FLAG_TEAM,false);
 
-//        hideAllFragment();
-//        if (teamFragment == null) {
-//            teamFragment = new TeamFragment();
-//            addFragment(teamFragment);
-//        } else {
-//
-//            //showFragment(teamFragment);
-//        }
     }
 
     /**
@@ -290,15 +219,8 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuMessageClicked() {
 
         changeMessageMenuStatus();
-        mainViewPager.setCurrentItem(2);
-//        hideAllFragment();
-//        if (messageFragment == null) {
-//            messageFragment = new MessageFragment();
-//            addFragment(messageFragment);
-//        } else {
-//
-//            //showFragment(messageFragment);
-//        }
+        mainViewPager.setCurrentItem(Config.FLAG_MESSAGE,false);
+
     }
 
     /**
@@ -308,25 +230,8 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuMineClicked() {
 
         changeMineMenuStatus();
-        mainViewPager.setCurrentItem(3);
-
-//        hideAllFragment();
-//        if (mineFragment == null) {
-//            mineFragment = new MineFragment();
-//            addFragment(mineFragment);
-//        } else {
-//
-//
-//            //showFragment(mineFragment);
-//        }
+        mainViewPager.setCurrentItem(Config.FLAG_MINE,false);
 
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

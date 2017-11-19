@@ -89,7 +89,7 @@
             android:textSize="15sp"
             android:gravity="right"
             android:text="@string/txt_forget_password"
-            android:textColor="@color/black"
+            android:textColor="@color/bg_black"
              />
 
 

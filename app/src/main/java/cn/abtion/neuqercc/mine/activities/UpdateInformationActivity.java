@@ -27,12 +27,13 @@ import cn.abtion.neuqercc.utils.ToastUtil;
 
 public class UpdateInformationActivity extends NoBarActivity {
 
+    public static final int FLAG_EYE_OPEN=1;
+    public static final int FLAG_EYE_CLOSE=0;
+
     public static int flagNameEye = 1;
     public static int flagPhoneEye = 1;
     public Dialog dialogAddHonor;
-    //@BindView(R.id.btn_add_honor)
     Button btnAddHonor;
-    //@BindView(R.id.btn_cancel)
     Button btnCancel;
 
     @BindView(R.id.img_mine_name_eye)
@@ -100,12 +101,12 @@ public class UpdateInformationActivity extends NoBarActivity {
     @OnClick(R.id.img_mine_name_eye)
     public void onImgNameEyeClicked() {
 
-        if (flagNameEye == 1) {
+        if (flagNameEye == FLAG_EYE_OPEN) {
             imgNameEye.setSelected(true);
-            flagNameEye = 0;
+            flagNameEye = FLAG_EYE_CLOSE;
         } else {
             imgNameEye.setSelected(false);
-            flagNameEye = 1;
+            flagNameEye = FLAG_EYE_OPEN;
         }
 
     }
@@ -113,12 +114,12 @@ public class UpdateInformationActivity extends NoBarActivity {
     @OnClick(R.id.img_mine_phone_eye)
     public void onImgPhoneEyeClicked() {
 
-        if (flagPhoneEye == 1) {
+        if (flagPhoneEye == FLAG_EYE_OPEN) {
             imgPhoneEye.setSelected(true);
-            flagPhoneEye = 0;
+            flagPhoneEye = FLAG_EYE_CLOSE;
         } else {
             imgPhoneEye.setSelected(false);
-            flagPhoneEye = 1;
+            flagPhoneEye = FLAG_EYE_OPEN;
         }
     }
 
@@ -148,7 +149,7 @@ public class UpdateInformationActivity extends NoBarActivity {
             @Override
             public void onClick(View v) {
 
-                ToastUtil.showToast("点击了添加证书");
+
             }
         });
 

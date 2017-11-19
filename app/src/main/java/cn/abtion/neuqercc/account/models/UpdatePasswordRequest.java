@@ -2,17 +2,20 @@ package cn.abtion.neuqercc.account.models;
 
 import cn.abtion.neuqercc.base.models.BaseModel;
 
+
 /**
- * Created by 41061 on 2017/10/18.
+ * @author fhyPayaso
+ * @since 2017/11/7 16:40
+ * email fhyPayaso@qq.com
  */
 
-public class NewPasswordRequest extends BaseModel{
+public class UpdatePasswordRequest extends BaseModel{
 
 
     private String phone;
     private String password;
 
-    public NewPasswordRequest(){
+    public UpdatePasswordRequest(){
 
     }
 

@@ -81,7 +81,7 @@ public class CompetitionActivity extends ToolBarActivity{
     @OnClick(R.id.btn_search)
     public void onBtnSearchClicked(){
 
-        MainActivity.start(this,MainActivity.FLAG_TEAM);
+        MainActivity.start(this,Config.FLAG_TEAM);
         finish();
     }
 

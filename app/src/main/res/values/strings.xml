@@ -2,8 +2,14 @@
     <string name="app_name">NEUQerCC</string>
     <string name="msg_input_identifier">请输入oj账号/id/邮箱</string>
     <string name="msg_input_password">请输入密码</string>
+    <string name="test_sample">test</string>
 
 
+    <!--主活动页面-->
+    <string name="tab_bottom_home">首页</string>
+    <string name="tab_bottom_team">队伍</string>
+    <string name="tab_bottom_message">消息</string>
+    <string name="tab_bottom_mine">我的</string>
     <!--登录页面-->
     <string name="hint_account">账号</string>
     <string name="hint_password">密码</string>
@@ -32,16 +38,34 @@
     <string name="btn_over">完成</string>
 
     <string name="toast_register_successful">注册成功</string>
+    <string name="toast_update_successful">修改成功</string>
     <string name="toast_send_successful">发送成功,请注意查收验证码</string>
     <string name="error_phone_number_empty_illegal">手机号不得为空</string>
     <string name="error_captcha_empty_illegal">验证码不可为空</string>
     <string name="error_captcha_number_illegal">验证码不正确</string>
     <string name="error_passwords_inconsistent">两次输入密码不一致</string>
 
-
-
-
-
+    <!--个人页面-->
+    <string name="title_update_information">资料编辑</string>
+    <string name="txt_edit">编辑</string>
+    <string name="txt_good_at_direction">擅长方向</string>
+    <string name="txt_good_at_field">擅长领域</string>
+    <string name="txt_my_team">我的队伍</string>
+    <string name="txt_student_name">姓名</string>
+    <string name="txt_phone_number">联系方式</string>
+    <string name="txt_profession">专业</string>
+    <string name="txt_grade">年级</string>
+    <string name="txt_student_id">学号</string>
+    <string name="txt_sex">性别</string>
+    <string name="txt_honor_wall">荣誉墙</string>
+    <string name="txt_account_setting">账号设置</string>
+    <string name="dialog_add_honor">添加证书及奖项</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="hint_student_name">姓名</string>
+    <string name="hint_input_name">输入姓名</string>
+    <string name="hint_input_phone_number">输入手机号码</string>
+    <string name="hint_input_profession">输入专业</string>
+    <string name="hint_input_id">输入学号</string>
 
 
 
@@ -52,25 +76,7 @@
     <string name="contest_list_time_lower">报名时间：2017.10.15-2017.10.18</string>
     <string name="btn_search_team">寻找队伍</string>
     <string name="find_competition_name">查找比赛名称</string>
-
-    <!--个人页面-->
-    <string name="profession">专业</string>
-    <string name="grade">年级</string>
-    <string name="student_id">学号</string>
-    <string name="student_name">姓名</string>
-    <string name="phone_number">联系方式</string>
-    <string name="update_information">资料编辑</string>
     <string name="setting">设置</string>
-    <string name="account_setting">账号设置</string>
-    <string name="edit">编辑</string>
-    <string name="honor_wall">荣誉墙</string>
-    <string name="good_at_direction">擅长方向</string>
-    <string name="good_at_field">擅长领域</string>
-    <string name="my_team">我的队伍</string>
-    <string name="sex">性别</string>
-    <string name="add_honor">添加证书及奖项</string>
-    <string name="cancel">取消</string>
-
     <string name="organize_team">组队</string>
     <string name="home_page">赛事信息</string>
     <string name="message">聊天</string>
