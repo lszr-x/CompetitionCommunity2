@@ -80,7 +80,15 @@
     <string name="organize_team">组队</string>
     <string name="home_page">赛事信息</string>
     <string name="message">聊天</string>
-
+    <string name="test_team_name">地表最强队</string>
+    <string name="text_want_join">预参加比赛或项目</string>
+    <string name="text_contest_name">数学建模比赛</string>
+    <string name="text_team_member">团队成员</string>
+    <string name="text_captain">队长</string>
+    <string name="text_member_name">某某某</string>
+    <string name="text_adept">擅长</string>
+    <string name="text_math_power_up">数学编程能力强</string>
+    <string name="text_team_introduce">队伍介绍</string>
 
 
 </resources>

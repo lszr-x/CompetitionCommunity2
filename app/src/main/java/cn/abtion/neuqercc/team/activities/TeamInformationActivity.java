@@ -2,9 +2,11 @@ package cn.abtion.neuqercc.team.activities;
 
 import android.view.View;
 
+import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.BaseActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
  * @author lszr
@@ -26,6 +28,7 @@ public class TeamInformationActivity extends ToolBarActivity {
 
     @Override
     protected void initView() {
+        this.setActivityTitle("队伍信息");
 
     }
 
@@ -33,4 +36,18 @@ public class TeamInformationActivity extends ToolBarActivity {
     protected void loadData() {
 
     }
+    @OnClick(R.id.btn_join_team)
+    public void onViewClicked() {
+        //      弹出提示
+
+        ToastUtil.showToast("已提交加入队伍申请");
+
+
+        //      发送加入队伍请求
+
+
+    }
+
+
+
 }
