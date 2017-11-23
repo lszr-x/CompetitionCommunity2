@@ -16,8 +16,8 @@
             android:id="@+id/mine_header_bg"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:orientation="vertical"
-            android:background="@drawable/bg_mine_title">
+            android:background="@drawable/bg_mine_title"
+            android:orientation="vertical">
 
         </LinearLayout>
 
@@ -75,26 +75,35 @@
                 android:text="@string/txt_good_at_direction" />
 
             <TextView
-                android:id="@+id/mine_team"
-                style="@style/mine_txt_information"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@id/mine_dividing_two"
-                android:text="@string/txt_my_team" />
-
-            <TextView
                 style="@style/mine_txt_information"
                 android:layout_alignLeft="@+id/mine_direction"
                 android:layout_below="@id/mine_direction"
                 android:layout_marginTop="5dp"
                 android:text="@string/test_sample" />
 
-            <TextView
-                style="@style/mine_txt_information"
-                android:layout_alignLeft="@+id/mine_team"
-                android:layout_below="@id/mine_team"
-                android:layout_marginTop="5dp"
-                android:text="@string/test_sample" />
+            <RelativeLayout
+                android:id="@+id/rlayout_mine_team"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/mine_dividing_two">
+
+                <TextView
+                    android:id="@+id/mine_team"
+                    style="@style/mine_txt_information"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/txt_my_team" />
+
+                <TextView
+                    style="@style/mine_txt_information"
+                    android:layout_alignLeft="@+id/mine_team"
+                    android:layout_below="@id/mine_team"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/test_sample" />
+
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
@@ -147,36 +156,18 @@
 
 
             <TextView
-                android:id="@+id/mine_name"
                 style="@style/mine_txt_information"
+                android:layout_alignBottom="@+id/ic_name"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="13dp"
                 android:layout_toRightOf="@id/ic_name"
-                android:text="@string/txt_student_name" />
-
-            <TextView
-                android:id="@+id/mine_phonenumber"
-                style="@style/mine_txt_information"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="6dp"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/ic_phone"
-                android:text="@string/txt_phone_number" />
-
-
-            <TextView
-                style="@style/mine_txt_information"
-                android:layout_alignBottom="@+id/mine_name"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/mine_name"
                 android:text="@string/test_sample" />
 
 
             <TextView
                 style="@style/mine_txt_information"
-                android:layout_alignBottom="@id/mine_phonenumber"
+                android:layout_alignBottom="@id/ic_phone"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/mine_phonenumber"
+                android:layout_toRightOf="@id/ic_phone"
                 android:text="@string/test_sample" />
 
 
@@ -303,13 +294,13 @@
             android:id="@+id/btn_setting"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/mine_honor"
             android:layout_marginTop="6dp"
             android:background="@color/bg_white"
-            android:layout_below="@+id/mine_honor"
             android:text="@string/txt_account_setting"
             android:textColor="@color/text_warning"
-            android:textSize="17sp"
-            android:layout_alignParentBottom="true"/>
+            android:textSize="17sp" />
 
     </RelativeLayout>
 

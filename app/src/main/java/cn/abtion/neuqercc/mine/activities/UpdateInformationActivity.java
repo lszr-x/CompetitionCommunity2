@@ -1,23 +1,33 @@
 package cn.abtion.neuqercc.mine.activities;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.base.activities.NoBarActivity;
-import cn.abtion.neuqercc.utils.ToastUtil;
+import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
+import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
+import cn.abtion.neuqercc.widget.HonorGridView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author fhyPayaso
@@ -25,27 +35,35 @@ import cn.abtion.neuqercc.utils.ToastUtil;
  * email fhyPayaso@qq.com
  */
 
-public class UpdateInformationActivity extends NoBarActivity {
+public class UpdateInformationActivity extends ToolBarActivity {
 
-    public static final int FLAG_EYE_OPEN=1;
-    public static final int FLAG_EYE_CLOSE=0;
+    public static final int FLAG_EYE_OPEN = 1;
+    public static final int FLAG_EYE_CLOSE = 0;
 
     public static int flagNameEye = 1;
     public static int flagPhoneEye = 1;
-    public Dialog dialogAddHonor;
+
     Button btnAddHonor;
+    Button btnTakePhoto;
+    Button btnFromAlbum;
     Button btnCancel;
 
     @BindView(R.id.img_mine_name_eye)
     ImageView imgNameEye;
     @BindView(R.id.img_mine_phone_eye)
     ImageView imgPhoneEye;
-    @BindView(R.id.img_mine_update_honor)
-    ImageView imgUpdateHonor;
     @BindView(R.id.cb_edit_girl)
     CheckBox checkBoxGirl;
     @BindView(R.id.cb_edit_boy)
     CheckBox checkBoxBoy;
+    @BindView(R.id.mine_update_avatar)
+    CircleImageView imgUpdateAvatar;
+    @BindView(R.id.rlayout_mine_wrap)
+    RelativeLayout rlayoutMineWrap;
+
+    private GridHonorAdapter gridHonorAdapter;
+    private boolean isShowDelete;
+    private List<HonorCertificateModel> honorCertificateModelList = new ArrayList<HonorCertificateModel>();
 
 
     @Override
@@ -56,17 +74,72 @@ public class UpdateInformationActivity extends NoBarActivity {
     @Override
     protected void initVariable() {
 
+        setActivityTitle(getString(R.string.title_update_information));
     }
 
     @Override
     protected void initView() {
 
         initCheckbox();
+        initGrid();
 
     }
 
     @Override
     protected void loadData() {
+
+    }
+
+    public void initGrid() {
+
+
+        HonorGridView gridView = (HonorGridView) findViewById(R.id.mine_grid_honor);
+        gridHonorAdapter = new GridHonorAdapter(this, honorCertificateModelList);
+        gridView.setAdapter(gridHonorAdapter);
+
+        //如果点击添加图片部分
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == parent.getChildCount() - 1) {
+
+                    initHonorDialog();
+                    addDatas();
+                }
+                isShowDelete=false;
+            }
+        });
+
+        //如果长按图片
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position < honorCertificateModelList.size()) {
+
+                    if (isShowDelete) {
+                        isShowDelete = false;
+                        gridHonorAdapter.setIsShowDelete(isShowDelete);
+                    } else {
+                        isShowDelete = true;
+                        gridHonorAdapter.setIsShowDelete(isShowDelete);
+                    }
+                }
+                return false;
+            }
+        });
+
+
+    }
+
+    public void addDatas() {
+
+        HonorCertificateModel honorCertificateAdd = new HonorCertificateModel(R.drawable.bg_account_title);
+        honorCertificateModelList.add(honorCertificateAdd);
+        gridHonorAdapter.notifyDataSetChanged();
 
     }
 
@@ -124,31 +197,37 @@ public class UpdateInformationActivity extends NoBarActivity {
     }
 
 
+
+
     public void initHonorDialog() {
 
 
-        dialogAddHonor =new Dialog(this,R.style.dialog_bottom);
-        View inflate = LayoutInflater.from(this).inflate(R.layout.dialog_mine_honor, null);
-
-
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_mine_honor, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog_bottom);
+        builder.setView(view);
+        final AlertDialog dialogAddHonor = builder.create();
         Window window = dialogAddHonor.getWindow();
         window.setGravity(Gravity.BOTTOM);
-        android.view.WindowManager.LayoutParams layoutParams =window.getAttributes();
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(layoutParams);
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+        dialogAddHonor.show();
 
-        dialogAddHonor.setContentView(inflate);
-        dialogAddHonor.setCancelable(true);
-        dialogAddHonor.setCanceledOnTouchOutside(true);
-
-        btnAddHonor=(Button)inflate.findViewById(R.id.btn_add_honor);
-        btnCancel=(Button)inflate.findViewById(R.id.btn_cancel);
+        btnAddHonor = (Button) view.findViewById(R.id.btn_add_honor);
+        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
 
 
         btnAddHonor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if (dialogAddHonor.isShowing()) {
+                    dialogAddHonor.dismiss();
+                }
+                Intent intent = new Intent(UpdateInformationActivity.this, HonorUpdateActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -157,7 +236,7 @@ public class UpdateInformationActivity extends NoBarActivity {
             @Override
             public void onClick(View v) {
 
-                if(dialogAddHonor!=null&&dialogAddHonor.isShowing()) {
+                if (dialogAddHonor != null && dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
             }
@@ -166,15 +245,90 @@ public class UpdateInformationActivity extends NoBarActivity {
     }
 
 
-    @OnClick(R.id.img_mine_update_honor)
-    public void onImgUpdateHonorClicked() {
 
-        if (dialogAddHonor == null) {
-            initHonorDialog();
-        } else {
-            dialogAddHonor.show();
-        }
 
+
+    public void initAvatarDialog() {
+
+
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_mine_avatar, null);
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog_bottom);
+        builder.setView(view);
+        final AlertDialog dialogAddHonor = builder.create();
+        Window window = dialogAddHonor.getWindow();
+        window.setGravity(Gravity.BOTTOM);
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+        dialogAddHonor.show();
+
+        btnTakePhoto = (Button) view.findViewById(R.id.btn_take_photo);
+        btnFromAlbum = (Button) view.findViewById(R.id.btn_from_album);
+        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+
+        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (dialogAddHonor.isShowing()) {
+                    dialogAddHonor.dismiss();
+                }
+
+                Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takeIntent, 1);
+
+
+            }
+        });
+
+
+        btnFromAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (dialogAddHonor.isShowing()) {
+                    dialogAddHonor.dismiss();
+                }
+
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 100);
+
+            }
+        });
+
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (dialogAddHonor != null && dialogAddHonor.isShowing()) {
+                    dialogAddHonor.dismiss();
+                }
+            }
+        });
     }
 
+    @OnClick(R.id.mine_update_avatar)
+    public void onImgUpdateAvatarClicked() {
+
+        initAvatarDialog();
+    }
+
+
+
+    @OnClick(R.id.rlayout_mine_wrap)
+    public void onViewClicked() {
+
+        if(isShowDelete) {
+
+            isShowDelete=false;
+            gridHonorAdapter.setIsShowDelete(isShowDelete);
+        }else {
+            gridHonorAdapter.setIsShowDelete(isShowDelete);
+        }
+    }
 }

@@ -93,8 +93,7 @@ public abstract class ToolBarActivity extends BaseActivity {
      */
     protected void setActivityTitle(CharSequence charSequence) {
         if (toolbar != null) {
-            //toolbar.setTitle(charSequence);
-            //toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
             toolBarTitle.setText(charSequence);
             toolBarTitle.setTextColor(getResources().getColor(R.color.white));
         }

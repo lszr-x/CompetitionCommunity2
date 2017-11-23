@@ -76,13 +76,39 @@
     <string name="hint_input_phone_number">输入手机号码</string>
     <string name="hint_input_profession">输入专业</string>
     <string name="hint_input_id">输入学号</string>
+    <string name="txt_mine_setting">设置</string>
+    <string name="txt_update_password">修改密码</string>
+    <string name="txt_current_account">当前账号</string>
+    <string name="txt_feedback">意见反馈</string>
+    <string name="txt_about_us">关于我们</string>
+    <string name="btn_sign_out">退出登录</string>
+    <string name="title_setting">设置</string>
+    <string name="txt_old_password">旧密码</string>
+    <string name="txt_new_password">新密码</string>
+    <string name="txt_repeat_password">新密码</string>
+    <string name="hint_input_old_password">输入旧密码</string>
+    <string name="hint_input_new_password">输入新密码</string>
+    <string name="hint_input_repeat_password">再次输入新密码</string>
+    <string name="btn_confirm_changes">确认修改</string>
+    <string name="btn_submit">提交</string>
+    <string name="hint_please_input_question">请描述遇到的问题</string>
+    <string name="title_certificate_editing">证书编辑</string>
+    <string name="btn_confirm_editing">编辑完成</string>
+    <string name="txt_event_name">赛事名称</string>
+    <string name="txt_get_time">获得时间</string>
+    <string name="dialog_take_photo">拍照</string>
+    <string name="dialog_from_album">从相册中选取</string>
+    <string name="title_mine_team">我的队伍</string>
+    <string name="txt_mine_team_number">人数：</string>
+    <string name="txt_mine_team_position">组内职务：</string>
+    <string name="txt_version_number">版本号1.0.0</string>
+    <string name="txt_computer_communication">计算机与通信工程学院</string>
+    <string name="txt_slogan">石可破也，而不可夺坚；丹可磨也，而不可夺赤</string>
 
 
 
     <string name="btn_return">返回</string>
-
     <string name="find_competition_name">查找比赛名称</string>
-    <string name="setting">设置</string>
     <string name="organize_team">组队</string>
     <string name="home_page">赛事信息</string>
     <string name="message">聊天</string>
