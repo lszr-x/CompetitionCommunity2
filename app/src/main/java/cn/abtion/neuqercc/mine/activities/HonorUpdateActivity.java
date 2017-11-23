@@ -36,6 +36,10 @@ import cn.abtion.neuqercc.utils.ToastUtil;
 public class HonorUpdateActivity extends ToolBarActivity {
 
 
+    public final int PHOTO_FLAG=1;
+    public final int IMG_FLAG=100;
+
+
     Button btnTakePhoto;
     Button btnFromAlbum;
     Button btnCancel;
@@ -47,9 +51,9 @@ public class HonorUpdateActivity extends ToolBarActivity {
     Button btnHonorConfirmEdit;
 
 
-    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[] {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-    private static final int REQUEST_EXTERNAL_STORAGE = 100;
+//    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[] {
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+//    private static final int REQUEST_EXTERNAL_STORAGE = 100;
 
 
 
@@ -114,7 +118,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
                 }
 
                 Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takeIntent, 100);
+                startActivityForResult(takeIntent, PHOTO_FLAG);
 
 
             }
@@ -129,7 +133,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
                 }
 
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, IMG_FLAG);
 
             }
         });
@@ -179,14 +183,14 @@ public class HonorUpdateActivity extends ToolBarActivity {
     }
 
 
-    private void verifyStoragePermissions(Activity activity) {
-        int permissionWrite = ActivityCompat.checkSelfPermission(activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if(permissionWrite != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, PERMISSION_EXTERNAL_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE);
-        }
-    }
+//    private void verifyStoragePermissions(Activity activity) {
+//        int permissionWrite = ActivityCompat.checkSelfPermission(activity,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//        if(permissionWrite != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(activity, PERMISSION_EXTERNAL_STORAGE,
+//                    REQUEST_EXTERNAL_STORAGE);
+//        }
+//    }
 
 
 

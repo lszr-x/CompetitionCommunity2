@@ -60,6 +60,7 @@ public class MineTeamListActivity extends ToolBarActivity {
         recMineTeam.setNestedScrollingEnabled(false);
         mineTeamListModels = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
+            //test
             mineTeamListModels.add(new MineTeamListModel("无敌最强队","5","组长","数学建模"));
         }
 
@@ -72,6 +73,7 @@ public class MineTeamListActivity extends ToolBarActivity {
 
             @Override
             public void onItemClicked(MineTeamListModel mineTeamListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
+                //test
                 ToastUtil.showToast("点击成功");
             }
         });
