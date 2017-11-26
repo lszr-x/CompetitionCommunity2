@@ -15,11 +15,10 @@
 
         <ImageView
             android:id="@+id/img_add_honor"
-            android:src="@drawable/bg_add_honor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-             />
+            android:src="@drawable/bg_add_honor" />
 
     </RelativeLayout>
 
@@ -42,12 +41,14 @@
 
 
         <EditText
+            android:id="@+id/edit_event_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@null"
             android:hint="@string/test_sample"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:gravity="right"/>
 
     </RelativeLayout>
 
