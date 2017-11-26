@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -26,6 +27,8 @@ import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.utils.ToastUtil;
+
+import static android.R.attr.bitmap;
 
 /**
  * @author fhyPayaso
@@ -51,9 +54,9 @@ public class HonorUpdateActivity extends ToolBarActivity {
     Button btnHonorConfirmEdit;
 
 
-//    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[] {
-//            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-//    private static final int REQUEST_EXTERNAL_STORAGE = 100;
+    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[] {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final int REQUEST_EXTERNAL_STORAGE = 100;
 
 
 
@@ -68,6 +71,8 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
 
         setActivityTitle(getString(R.string.title_certificate_editing));
+
+        verifyStoragePermissions(HonorUpdateActivity.this);
     }
 
     @Override
@@ -172,8 +177,12 @@ public class HonorUpdateActivity extends ToolBarActivity {
     }
 
     private void showImage(String imgPath){
+
+
         Bitmap bm = BitmapFactory.decodeFile(imgPath);
+        //imgAddHonor.setImageDrawable();
         //imgAddHonor.setImageBitmap(bm);
+        //imgAddHonor.setVisibility(View.VISIBLE);
     }
 
 
@@ -183,14 +192,14 @@ public class HonorUpdateActivity extends ToolBarActivity {
     }
 
 
-//    private void verifyStoragePermissions(Activity activity) {
-//        int permissionWrite = ActivityCompat.checkSelfPermission(activity,
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//        if(permissionWrite != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(activity, PERMISSION_EXTERNAL_STORAGE,
-//                    REQUEST_EXTERNAL_STORAGE);
-//        }
-//    }
+    private void verifyStoragePermissions(Activity activity) {
+        int permissionWrite = ActivityCompat.checkSelfPermission(activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(permissionWrite != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, PERMISSION_EXTERNAL_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }
+    }
 
 
 
