@@ -35,19 +35,19 @@ import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 public class HonorUpdateActivity extends ToolBarActivity {
 
 
-    public final int TAKE_PHOTO_FLAG = 1;
-    public final int SET_IMG_FLAG = 100;
+
 
     /**
      * 动态申请权限
      */
     private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_EXTERNAL_STORAGE = 100;
+    public final int TAKE_PHOTO_FLAG = 1;
+    public final int SET_IMG_FLAG = 100;
 
     Button btnTakePhoto;
     Button btnFromAlbum;
     Button btnCancel;
-
 
     @BindView(R.id.img_add_honor)
     ImageView imgAddHonor;

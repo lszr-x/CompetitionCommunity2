@@ -73,8 +73,10 @@ public class MineTeamListActivity extends ToolBarActivity {
 
             @Override
             public void onItemClicked(MineTeamListModel mineTeamListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
-                //test
-                ToastUtil.showToast("点击成功");
+
+                Intent intent = new Intent(MineTeamListActivity.this,MineTeamIfromationActivity.class);
+                startActivity(intent);
+
             }
         });
     }

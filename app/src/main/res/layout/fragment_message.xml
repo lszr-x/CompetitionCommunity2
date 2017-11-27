@@ -8,6 +8,6 @@
         android:id="@+id/txt_team_title"
         style="@style/title_txt"
         android:background="@color/colorAccent"
-        android:text="@string/message"/>
+        android:text="@string/message" />
 
 </LinearLayout>

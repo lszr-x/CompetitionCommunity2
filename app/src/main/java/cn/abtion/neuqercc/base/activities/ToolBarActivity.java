@@ -12,10 +12,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.abtion.neuqercc.R;
 
 /**
  * super activity for toolbar activity.
+ *
  * @author abtion.
  * @since 17/9/22 17:47.
  * email caiheng@hrsoft.net
@@ -23,16 +25,21 @@ import cn.abtion.neuqercc.R;
 
 public abstract class ToolBarActivity extends BaseActivity {
 
-    /** activity 页面Toolbar */
+
+    /**
+     * activity 页面Toolbar
+     */
     private Toolbar toolbar;
     @BindView(R.id.txt_toolbar_title)
     protected TextView toolBarTitle;
-
+    @BindView(R.id.txt_toolbar_over)
+    protected TextView toolBarOver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getToolbarView());
+        ButterKnife.bind(this);
         init();
     }
 
@@ -98,6 +105,17 @@ public abstract class ToolBarActivity extends BaseActivity {
             toolBarTitle.setTextColor(getResources().getColor(R.color.white));
         }
     }
+
+
+    protected void setTextOver(CharSequence charSequence) {
+        if (toolbar != null) {
+
+            toolBarOver.setText(charSequence);
+            toolBarOver.setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
+
 
     /**
      * Toolbar返回按钮的监听事件

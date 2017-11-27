@@ -25,7 +25,6 @@
     <string name="toast_login_successful">登录成功</string>
 
 
-
     <!--注册、修改密码页面-->
     <string name="hint_register_phone">请输入手机号</string>
     <string name="hint_captcha">请输入验证码</string>
@@ -45,7 +44,7 @@
     <string name="error_captcha_number_illegal">验证码不正确</string>
     <string name="error_passwords_inconsistent">两次输入密码不一致</string>
 
-    
+
     <!--home页面-->
     <string name="title_competition">赛事</string>
     <string name="contest_list_title">数学建模</string>
@@ -53,8 +52,8 @@
     <string name="contest_list_time_upper">比赛时间：2017.10.15-2017.10.18</string>
     <string name="contest_list_time_lower">报名时间：2017.10.15-2017.10.18</string>
     <string name="btn_search_team">寻找队伍</string>
-    
-    
+
+
     <!--个人页面-->
     <string name="title_update_information">资料编辑</string>
     <string name="txt_edit">编辑</string>
@@ -104,7 +103,9 @@
     <string name="txt_version_number">版本号1.0.0</string>
     <string name="txt_computer_communication">计算机与通信工程学院</string>
     <string name="txt_slogan">石可破也，而不可夺坚；丹可磨也，而不可夺赤</string>
-
+    <string name="btn_edit_team_information">修改信息</string>
+    <string name="title_edit_team_information">编辑信息</string>
+    <string name="title_over">完成</string>
 
 
     <string name="btn_return">返回</string>

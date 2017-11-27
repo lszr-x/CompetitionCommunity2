@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
     @Override
     protected void initVariable() {
 
-        setActivityTitle(getString(R.string.title_update_information));
+
     }
 
     @Override
@@ -82,6 +83,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
         initCheckbox();
         initGrid();
+        initTitle();
 
     }
 
@@ -89,6 +91,23 @@ public class UpdateInformationActivity extends ToolBarActivity {
     protected void loadData() {
 
     }
+
+
+    protected  void initTitle() {
+
+        setActivityTitle(getString(R.string.title_update_information));
+        setTextOver(getString(R.string.title_over));
+
+        TextView txtTitleOver=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
+
+        txtTitleOver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
 
     public void initGrid() {
 
