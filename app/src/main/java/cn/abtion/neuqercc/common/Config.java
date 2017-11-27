@@ -117,4 +117,14 @@ public class Config {
     public static final int FLIPPER_TIME_INTERVAL=5000;
     public static final int FLIPPER_ACTION_SPEED=200;
 
+
+    /**
+     * 颜色
+     */
+    public static final int COLOR_MIN=0;
+    public static final int COLOR_MAX=255;
+    public static final int TITLE_BG_R=255;
+    public static final int TITLE_BG_G=108;
+    public static final int TITLE_BG_B=97;
+
 }

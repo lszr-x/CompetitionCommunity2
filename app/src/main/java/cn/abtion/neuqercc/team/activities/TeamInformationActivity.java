@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.Window;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -68,10 +71,42 @@ public class TeamInformationActivity extends ToolBarActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @OnClick(R.id.btn_join_team)
     public void onButtonJoinTeamClicked() {
+
+
+        showDialog();
+
+
+
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void showDialog() {
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(R.layout.item_dialog_join_team);
+        View view=View.inflate(this,R.layout.item_dialog_join_team,null);
+
+
+        TextView textView=(TextView)view.findViewById(R.id.qvxiao);
+        textView.setText("取消");
+
+
+
         builder.show();
+
+        //AlertDialog alertDialog =new AlertDialog.Builder(TeamInformationActivity.this).create();
+//        alertDialog.show();
+//        Window window =alertDialog.getWindow();
+//        window.setContentView(R.layout.item_dialog_join_team);
+
+
+
     }
+
+
 }

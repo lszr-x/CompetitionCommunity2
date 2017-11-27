@@ -7,6 +7,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
  * @author fhyPayaso
@@ -49,6 +50,8 @@ public class FeedbackActivity extends ToolBarActivity {
 
         Intent intent=new Intent(FeedbackActivity.this,SettingActivity.class);
         startActivity(intent);
+        ToastUtil.showToast("提交成功");
         finish();
+
     }
 }

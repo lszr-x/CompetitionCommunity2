@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputEditText;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,8 +27,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
 import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
+import cn.abtion.neuqercc.utils.RegexUtil;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.HonorGridView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -61,6 +66,16 @@ public class UpdateInformationActivity extends ToolBarActivity {
     CircleImageView imgUpdateAvatar;
     @BindView(R.id.rlayout_mine_wrap)
     RelativeLayout rlayoutMineWrap;
+    @BindView(R.id.edit_nick_name)
+    EditText editNickName;
+    @BindView(R.id.edit_real_name)
+    EditText editRealName;
+    @BindView(R.id.edit_phone_number)
+    EditText editPhoneNumber;
+    @BindView(R.id.edit_update_profession)
+    EditText editUpdateProfession;
+    @BindView(R.id.edit_update_stu_id)
+    EditText editUpdateStuId;
 
     private GridHonorAdapter gridHonorAdapter;
     private boolean isShowDelete;
@@ -93,16 +108,24 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
-    protected  void initTitle() {
+    protected void initTitle() {
 
         setActivityTitle(getString(R.string.title_update_information));
         setTextOver(getString(R.string.title_over));
 
-        TextView txtTitleOver=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
+        TextView txtTitleOver = (TextView) getToolbar().findViewById(R.id.txt_toolbar_over);
 
         txtTitleOver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (isDataTrue()) {
+
+                    ToastUtil.showToast("编辑成功");
+                } else {
+
+                    ToastUtil.showToast("编辑成功");
+                }
                 finish();
             }
         });
@@ -126,7 +149,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
                     initHonorDialog();
                     addDatas();
                 }
-                isShowDelete=false;
+                isShowDelete = false;
             }
         });
 
@@ -216,8 +239,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
-
-
     public void initHonorDialog() {
 
 
@@ -262,9 +283,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
         });
 
     }
-
-
-
 
 
     public void initAvatarDialog() {
@@ -338,16 +356,58 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
-
     @OnClick(R.id.rlayout_mine_wrap)
     public void onViewClicked() {
 
-        if(isShowDelete) {
+        if (isShowDelete) {
 
-            isShowDelete=false;
+            isShowDelete = false;
             gridHonorAdapter.setIsShowDelete(isShowDelete);
-        }else {
+        } else {
             gridHonorAdapter.setIsShowDelete(isShowDelete);
         }
     }
+
+
+    /**
+     * 验证用户输入是否正确
+     *
+     * @return 正确为true
+     */
+    private boolean isDataTrue() {
+        boolean flag = true;
+        if (editNickName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            //showError(editNickName, getString(R.string.error_account_empty_illegal));
+            flag = false;
+        } else if (editRealName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            //showError(editIdentifier, getString(R.string.error_phone_number_illegal));
+            flag = false;
+        } else if (editPhoneNumber.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            //showError(editPassword, getString(R.string.error_password_min_limit));
+            flag = false;
+        } else if (editUpdateProfession.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            //showError(editPassword, getString(R.string.error_password_max_limit));
+            flag = false;
+        } else if (editUpdateStuId.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+
+            flag = false;
+        }
+        return flag;
+    }
+
+    /**
+     * 用于TextInputEditText控件显示错误信息
+     *
+     * @param textInputEditText 控件对象
+     * @param error             错误信息
+     */
+    private void showError(TextInputEditText textInputEditText, String error) {
+        textInputEditText.setError(error);
+        textInputEditText.setFocusable(true);
+        textInputEditText.setFocusableInTouchMode(true);
+        textInputEditText.requestFocus();
+    }
+
+
+
 }

@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -39,9 +41,10 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     @Override
     protected void initView() {
 
-        this.setActivityTitle(getString(R.string.title_team_information));
+        initTitle();
 
         recylerviewTeamMember.setNestedScrollingEnabled(false);
+        //test
         teamMemberListModels = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             teamMemberListModels.add(new TeamMemberListModel());
@@ -53,6 +56,23 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
     }
 
+    protected  void initTitle() {
+
+        setActivityTitle(getString(R.string.title_team_information));
+        setTextOver(getString(R.string.txt_edit));
+
+
+        TextView txtTitleEdit=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
+
+        txtTitleEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MineTeamIfromationActivity.this,UpdateTeamInformationActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     @Override
     protected void loadData() {
 
@@ -61,8 +81,8 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     @OnClick(R.id.btn_join_team)
     public void onButtonJoinTeamClicked() {
 
-        Intent intent = new Intent(MineTeamIfromationActivity.this,UpdateTeamInformationActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MineTeamIfromationActivity.this,UpdateTeamInformationActivity.class);
+//        startActivity(intent);
 
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //        builder.setTitle("确认加入该队吗？");

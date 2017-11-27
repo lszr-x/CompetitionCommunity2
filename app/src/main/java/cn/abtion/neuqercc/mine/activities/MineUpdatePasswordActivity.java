@@ -9,6 +9,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
  * @author fhyPayaso
@@ -49,6 +50,7 @@ public class MineUpdatePasswordActivity extends ToolBarActivity {
 
         Intent intent = new Intent(MineUpdatePasswordActivity.this,SettingActivity.class);
         startActivity(intent);
+        ToastUtil.showToast("修改成功");
         finish();
 
     }

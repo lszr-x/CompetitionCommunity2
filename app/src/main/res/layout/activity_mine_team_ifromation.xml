@@ -155,7 +155,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="500dp"
         android:background="@drawable/bg_account_btn"
-        android:text="@string/btn_edit_team_information"
+        android:text="@string/btn_invite_friend"
         android:textColor="@color/text_white"
         android:textSize="16sp" />
 

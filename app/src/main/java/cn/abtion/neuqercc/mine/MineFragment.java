@@ -20,6 +20,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.mine.activities.MineTeamListActivity;
 import cn.abtion.neuqercc.mine.activities.SettingActivity;
 import cn.abtion.neuqercc.mine.activities.UpdateInformationActivity;
@@ -75,23 +76,23 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onScrollChanged(GradientScrollView scrollView, int x, int y, int oldx, int oldy) {
 
-                txtTeamTitle.setTextColor(Color.argb((int) 0, 255, 255, 255));
+                txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MIN, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
 
                 if (y <= 0) {
 
-                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) 0, 255, 108, 97));
-                    txtTeamTitle.setTextColor(Color.argb((int) 0, 255, 255, 255));
+                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) Config.COLOR_MIN, Config.TITLE_BG_R, Config.TITLE_BG_G, Config.TITLE_BG_B));
+                    txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MIN, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
 
                 } else if (y > 0 && y < (mineHeaderBg.getHeight() - rlayoutMineTitle.getHeight())) {
 
                     float scale = (float) y / (mineHeaderBg.getHeight() - rlayoutMineTitle.getHeight());
-                    float alpha = (255 * scale);
-                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) alpha, 255, 108, 97));
-                    txtTeamTitle.setTextColor(Color.argb((int) alpha, 255, 255, 255));
+                    float alpha = (Config.COLOR_MAX * scale);
+                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) alpha, Config.TITLE_BG_R, Config.TITLE_BG_G, Config.TITLE_BG_B));
+                    txtTeamTitle.setTextColor(Color.argb((int) alpha, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
 
                 } else {
-                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) 255, 255, 108, 97));
-                    txtTeamTitle.setTextColor(Color.argb((int) 255, 255, 255, 255));
+                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) Config.COLOR_MAX, Config.TITLE_BG_R, Config.TITLE_BG_G, Config.TITLE_BG_B));
+                    txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
                 }
             }
         });
