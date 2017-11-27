@@ -36,5 +36,6 @@
     <color name="trans_black">#32000000</color>
     <color name="search_background">#eeeeee</color>
     <color name="search_stroke">#707070</color>
+    <color name="text_gray">#b2b2b2</color>
 
 </resources>

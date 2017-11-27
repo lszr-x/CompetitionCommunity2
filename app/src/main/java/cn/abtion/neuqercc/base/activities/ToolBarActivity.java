@@ -123,4 +123,5 @@ public abstract class ToolBarActivity extends BaseActivity {
     protected void onBackBtnOnclick() {
         this.finish();
     }
+
 }

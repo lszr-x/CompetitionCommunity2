@@ -1,7 +1,9 @@
 package cn.abtion.neuqercc.team.activities;
 
 import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -65,12 +67,11 @@ public class TeamInformationActivity extends ToolBarActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.btn_join_team)
     public void onButtonJoinTeamClicked() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("确认加入该队吗？");
-        builder.setNegativeButton("取消", null);
-        builder.setPositiveButton("确定", null);
+        builder.setView(R.layout.item_dialog_join_team);
         builder.show();
     }
 }

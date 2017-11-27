@@ -1,5 +1,6 @@
 package cn.abtion.neuqercc.team.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.team.adapters.TeamMemberListAdapter;
 import cn.abtion.neuqercc.team.models.TeamMemberListModel;
 import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
@@ -66,6 +68,8 @@ public class EstablishTeamFinishActivity extends NoBarActivity {
 
     @OnClick(R.id.txt_finish_establish)
     public void onFinishEstablishViewClicked() {
+        Intent intent = new Intent(EstablishTeamFinishActivity.this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 

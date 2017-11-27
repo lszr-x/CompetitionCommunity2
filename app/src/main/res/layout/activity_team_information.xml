@@ -7,10 +7,10 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:fillViewport="true"
         android:layout_alignParentTop="true"
-        android:fillViewport="true">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -152,12 +152,13 @@
         android:id="@+id/btn_join_team"
         android:layout_width="300dp"
         android:layout_height="36dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="500dp"
         android:background="@drawable/bg_account_btn"
         android:text="@string/btn_enter_team"
         android:textColor="@color/text_white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp" />
 
 
 </RelativeLayout>

@@ -136,6 +136,10 @@
     <string name="txt_finish">完成</string>
     <string name="btn_invite_friend">邀请好友</string>
     <string name="txt_establish_team">创建队伍</string>
+    <string name="txt_if_want_join_team">确认加入该队吗？</string>
+    <string name="txt_dialog_content">确认后我们会将您的信息发送给队长</string>
+    <string name="txt_cancel">取消</string>
+    <string name="txt_dialog_confirm">确认</string>
 
 
 </resources>
