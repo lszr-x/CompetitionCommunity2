@@ -3,6 +3,8 @@ package cn.abtion.neuqercc.team.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -11,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.team.adapters.TeamMemberListAdapter;
 import cn.abtion.neuqercc.team.models.TeamMemberListModel;
@@ -22,7 +25,7 @@ import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
  * email wsyglszr@gmail.com
  */
 
-public class EstablishTeamFinishActivity extends NoBarActivity {
+public class EstablishTeamFinishActivity extends ToolBarActivity {
 
     private ArrayList<TeamMemberListModel> teamMemberListModels;
 
@@ -42,6 +45,9 @@ public class EstablishTeamFinishActivity extends NoBarActivity {
 
     @Override
     protected void initView() {
+
+        initTitle();
+
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         teamMemberListModels = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -60,23 +66,27 @@ public class EstablishTeamFinishActivity extends NoBarActivity {
     }
 
 
-    @OnClick(R.id.img_return)
-    public void onReturnViewClicked() {
-        finish();
-    }
 
-
-    @OnClick(R.id.txt_finish_establish)
-    public void onFinishEstablishViewClicked() {
-        Intent intent = new Intent(EstablishTeamFinishActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
 
 
     @OnClick(R.id.btn_invite_friend)
     public void onInviteFriendViewClicked() {
 
+    }
+
+    public void initTitle(){
+        setActivityTitle(getString(R.string.title_team_information));
+        setTextOver(getString(R.string.title_over));
+        TextView textView=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EstablishTeamFinishActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }
