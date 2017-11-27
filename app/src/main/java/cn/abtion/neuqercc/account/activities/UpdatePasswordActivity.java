@@ -7,10 +7,10 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.account.models.CaptchaCountDownTimer;
 import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
@@ -18,6 +18,7 @@ import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import cn.abtion.neuqercc.widget.CaptchaCountDownTimer;
 import retrofit2.Call;
 import retrofit2.Response;
 

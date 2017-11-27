@@ -1,18 +1,23 @@
 package cn.abtion.neuqercc.team.fragments;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.lang.reflect.Field;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.team.activities.EstablishTeamActivity;
+import cn.abtion.neuqercc.team.activities.TeamInformationActivity;
 import cn.abtion.neuqercc.team.adapters.TeamViewPagerAdapter;
 
 /**
@@ -26,7 +31,8 @@ public class TeamFragment extends BaseFragment {
     TabLayout tableHeaderNavigation;
     @BindView(R.id.viewPager_team)
     ViewPager viewPagerTeam;
-
+    @BindView(R.id.btn_establish_team)
+    Button btnEstablishTeam;
 
     private TeamViewPagerAdapter teamViewPagerAdapter;
 
@@ -92,4 +98,11 @@ public class TeamFragment extends BaseFragment {
     }
 
 
+
+
+    @OnClick(R.id.btn_establish_team)
+    public void OnBtnEstablishTeamClicked() {
+        Intent intent = new Intent(getContext(), EstablishTeamActivity.class);
+        startActivity(intent);
+    }
 }
