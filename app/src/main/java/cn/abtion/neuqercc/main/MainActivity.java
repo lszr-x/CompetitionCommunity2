@@ -191,6 +191,21 @@ public class MainActivity extends NoBarActivity {
     }
 
 
+    long startTime=0;
+    @Override
+    public void onBackPressed() {
+
+        long currentTime=System.currentTimeMillis();
+
+        if((currentTime-startTime)>2000) {
+            ToastUtil.showToast("再按一次退出聚点");
+            startTime=currentTime;
+        } else {
+            finish();
+        }
+
+    }
+
     /**
      * 点击Home
      */
