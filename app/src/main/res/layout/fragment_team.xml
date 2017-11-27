@@ -8,6 +8,9 @@
     <TextView
         android:id="@+id/txt_team_title"
         style="@style/title_txt"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:background="@color/colorAccent"
         android:text="@string/organize_team" />
 
@@ -51,23 +54,27 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
-        android:id="@+id/view_container"
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager_team"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/appbarlayout_table"
-        android:background="@color/bg_gray">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager_team"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        >
+    </android.support.v4.view.ViewPager>
 
 
-        </android.support.v4.view.ViewPager>
-
-
-    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_establish_team"
+        android:layout_width="328dp"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="17.5dp"
+        android:background="@drawable/bg_account_btn"
+        android:text="@string/txt_establish_team"
+        android:textColor="@color/text_white"
+        android:textSize="18sp" />
 
 
 </RelativeLayout>
