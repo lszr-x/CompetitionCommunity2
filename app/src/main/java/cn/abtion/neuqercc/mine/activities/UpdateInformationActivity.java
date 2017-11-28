@@ -1,10 +1,17 @@
 package cn.abtion.neuqercc.mine.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
@@ -45,9 +51,22 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     public static final int FLAG_EYE_OPEN = 1;
     public static final int FLAG_EYE_CLOSE = 0;
-
+    public static final int FLAG_CORRECT = 0;
+    public static final int FLAG_LACK_ERROR = 1;
+    public static final int FLAG_PHONE_ERROR = 2;
     public static int flagNameEye = 1;
     public static int flagPhoneEye = 1;
+
+
+    /**
+     * 动态申请权限
+     */
+    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final int REQUEST_EXTERNAL_STORAGE = 100;
+    public final int TAKE_PHOTO_FLAG = 1;
+    public final int SET_IMG_FLAG = 100;
+    private boolean flagUpLoad =false;
+
 
     Button btnAddHonor;
     Button btnTakePhoto;
@@ -119,24 +138,34 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if (isDataTrue()) {
+                switch (isDataTrue()) {
 
-                    ToastUtil.showToast("编辑成功");
-                } else {
+                    case FLAG_LACK_ERROR:
+                        ToastUtil.showToast(getString(R.string.toast_lack_information));
+                        break;
+                    case FLAG_PHONE_ERROR:
+                        ToastUtil.showToast(getString(R.string.error_phone_number_illegal));
+                        break;
+                    default:
+                        ToastUtil.showToast(getString(R.string.toast_edit_successful));
+                        finish();
+                        break;
 
-                    ToastUtil.showToast("编辑成功");
                 }
-                finish();
+
             }
         });
     }
 
 
+    /**
+     * 初始化荣誉墙
+     */
     public void initGrid() {
 
 
         HonorGridView gridView = (HonorGridView) findViewById(R.id.mine_grid_honor);
-        gridHonorAdapter = new GridHonorAdapter(this, honorCertificateModelList);
+        gridHonorAdapter = new GridHonorAdapter(this, honorCertificateModelList,true);
         gridView.setAdapter(gridHonorAdapter);
 
         //如果点击添加图片部分
@@ -148,10 +177,16 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
                     initHonorDialog();
                     addDatas();
+                } else  {
+                    Intent intent = new Intent(UpdateInformationActivity.this, HonorUpdateActivity.class);
+                    startActivity(intent);
                 }
                 isShowDelete = false;
             }
         });
+
+
+
 
         //如果长按图片
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -170,13 +205,15 @@ public class UpdateInformationActivity extends ToolBarActivity {
                         gridHonorAdapter.setIsShowDelete(isShowDelete);
                     }
                 }
-                return false;
+                //返回true只处理长按事件
+                return true;
             }
         });
-
-
     }
 
+    /**
+     * 荣誉墙添加item
+     */
     public void addDatas() {
 
         HonorCertificateModel honorCertificateAdd = new HonorCertificateModel(R.drawable.bg_account_title);
@@ -213,6 +250,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
+    /**
+     * 控制姓名显示
+     */
     @OnClick(R.id.img_mine_name_eye)
     public void onImgNameEyeClicked() {
 
@@ -226,6 +266,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     }
 
+    /**
+     * 控制手机号码显示
+     */
     @OnClick(R.id.img_mine_phone_eye)
     public void onImgPhoneEyeClicked() {
 
@@ -239,6 +282,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
+    /**
+     * 初始化添加荣誉底部弹窗
+     */
     public void initHonorDialog() {
 
 
@@ -285,6 +331,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
+    /**
+     * 初始化更换头像底部弹窗
+     */
     public void initAvatarDialog() {
 
 
@@ -316,7 +365,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
                 }
 
                 Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takeIntent, 1);
+                startActivityForResult(takeIntent, TAKE_PHOTO_FLAG);
 
 
             }
@@ -331,8 +380,10 @@ public class UpdateInformationActivity extends ToolBarActivity {
                     dialogAddHonor.dismiss();
                 }
 
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 100);
+                Intent intent = new Intent(Intent. ACTION_PICK,
+                        android.provider.MediaStore.Images.Media. EXTERNAL_CONTENT_URI);
+                intent.setType( "image/*");
+                startActivityForResult(intent, SET_IMG_FLAG);
 
             }
         });
@@ -342,13 +393,16 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if (dialogAddHonor != null && dialogAddHonor.isShowing()) {
+                if ( dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
             }
         });
     }
 
+    /**
+     * 更换头像点击事件
+     */
     @OnClick(R.id.mine_update_avatar)
     public void onImgUpdateAvatarClicked() {
 
@@ -356,6 +410,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
+    /**
+     * 取消荣誉墙删除按钮点击事件
+     */
     @OnClick(R.id.rlayout_mine_wrap)
     public void onViewClicked() {
 
@@ -374,40 +431,93 @@ public class UpdateInformationActivity extends ToolBarActivity {
      *
      * @return 正确为true
      */
-    private boolean isDataTrue() {
-        boolean flag = true;
+    private int isDataTrue() {
+        int flag = FLAG_CORRECT;
         if (editNickName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            //showError(editNickName, getString(R.string.error_account_empty_illegal));
-            flag = false;
+
+            flag = FLAG_LACK_ERROR;
         } else if (editRealName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            //showError(editIdentifier, getString(R.string.error_phone_number_illegal));
-            flag = false;
+
+            flag = FLAG_LACK_ERROR;
         } else if (editPhoneNumber.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            //showError(editPassword, getString(R.string.error_password_min_limit));
-            flag = false;
+
+            flag = FLAG_LACK_ERROR;
         } else if (editUpdateProfession.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            //showError(editPassword, getString(R.string.error_password_max_limit));
-            flag = false;
+
+            flag = FLAG_LACK_ERROR;
         } else if (editUpdateStuId.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
 
-            flag = false;
+            flag = FLAG_LACK_ERROR;
+        } else if (!checkBoxBoy.isChecked()&&!checkBoxGirl.isChecked()) {
+
+            flag = FLAG_LACK_ERROR;
+        } else if (!flagUpLoad){
+
+            flag = FLAG_LACK_ERROR;
+        }else if(!RegexUtil.checkMobile(editPhoneNumber.getText().toString().trim())) {
+
+            flag = FLAG_PHONE_ERROR;
         }
         return flag;
     }
 
+
     /**
-     * 用于TextInputEditText控件显示错误信息
-     *
-     * @param textInputEditText 控件对象
-     * @param error             错误信息
+     * 动态申请权限
+     * @param activity
      */
-    private void showError(TextInputEditText textInputEditText, String error) {
-        textInputEditText.setError(error);
-        textInputEditText.setFocusable(true);
-        textInputEditText.setFocusableInTouchMode(true);
-        textInputEditText.requestFocus();
+    private void verifyStoragePermissions(Activity activity) {
+        int permissionWrite = ActivityCompat.checkSelfPermission(activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permissionWrite != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, PERMISSION_EXTERNAL_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE);
+        }
     }
 
+
+    /**
+     * 返回选择的图片
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SET_IMG_FLAG && resultCode == RESULT_OK && null != data) {
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null , null);
+
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+
+            String picturePath = cursor.getString(columnIndex);
+
+            cursor.close();
+
+            imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+            flagUpLoad = true;
+
+        } else if(requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
+
+            Bundle bundle = data.getExtras();
+            Bitmap bitmap = (Bitmap) bundle.get("data");
+            imgUpdateAvatar.setImageBitmap(bitmap);
+
+            flagUpLoad = true;
+        }
+
+    }
 
 
 }

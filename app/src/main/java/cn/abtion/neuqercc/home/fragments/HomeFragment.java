@@ -25,6 +25,7 @@ import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.activities.CompetitionActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 import static android.view.MotionEvent.ACTION_UP;
 import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
@@ -81,7 +82,7 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    public void initContestRecyclerView(){
+    public void initContestRecyclerView() {
 
 
         recHome.setNestedScrollingEnabled(false);
@@ -100,7 +101,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
-                Intent intent=new Intent(getContext(),CompetitionActivity.class);
+                Intent intent = new Intent(getContext(), CompetitionActivity.class);
                 startActivity(intent);
 
             }
@@ -108,7 +109,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private ImageView getImageView(int id) {
-        ImageView imageView =new ImageView(this.getContext());
+        ImageView imageView = new ImageView(this.getContext());
         imageView.setImageResource(id);
         return imageView;
     }
@@ -133,6 +134,7 @@ public class HomeFragment extends BaseFragment {
                 vfContest.getParent().requestDisallowInterceptTouchEvent(true);
                 //手势滑动
                 int x;
+                long downTime=0;
                 switch (event.getAction()) {
 
                     case MotionEvent.ACTION_DOWN:
@@ -143,7 +145,7 @@ public class HomeFragment extends BaseFragment {
                     case ACTION_UP:
                         //记录离开时的坐标
                         x = (int) event.getRawX();
-                        if (downX - x   > FLING_MIN_DISTANCE) {
+                        if (downX - x > FLING_MIN_DISTANCE) {
 
                             vfContest.setInAnimation(inFromRightAnimation());
                             vfContest.setOutAnimation(outToLeftAnimation());
@@ -162,11 +164,12 @@ public class HomeFragment extends BaseFragment {
 
                         } else {
 
+                            Intent intent = new Intent(getContext(), CompetitionActivity.class);
+                            startActivity(intent);
+
                             vfContest.showNext();
                             vfContest.startFlipping();
                         }
-
-
                         break;
                     default:
                         break;
@@ -175,7 +178,6 @@ public class HomeFragment extends BaseFragment {
                 return true;
             }
         });
-
 
 
     }

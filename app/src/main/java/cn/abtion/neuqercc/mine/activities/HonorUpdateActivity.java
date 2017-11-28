@@ -25,6 +25,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
  * @author fhyPayaso
@@ -44,6 +46,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 100;
     public final int TAKE_PHOTO_FLAG = 1;
     public final int SET_IMG_FLAG = 100;
+    private boolean flagUpLoad =false;
 
     Button btnTakePhoto;
     Button btnFromAlbum;
@@ -147,7 +150,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if (dialogAddHonor != null && dialogAddHonor.isShowing()) {
+                if ( dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
             }
@@ -185,12 +188,15 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
             imgAddHonor.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
+            flagUpLoad = true;
+
         } else if(requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
 
             Bundle bundle = data.getExtras();
             Bitmap bitmap = (Bitmap) bundle.get("data");
             imgAddHonor.setImageBitmap(bitmap);
 
+            flagUpLoad = true;
         }
 
     }
@@ -201,7 +207,14 @@ public class HonorUpdateActivity extends ToolBarActivity {
      */
     @OnClick(R.id.btn_honor_confirm_edit)
     public void onBtnConfirmClicked() {
-        finish();
+
+        if(isDataTrue()) {
+            ToastUtil.showToast(getString(R.string.toast_edit_successful));
+            finish();
+        } else {
+            ToastUtil.showToast(getString(R.string.toast_lack_information));
+        }
+
     }
 
 
@@ -218,5 +231,21 @@ public class HonorUpdateActivity extends ToolBarActivity {
         }
     }
 
+
+    /**
+     * 判断信息是否完整
+     * @return
+     */
+    private boolean isDataTrue() {
+        boolean flag = true;
+
+        if (editEventName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            flag=false;
+        } else if(!flagUpLoad) {
+            flag=false;
+        }
+
+        return flag;
+    }
 
 }

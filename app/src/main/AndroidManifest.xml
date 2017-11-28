@@ -40,7 +40,8 @@
         <activity android:name=".team.activities.EstablishTeamActivity" />
         <activity android:name=".team.activities.EstablishTeamFinishActivity" />
         <activity android:name=".mine.activities.MineTeamIfromationActivity" />
-        <activity android:name=".mine.activities.UpdateTeamInformationActivity"></activity>
+        <activity android:name=".mine.activities.UpdateTeamInformationActivity"/>
+        <activity android:name=".mine.activities.HonorInformationActivity"/>
     </application>
 
 </manifest>

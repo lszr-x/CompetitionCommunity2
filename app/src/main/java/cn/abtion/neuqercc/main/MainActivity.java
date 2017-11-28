@@ -18,6 +18,7 @@ import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.HomeViewPagerAdapter;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import cn.abtion.neuqercc.widget.MainViewPager;
 
 
 /**
@@ -46,7 +47,7 @@ public class MainActivity extends NoBarActivity {
     @BindView(R.id.txt_tab_menu_mine)
     TextView txtTabMenuMine;
     @BindView(R.id.vp_main_container)
-    ViewPager mainViewPager;
+    MainViewPager mainViewPager;
 
 
     public static void start(BaseActivity context, int flag) {

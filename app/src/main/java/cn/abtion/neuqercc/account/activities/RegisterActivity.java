@@ -94,7 +94,7 @@ public class RegisterActivity extends NoBarActivity {
         if (editPhone.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editPhone, getString(R.string.error_phone_number_empty_illegal));
             flag = false;
-        } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
+        } else if (!RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
             showError(editPhone,getString(R.string.error_phone_number_illegal));
             flag = false;
         }

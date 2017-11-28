@@ -1,17 +1,16 @@
 package cn.abtion.neuqercc.mine.activities;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import butterknife.OnClick;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
-import cn.abtion.neuqercc.team.activities.EstablishTeamActivity;
-import cn.abtion.neuqercc.team.activities.EstablishTeamFinishActivity;
+import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 
 /**
@@ -24,8 +23,10 @@ import cn.abtion.neuqercc.team.activities.EstablishTeamFinishActivity;
 public class UpdateTeamInformationActivity extends ToolBarActivity {
 
 
-
-
+    @BindView(R.id.edit_team_name)
+    EditText editTeamName;
+    @BindView(R.id.edit_want_join)
+    EditText editWantJoin;
 
     @Override
     protected int getLayoutId() {
@@ -34,7 +35,6 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
 
     @Override
     protected void initVariable() {
-
 
 
     }
@@ -54,20 +54,42 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
     }
 
 
-    protected  void initTitle() {
+    protected void initTitle() {
 
         setActivityTitle(getString(R.string.title_edit_team_information));
         setTextOver(getString(R.string.title_over));
 
 
-        TextView txtTitleOver=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
+        TextView txtTitleOver = (TextView) getToolbar().findViewById(R.id.txt_toolbar_over);
 
         txtTitleOver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+
+                if (isDataTrue()) {
+                    finish();
+                } else {
+                    ToastUtil.showToast(getString(R.string.toast_lack_information));
+                }
+
+
             }
         });
+    }
+
+
+
+    private boolean isDataTrue() {
+
+        boolean flag=true;
+
+        if(editTeamName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            flag = false;
+        } else if(editWantJoin.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            flag = false;
+        }
+        return flag;
     }
 
 

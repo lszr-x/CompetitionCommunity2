@@ -1,18 +1,31 @@
 package cn.abtion.neuqercc.mine;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.CardView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,10 +34,15 @@ import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.mine.activities.HonorInformationActivity;
 import cn.abtion.neuqercc.mine.activities.MineTeamListActivity;
 import cn.abtion.neuqercc.mine.activities.SettingActivity;
 import cn.abtion.neuqercc.mine.activities.UpdateInformationActivity;
+import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
+import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
 import cn.abtion.neuqercc.widget.GradientScrollView;
+import cn.abtion.neuqercc.widget.HonorGridView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author abtion.
@@ -35,8 +53,7 @@ import cn.abtion.neuqercc.widget.GradientScrollView;
 public class MineFragment extends BaseFragment {
 
 
-    @BindView(R.id.btn_setting)
-    Button btnSetting;
+
     @BindView(R.id.rlayout_mine_team)
     RelativeLayout rlayoutMineTeam;
     @BindView(R.id.scroll_mine_information)
@@ -49,7 +66,15 @@ public class MineFragment extends BaseFragment {
     TextView txtTeamTitle;
     @BindView(R.id.title_mine_edit)
     ImageView titleMineEdit;
+    @BindView(R.id.mine_grid_honor)
+    HonorGridView gridHonor;
+    @BindView(R.id.mine_avatar)
+    CircleImageView imgAvatar;
 
+
+
+    private GridHonorAdapter gridHonorAdapter;
+    private List<HonorCertificateModel> honorCertificateModelList = new ArrayList<HonorCertificateModel>();
 
     @Override
     protected int getLayoutId() {
@@ -64,7 +89,8 @@ public class MineFragment extends BaseFragment {
     @Override
     protected void initView() {
 
-       initScrollView();
+        initScrollView();
+        initGrid();
 
     }
 
@@ -110,34 +136,131 @@ public class MineFragment extends BaseFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    /**
-     * 账号设置按钮点击事件
-     */
-    @OnClick(R.id.btn_setting)
-    public void onBtnSettingClicked() {
-
-        Intent intent = new Intent(getContext(), SettingActivity.class);
-        startActivity(intent);
-
-    }
-
-    /**
-     * 我的队伍点击事件
-     */
-    @OnClick(R.id.rlayout_mine_team)
-    public void onRlayoutMineTeamClicked() {
-
-        Intent intent = new Intent(getContext(), MineTeamListActivity.class);
-        startActivity(intent);
-
-    }
-
-
     @OnClick(R.id.title_mine_edit)
     public void onImgEditClicked() {
 
-        Intent intent = new Intent(getContext(), UpdateInformationActivity.class);
-        startActivity(intent);
+        showDialog();
 
     }
+
+    public void showDialog() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.pop_window_edit);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        window.setGravity(Gravity.END|Gravity.TOP);
+        lp.y=170;
+        window.setAttributes(lp);
+        dialog.show();
+
+
+        CardView txtEditInformation = (CardView)dialog.findViewById(R.id.card_update_information);
+        CardView txtMineSetting = (CardView)dialog.findViewById(R.id.card_setting);
+        CardView txtMineTeam = (CardView)dialog.findViewById(R.id.card_mine_team);
+
+
+        txtEditInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+
+                Intent intent = new Intent(getContext(), UpdateInformationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        txtMineSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+
+                Intent intent = new Intent(getContext(), SettingActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        txtMineTeam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+
+                Intent intent = new Intent(getContext(), MineTeamListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+
+    /**
+     * 初始化荣誉墙
+     */
+    public void initGrid() {
+
+
+        initData();
+
+        gridHonorAdapter = new GridHonorAdapter(getContext(), honorCertificateModelList, false);
+        gridHonor.setAdapter(gridHonorAdapter);
+
+        gridHonor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                Intent intent = new Intent(getContext(), HonorInformationActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+    }
+
+    /**
+     * 初始化item
+     */
+    public void initData() {
+
+        for (int i = 1; i <= 9; i++) {
+
+            HonorCertificateModel honorCertificateAdd = new HonorCertificateModel(R.drawable.bg_account_title);
+            honorCertificateModelList.add(honorCertificateAdd);
+        }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @OnClick(R.id.mine_avatar)
+    public void onImgAvaterClicked() {
+
+        showFullImg();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void showFullImg() {
+
+        View view = View.inflate(getContext(), R.layout.item_dialog_full_img, null);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(view);
+        ImageView imageView = (ImageView)view.findViewById(R.id.img_full_dialog);
+        imageView.setImageResource(R.drawable.bg_about_us);
+
+        builder.show();
+
+    }
+
+
+
 }

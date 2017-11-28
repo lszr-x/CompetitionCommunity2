@@ -111,7 +111,7 @@
                 android:layout_alignBottom="@id/mine_information"
                 android:layout_marginBottom="23dp"
                 android:layout_marginLeft="16dp"
-                android:src="@color/bg_gray" />
+                android:src="@drawable/bg_about_us" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -252,52 +252,36 @@
                     android:background="@color/bg_black" />
 
 
-                <GridLayout
+                <cn.abtion.neuqercc.widget.HonorGridView
                     android:id="@+id/mine_grid_honor"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_height="match_parent"
                     android:layout_below="@id/mine_txt_honor"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:columnCount="3"
-                    android:orientation="horizontal"
-                    android:rowCount="3">
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:horizontalSpacing="5dp"
+                    android:numColumns="3"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
 
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                    <TextView style="@style/view_mine_honor" />
-
-                </GridLayout>
+                </cn.abtion.neuqercc.widget.HonorGridView>
 
 
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/btn_setting"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@+id/mine_honor"
-                android:layout_marginTop="6dp"
-                android:background="@color/bg_white"
-                android:text="@string/txt_account_setting"
-                android:textColor="@color/text_warning"
-                android:textSize="17sp" />
+            <!--<Button-->
+                <!--android:id="@+id/btn_setting"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_below="@+id/mine_honor"-->
+                <!--android:layout_marginTop="6dp"-->
+                <!--android:background="@color/bg_white"-->
+                <!--android:text="@string/txt_account_setting"-->
+                <!--android:textColor="@color/text_warning"-->
+                <!--android:textSize="17sp" />-->
 
         </RelativeLayout>
 
@@ -320,13 +304,12 @@
 
         <ImageView
             android:id="@+id/title_mine_edit"
-            android:layout_width="40dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="3dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ic_mine_edit" />
+            android:src="@drawable/ic_add" />
 
 
     </RelativeLayout>

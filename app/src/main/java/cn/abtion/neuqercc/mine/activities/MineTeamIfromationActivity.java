@@ -81,17 +81,6 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     @OnClick(R.id.btn_join_team)
     public void onButtonJoinTeamClicked() {
 
-//        Intent intent = new Intent(MineTeamIfromationActivity.this,UpdateTeamInformationActivity.class);
-//        startActivity(intent);
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("确认加入该队吗？");
-//        builder.setNegativeButton("取消", null);
-//        builder.setPositiveButton("确定", null);
-//        builder.show();
     }
-
-
-
 
 }

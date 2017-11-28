@@ -32,6 +32,8 @@ import retrofit2.Response;
 public class LoginActivity extends NoBarActivity {
 
 
+    public static String password;
+
     @BindView(R.id.edit_identifier)
     TextInputEditText editIdentifier;
     @BindView(R.id.edit_password)
@@ -113,7 +115,10 @@ public class LoginActivity extends NoBarActivity {
             //请求成功时回调
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                password=editPassword.getText().toString().trim();
                 ToastUtil.showToast(getString(R.string.toast_login_successful));
+
 
                 //跳转至MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);

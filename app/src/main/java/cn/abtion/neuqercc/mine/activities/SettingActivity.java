@@ -1,7 +1,11 @@
 package cn.abtion.neuqercc.mine.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,7 +37,6 @@ public class SettingActivity extends ToolBarActivity {
     Button btnSignOut;
 
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_mine_setting;
@@ -63,7 +66,7 @@ public class SettingActivity extends ToolBarActivity {
     @OnClick(R.id.txt_mine_update_password)
     public void onTxtUpdatePasswordClicked() {
 
-        Intent intent =new Intent(SettingActivity.this,MineUpdatePasswordActivity.class);
+        Intent intent = new Intent(SettingActivity.this, MineUpdatePasswordActivity.class);
         startActivity(intent);
     }
 
@@ -73,7 +76,7 @@ public class SettingActivity extends ToolBarActivity {
     @OnClick(R.id.txt_mine_feedback)
     public void onTxtFeedbackClicked() {
 
-        Intent intent =new Intent(SettingActivity.this,FeedbackActivity.class);
+        Intent intent = new Intent(SettingActivity.this, FeedbackActivity.class);
         startActivity(intent);
 
     }
@@ -82,23 +85,69 @@ public class SettingActivity extends ToolBarActivity {
     public void onTxtAboutUsClicked() {
 
 
-        Intent intent =new Intent(SettingActivity.this,AboutUsActivity.class);
+        Intent intent = new Intent(SettingActivity.this, AboutUsActivity.class);
         startActivity(intent);
 
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @OnClick(R.id.btn_mine_sign_out)
     public void onBtnSignOutClicked() {
 
+        showDialog();
+    }
 
 
-        Intent intent =new Intent(SettingActivity.this, LoginActivity.class);
-        startActivity(intent);
 
-        NEUQerCCApplication neuQerCCApplication=new NEUQerCCApplication();
-        neuQerCCApplication.exitAccount();
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void showDialog() {
+
+        View view = View.inflate(this, R.layout.item_dialog_join_team, null);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+
+        TextView txtDialogTitle = (TextView) view.findViewById(R.id.txt_dialog_title);
+        TextView txtDialogCancel = (TextView) view.findViewById(R.id.txt_dialog_cancel);
+        TextView txtDialogConfirm = (TextView) view.findViewById(R.id.txt_dialog_confirm);
+
+        txtDialogTitle.setText(getString(R.string.dialog_if_sign_out));
+        txtDialogCancel.setText(getString(R.string.txt_cancel));
+        txtDialogConfirm.setText(getString(R.string.txt_dialog_confirm));
+        txtDialogConfirm.setTextColor(getColor(R.color.colorAccent));
+
+        final AlertDialog dialog=builder.show();
+
+
+        txtDialogConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(dialog.isShowing()) {
+                    dialog.dismiss();
+
+                    Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    NEUQerCCApplication neuQerCCApplication = new NEUQerCCApplication();
+                    neuQerCCApplication.exitAccount();
+
+                }
+            }
+        });
+
+
+        txtDialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
 
     }
+
 
 }

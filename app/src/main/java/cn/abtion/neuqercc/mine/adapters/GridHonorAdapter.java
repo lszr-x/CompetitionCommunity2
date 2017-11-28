@@ -26,12 +26,13 @@ public class GridHonorAdapter extends BaseAdapter {
     private Context context;
     private List<HonorCertificateModel> honorCertificateList;
     final int position =0;
-
+    private boolean isShowLast;
     private  boolean isShowDelete;
 
 
-    public  GridHonorAdapter(Context context, List<HonorCertificateModel> honorCertificateList) {
+    public  GridHonorAdapter(Context context, List<HonorCertificateModel> honorCertificateList,boolean isShowLast) {
 
+        this.isShowLast=isShowLast;
         this.context=context;
         this.honorCertificateList = honorCertificateList;
     }
@@ -39,7 +40,13 @@ public class GridHonorAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return honorCertificateList.size()+1;
+
+        if (isShowLast) {
+            return honorCertificateList.size()+1;
+        } else {
+            return honorCertificateList.size();
+        }
+
     }
 
     @Override
@@ -82,7 +89,7 @@ public class GridHonorAdapter extends BaseAdapter {
 
             return convertView;
 
-        } else {
+        } else if (isShowLast){
 
 
             convertView = LayoutInflater.from(context).inflate(R.layout.item_grid_honor,null,false);
@@ -93,6 +100,9 @@ public class GridHonorAdapter extends BaseAdapter {
 
             return convertView;
 
+        } else {
+
+            return convertView;
         }
     }
 

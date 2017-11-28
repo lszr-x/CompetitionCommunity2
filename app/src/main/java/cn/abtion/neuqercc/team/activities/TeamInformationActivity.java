@@ -92,10 +92,6 @@ public class TeamInformationActivity extends ToolBarActivity {
         View view=View.inflate(this,R.layout.item_dialog_join_team,null);
 
 
-        TextView textView=(TextView)view.findViewById(R.id.qvxiao);
-        textView.setText("取消");
-
-
 
         builder.show();
 
