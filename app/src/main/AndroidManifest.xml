@@ -42,6 +42,10 @@
         <activity android:name=".mine.activities.MineTeamIfromationActivity" />
         <activity android:name=".mine.activities.UpdateTeamInformationActivity"/>
         <activity android:name=".mine.activities.HonorInformationActivity"/>
+        <activity android:name=".team.activities.SearchTeamActivity"/>
+        <activity android:name=".team.activities.SearchTeamResultActivity"
+            android:launchMode="singleTask"/>
+
     </application>
 
 </manifest>

@@ -2,11 +2,14 @@ package cn.abtion.neuqercc.team.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 
 /**
  * @author lszr
@@ -14,7 +17,7 @@ import cn.abtion.neuqercc.base.activities.NoBarActivity;
  * email wsyglszr@gmail.com
  */
 
-public class EstablishTeamActivity extends NoBarActivity {
+public class EstablishTeamActivity extends ToolBarActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_establish_team;
@@ -27,6 +30,7 @@ public class EstablishTeamActivity extends NoBarActivity {
 
     @Override
     protected void initView() {
+        initTitle();
 
     }
 
@@ -35,17 +39,22 @@ public class EstablishTeamActivity extends NoBarActivity {
 
     }
 
-    @OnClick(R.id.txt_finish_establish)
-    public void onFinishEstablishViewClicked() {
-        Intent intent = new Intent(EstablishTeamActivity.this, EstablishTeamFinishActivity.class);
-        startActivity(intent);
-
-    }
 
 
 
-    @OnClick(R.id.img_return)
-    public void onReturnViewClicked() {
-        finish();
+    public void initTitle(){
+
+        setActivityTitle(getString(R.string.title_establish_team));
+        setTextOver(getString(R.string.title_over));
+        TextView textView=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EstablishTeamActivity.this, EstablishTeamFinishActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

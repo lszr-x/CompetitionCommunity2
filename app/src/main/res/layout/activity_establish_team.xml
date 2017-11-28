@@ -5,48 +5,12 @@
     android:background="@color/bg_gray"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/rlayout_establish_team_finish_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent">
 
-        <ImageView
-            android:id="@+id/img_return"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="25dp"
-            android:src="@drawable/ic_back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:text="@string/title_establish_team"
-            android:textColor="@color/text_white"
-            android:textSize="18sp" />
-
-        <TextView
-
-            android:id="@+id/txt_finish_establish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="25dp"
-            android:text="@string/txt_finish"
-            android:textColor="@color/text_white"
-            android:textSize="18sp" />
-
-    </RelativeLayout>
 
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/rlayout_establish_team_finish_title">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
