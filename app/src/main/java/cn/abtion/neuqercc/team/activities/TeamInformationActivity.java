@@ -79,8 +79,8 @@ public class TeamInformationActivity extends ToolBarActivity {
         builder.setCancelable(true);
         TextView txtDialogTitle = (TextView) view.findViewById(R.id.txt_dialog_title);
         TextView txtDialogContent = (TextView) view.findViewById(R.id.txt_dialog_content);
-        TextView txtLeftButton = (TextView) view.findViewById(R.id.txt_left_button);
-        TextView txtRightButton = (TextView) view.findViewById(R.id.txt_right_button);
+        TextView txtLeftButton = (TextView) view.findViewById(R.id.txt_dialog_cancel);
+        TextView txtRightButton = (TextView) view.findViewById(R.id.txt_dialog_confirm);
 
         //  设置Dialog内部文字
         txtDialogTitle.setText(getString(R.string.txt_if_want_join_team));
