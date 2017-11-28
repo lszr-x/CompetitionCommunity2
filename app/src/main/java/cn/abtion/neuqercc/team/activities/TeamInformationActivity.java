@@ -1,11 +1,13 @@
 package cn.abtion.neuqercc.team.activities;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -25,7 +27,6 @@ import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
  */
 
 public class TeamInformationActivity extends ToolBarActivity {
-
 
 
     private ArrayList<TeamMemberListModel> teamMemberListModels;
@@ -48,8 +49,6 @@ public class TeamInformationActivity extends ToolBarActivity {
         this.setActivityTitle(getString(R.string.title_team_information));
 
 
-
-
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         teamMemberListModels = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -67,11 +66,51 @@ public class TeamInformationActivity extends ToolBarActivity {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @OnClick(R.id.btn_join_team)
     public void onButtonJoinTeamClicked() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(R.layout.item_dialog_join_team);
+
+
+        View view = View.inflate(TeamInformationActivity.this, R.layout.item_dialog_join_team, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(TeamInformationActivity.this);
+        builder.setCancelable(true);
+        TextView txtDialogTitle = (TextView) view.findViewById(R.id.txt_dialog_title);
+        TextView txtDialogContent = (TextView) view.findViewById(R.id.txt_dialog_content);
+        TextView txtLeftButton = (TextView) view.findViewById(R.id.txt_left_button);
+        TextView txtRightButton = (TextView) view.findViewById(R.id.txt_right_button);
+
+        //  设置Dialog内部文字
+        txtDialogTitle.setText(getString(R.string.txt_if_want_join_team));
+        txtDialogContent.setText(getString(R.string.txt_dialog_content));
+        txtLeftButton.setText(getString(R.string.txt_cancel));
+        txtRightButton.setText(getString(R.string.txt_dialog_confirm));
+
+
+        //设置点击事件
+
+        txtLeftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        txtRightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        builder.setView(view);
+
+
         builder.show();
+
+
     }
+
+
 }

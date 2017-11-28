@@ -77,7 +77,7 @@ public class EstablishTeamFinishActivity extends ToolBarActivity {
 
     public void initTitle(){
         setActivityTitle(getString(R.string.title_team_information));
-        setTextOver(getString(R.string.title_over));
+        setTextOver(getString(R.string.title_confirm));
         TextView textView=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
 
         textView.setOnClickListener(new View.OnClickListener() {

@@ -140,6 +140,9 @@
     <string name="txt_dialog_content">确认后我们会将您的信息发送给队长</string>
     <string name="txt_cancel">取消</string>
     <string name="txt_dialog_confirm">确认</string>
+    <string name="edit_search_team">请输入查询的队伍名</string>
+    <string name="txt_search_result">搜索结果</string>
+    <string name="title_confirm">确认</string>
 
 
 </resources>
