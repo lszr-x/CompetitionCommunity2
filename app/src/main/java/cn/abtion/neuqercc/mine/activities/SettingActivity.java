@@ -2,12 +2,9 @@ package cn.abtion.neuqercc.mine.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -17,7 +14,6 @@ import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
-import cn.abtion.neuqercc.main.MainActivity;
 
 /**
  * @author fhyPayaso
@@ -35,6 +31,8 @@ public class SettingActivity extends ToolBarActivity {
     TextView txtAboutUs;
     @BindView(R.id.btn_mine_sign_out)
     Button btnSignOut;
+    @BindView(R.id.txt_current_account)
+    TextView txtCurrentAccount;
 
 
     @Override
@@ -47,6 +45,7 @@ public class SettingActivity extends ToolBarActivity {
     protected void initVariable() {
 
         setActivityTitle(getString(R.string.title_setting));
+        txtCurrentAccount.setText(LoginActivity.phonenumber);
     }
 
     @Override
@@ -91,16 +90,13 @@ public class SettingActivity extends ToolBarActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     @OnClick(R.id.btn_mine_sign_out)
     public void onBtnSignOutClicked() {
 
         showDialog();
     }
 
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void showDialog() {
 
         View view = View.inflate(this, R.layout.item_dialog_join_team, null);
@@ -114,16 +110,15 @@ public class SettingActivity extends ToolBarActivity {
         txtDialogTitle.setText(getString(R.string.dialog_if_sign_out));
         txtDialogCancel.setText(getString(R.string.txt_cancel));
         txtDialogConfirm.setText(getString(R.string.txt_dialog_confirm));
-        txtDialogConfirm.setTextColor(getColor(R.color.colorAccent));
 
-        final AlertDialog dialog=builder.show();
+        final AlertDialog dialog = builder.show();
 
 
         txtDialogConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(dialog.isShowing()) {
+                if (dialog.isShowing()) {
                     dialog.dismiss();
 
                     Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
@@ -140,7 +135,7 @@ public class SettingActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if(dialog.isShowing()) {
+                if (dialog.isShowing()) {
                     dialog.dismiss();
                 }
             }

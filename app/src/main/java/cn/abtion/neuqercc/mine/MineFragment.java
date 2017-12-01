@@ -2,12 +2,14 @@ package cn.abtion.neuqercc.mine;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.CardView;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,6 +42,7 @@ import cn.abtion.neuqercc.mine.activities.SettingActivity;
 import cn.abtion.neuqercc.mine.activities.UpdateInformationActivity;
 import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
 import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
+import cn.abtion.neuqercc.utils.DensityUtil;
 import cn.abtion.neuqercc.widget.GradientScrollView;
 import cn.abtion.neuqercc.widget.HonorGridView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -145,14 +148,21 @@ public class MineFragment extends BaseFragment {
 
     public void showDialog() {
 
-        final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.pop_window_edit);
-        Window window = dialog.getWindow();
-        WindowManager.LayoutParams lp = window.getAttributes();
-        window.setGravity(Gravity.END|Gravity.TOP);
-        lp.y=170;
-        window.setAttributes(lp);
+
+        final  AlertDialog dialog = new AlertDialog.Builder(getContext(),R.style.dialog_bottom).create();
         dialog.show();
+        dialog.getWindow().setContentView(R.layout.pop_window_edit);
+        dialog.setCancelable(true);
+
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.END|Gravity.TOP);
+        window.getDecorView().setPadding(0, DensityUtil.dip2px(getContext(),73), DensityUtil.dip2px(getContext(),25), 0);
+
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = DensityUtil.dip2px(getContext(),170);
+        lp.height = DensityUtil.dip2px(getContext(),300);
+        window.setAttributes(lp);
+
 
 
         CardView txtEditInformation = (CardView)dialog.findViewById(R.id.card_update_information);
@@ -241,14 +251,12 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @OnClick(R.id.mine_avatar)
     public void onImgAvaterClicked() {
 
         showFullImg();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void showFullImg() {
 
         View view = View.inflate(getContext(), R.layout.item_dialog_full_img, null);
@@ -260,7 +268,5 @@ public class MineFragment extends BaseFragment {
         builder.show();
 
     }
-
-
 
 }

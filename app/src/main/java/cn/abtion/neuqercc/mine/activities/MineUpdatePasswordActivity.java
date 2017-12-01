@@ -10,9 +10,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
+import cn.abtion.neuqercc.account.activities.UpdatePasswordActivity;
+import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * @author fhyPayaso
@@ -28,6 +36,7 @@ public class MineUpdatePasswordActivity extends ToolBarActivity {
     public static final int FLAG_PASSWORD_ERROR = 2;
     public static final int FLAG_PASSWORD_DIFFERENT = 3;
 
+    private UpdatePasswordRequest updatePasswordRequest;
 
     @BindView(R.id.btn_mine_confirm_changes)
     Button btnMineConfirmChanges;
@@ -76,14 +85,60 @@ public class MineUpdatePasswordActivity extends ToolBarActivity {
                 break;
             default:
 
-                Intent intent = new Intent(MineUpdatePasswordActivity.this, SettingActivity.class);
-                startActivity(intent);
-                ToastUtil.showToast(getString(R.string.toast_update_successful));
-                finish();
+                updatePasswordRequest = new UpdatePasswordRequest();
+                updatePasswordRequest.setPhone(LoginActivity.phonenumber);
+                updatePasswordRequest.setPassword(editNewPassword.getText().toString().trim());
+                updatePassword();
+
                 break;
 
         }
     }
+
+
+
+
+    /**
+     * 改密码按钮相关方法
+     */
+    public void updatePassword() {
+
+        //弹出progressDialog
+        progressDialog.setMessage(getString(R.string.dialog_wait_moment));
+        progressDialog.show();
+
+        //网络请求
+
+        RestClient.getService().updatePassword(updatePasswordRequest).enqueue(new DataCallback<APIResponse>() {
+
+            //请求成功时回调
+            @Override
+            public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                ToastUtil.showToast(getString(R.string.toast_update_successful));
+                finish();
+
+            }
+
+            //请求失败时回调
+            @Override
+            public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+
+            //无论成功或者失败时都回调，用于dismissDialog或隐藏其他控件
+            @Override
+            public void dismissDialog() {
+                if (progressDialog.isShowing()) {
+                    disMissProgressDialog();
+                }
+            }
+        });
+    }
+
+
+
+
 
 
     private int isDataTrue() {
@@ -96,7 +151,7 @@ public class MineUpdatePasswordActivity extends ToolBarActivity {
             flag = FLAG_LACK_ERROR;
         } else if(editRepeatPassword.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             flag = FLAG_LACK_ERROR;
-        } else if (editOldPassword.getText().toString().trim().equals(LoginActivity.password)) {
+        } else if (!editOldPassword.getText().toString().trim().equals(LoginActivity.password)) {
             flag = FLAG_PASSWORD_ERROR;
         } else if (!editNewPassword.getText().toString().trim().equals(editRepeatPassword.getText().toString().trim())) {
             flag = FLAG_PASSWORD_DIFFERENT;

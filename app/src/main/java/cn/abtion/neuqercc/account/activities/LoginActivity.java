@@ -33,6 +33,7 @@ public class LoginActivity extends NoBarActivity {
 
 
     public static String password;
+    public static String phonenumber;
 
     @BindView(R.id.edit_identifier)
     TextInputEditText editIdentifier;
@@ -70,13 +71,16 @@ public class LoginActivity extends NoBarActivity {
         loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
         loginRequest.setPassword(editPassword.getText().toString().trim());
 
-        if (isDataTrue()) {
-            processLogin();
-        }
-
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+
+        if (isDataTrue()) {
+            processLogin();
+
+
+
+        }
     }
 
     /**
@@ -116,6 +120,9 @@ public class LoginActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
+
+                //登录成功记录账号和密码
+                phonenumber=editIdentifier.getText().toString().trim();
                 password=editPassword.getText().toString().trim();
                 ToastUtil.showToast(getString(R.string.toast_login_successful));
 
@@ -166,7 +173,7 @@ public class LoginActivity extends NoBarActivity {
         if (editIdentifier.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editIdentifier, getString(R.string.error_account_empty_illegal));
             flag = false;
-        } else if (RegexUtil.checkMobile(editIdentifier.getText().toString().trim())) {
+        } else if (!RegexUtil.checkMobile(editIdentifier.getText().toString().trim())) {
             showError(editIdentifier, getString(R.string.error_phone_number_illegal));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {

@@ -74,9 +74,9 @@ public class TeamInformationActivity extends ToolBarActivity {
 
 
         View view = View.inflate(TeamInformationActivity.this, R.layout.item_dialog_join_team, null);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(TeamInformationActivity.this);
         builder.setCancelable(true);
+
         TextView txtDialogTitle = (TextView) view.findViewById(R.id.txt_dialog_title);
         TextView txtDialogContent = (TextView) view.findViewById(R.id.txt_dialog_content);
         TextView txtLeftButton = (TextView) view.findViewById(R.id.txt_dialog_cancel);

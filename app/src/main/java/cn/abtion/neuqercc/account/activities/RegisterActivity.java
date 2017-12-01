@@ -80,10 +80,12 @@ public class RegisterActivity extends NoBarActivity {
 
         smsRequest.setPhone(editPhone.getText().toString().trim());
 
-        captchaTimer.timerStart(true);
+
 
         if (isPhoneTrue()) {
+
             getVerifyCode();
+            captchaTimer.timerStart(true);
         }
     }
 
@@ -201,13 +203,14 @@ public class RegisterActivity extends NoBarActivity {
     private boolean isDataTrue() {
         boolean flag = true;
 
-        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
-            flag = false;
-        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
-            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
-            flag = false;
-        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+//        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
+//            flag = false;
+//        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
+//            flag = false;
+//        } else
+         if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, getString(R.string.error_password_min_limit));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {

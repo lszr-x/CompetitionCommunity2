@@ -95,12 +95,10 @@ public class HonorUpdateActivity extends ToolBarActivity {
     public void showHonorDialog() {
 
 
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_mine_avatar, null);
+        final  AlertDialog dialogAddHonor = new AlertDialog.Builder(this,R.style.dialog_bottom).create();
+        dialogAddHonor.show();
+        dialogAddHonor.getWindow().setContentView(R.layout.dialog_mine_avatar);
 
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog_bottom);
-        builder.setView(view);
-        final AlertDialog dialogAddHonor = builder.create();
         Window window = dialogAddHonor.getWindow();
         window.setGravity(Gravity.BOTTOM);
         window.getDecorView().setPadding(0, 0, 0, 0);
@@ -108,11 +106,11 @@ public class HonorUpdateActivity extends ToolBarActivity {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-        dialogAddHonor.show();
 
-        btnTakePhoto = (Button) view.findViewById(R.id.btn_take_photo);
-        btnFromAlbum = (Button) view.findViewById(R.id.btn_from_album);
-        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+
+        btnTakePhoto = (Button) dialogAddHonor.findViewById(R.id.btn_take_photo);
+        btnFromAlbum = (Button) dialogAddHonor.findViewById(R.id.btn_from_album);
+        btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
 
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override

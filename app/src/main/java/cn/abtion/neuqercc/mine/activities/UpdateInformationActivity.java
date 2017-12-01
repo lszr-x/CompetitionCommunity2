@@ -3,6 +3,7 @@ package cn.abtion.neuqercc.mine.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +111,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
     @Override
     protected void initVariable() {
 
-
+        verifyStoragePermissions(UpdateInformationActivity.this);
     }
 
     @Override
@@ -288,10 +290,11 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public void initHonorDialog() {
 
 
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_mine_honor, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog_bottom);
-        builder.setView(view);
-        final AlertDialog dialogAddHonor = builder.create();
+
+        final  AlertDialog dialogAddHonor = new AlertDialog.Builder(this,R.style.dialog_bottom).create();
+        dialogAddHonor.show();
+        dialogAddHonor.getWindow().setContentView(R.layout.dialog_mine_honor);
+
         Window window = dialogAddHonor.getWindow();
         window.setGravity(Gravity.BOTTOM);
         window.getDecorView().setPadding(0, 0, 0, 0);
@@ -299,10 +302,12 @@ public class UpdateInformationActivity extends ToolBarActivity {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-        dialogAddHonor.show();
 
-        btnAddHonor = (Button) view.findViewById(R.id.btn_add_honor);
-        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+
+        btnAddHonor = (Button) dialogAddHonor.findViewById(R.id.btn_add_honor);
+        btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
+
+
 
 
         btnAddHonor.setOnClickListener(new View.OnClickListener() {
@@ -337,12 +342,10 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public void initAvatarDialog() {
 
 
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_mine_avatar, null);
+        final  AlertDialog dialogAddHonor = new AlertDialog.Builder(this,R.style.dialog_bottom).create();
+        dialogAddHonor.show();
+        dialogAddHonor.getWindow().setContentView(R.layout.dialog_mine_avatar);
 
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.dialog_bottom);
-        builder.setView(view);
-        final AlertDialog dialogAddHonor = builder.create();
         Window window = dialogAddHonor.getWindow();
         window.setGravity(Gravity.BOTTOM);
         window.getDecorView().setPadding(0, 0, 0, 0);
@@ -350,11 +353,11 @@ public class UpdateInformationActivity extends ToolBarActivity {
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
-        dialogAddHonor.show();
 
-        btnTakePhoto = (Button) view.findViewById(R.id.btn_take_photo);
-        btnFromAlbum = (Button) view.findViewById(R.id.btn_from_album);
-        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+
+        btnTakePhoto = (Button) dialogAddHonor.findViewById(R.id.btn_take_photo);
+        btnFromAlbum = (Button) dialogAddHonor.findViewById(R.id.btn_from_album);
+        btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
 
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -398,6 +401,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
                 }
             }
         });
+
     }
 
     /**
