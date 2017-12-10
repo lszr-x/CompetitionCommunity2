@@ -52,10 +52,10 @@ public class MineTeamListAdapter extends BaseRecyclerViewAdapter<MineTeamListMod
         @Override
         protected void onBind(MineTeamListModel mineTeamListModel) {
 
-            txtTeamName.setText(mineTeamListModel.getTitle() == null ? "N/A" : mineTeamListModel.getTitle());
-            txtTeamNumber.setText(mineTeamListModel.getNumber() == null ? "N/A" : mineTeamListModel.getNumber());
-            txtTeamPosition.setText(mineTeamListModel.getPosition() == null ? "N/A" :mineTeamListModel.getPosition());
-            txtTeamSpecies.setText(mineTeamListModel.getSpecies() == null ? "N/A" : mineTeamListModel.getSpecies());
+            txtTeamName.setText(mineTeamListModel.getTeamName() == null ? "N/A" : mineTeamListModel.getTeamName());
+            txtTeamNumber.setText(mineTeamListModel.getNumber()+"" == null ? "N/A" : mineTeamListModel.getNumber()+"");
+            //txtTeamPosition.setText(mineTeamListModel.getPosition() == null ? "N/A" :mineTeamListModel.getPosition());
+            txtTeamSpecies.setText(mineTeamListModel.getCompetitionName() == null ? "N/A" : mineTeamListModel.getCompetitionName());
 
         }
 

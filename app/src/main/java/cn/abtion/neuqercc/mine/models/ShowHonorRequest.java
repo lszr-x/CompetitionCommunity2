@@ -1,17 +1,24 @@
 package cn.abtion.neuqercc.mine.models;
 
+import cn.abtion.neuqercc.base.models.BaseModel;
+
 /**
  * @author fhyPayaso
- * @since 2017/11/22 14:12
+ * @since 2017/12/7 15:23
  * email fhyPayaso@qq.com
  */
 
-public class HonorCertificateModel {
+public class ShowHonorRequest extends BaseModel {
 
     private int order;
-    private String gloryName;
-    private String gloryTime;
-    private String gloryPicUrl;
+    private String glory_name;
+    private String glory_time;
+    private String glory_pic;
+
+
+    public void ShowHonorRequest() {
+
+    }
 
 
     /**
@@ -34,11 +41,11 @@ public class HonorCertificateModel {
      */
 
     public String getGloryName() {
-        return gloryName;
+        return glory_name;
     }
 
     public void setGloryName(String gloryName){
-        this.gloryName = gloryName;
+        this.glory_name = gloryName;
     }
 
 
@@ -48,12 +55,12 @@ public class HonorCertificateModel {
      */
 
     public String getGloryTime() {
-        return gloryTime;
+        return glory_time;
     }
 
     public void setGloryTime(String gloryTime) {
 
-        this.gloryTime = gloryTime;
+        this.glory_time = gloryTime;
     }
 
 
@@ -63,11 +70,10 @@ public class HonorCertificateModel {
      */
 
     public String getGloryPicUrl() {
-        return gloryPicUrl;
+        return glory_pic;
     }
 
     public void setGloryPicUrl(String gloryPicUrl) {
-        this.gloryPicUrl = gloryPicUrl;
+        this.glory_pic = gloryPicUrl;
     }
-
 }

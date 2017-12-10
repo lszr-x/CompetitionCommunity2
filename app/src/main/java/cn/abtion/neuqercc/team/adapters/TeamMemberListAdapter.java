@@ -21,6 +21,13 @@ import cn.abtion.neuqercc.team.models.TeamMemberListModel;
 
 public class TeamMemberListAdapter extends BaseRecyclerViewAdapter<TeamMemberListModel> {
 
+    @BindView(R.id.txt_team_position)
+    TextView txtTeamPosition;
+    @BindView(R.id.txt_member_name)
+    TextView txtMemberName;
+    @BindView(R.id.txt_good_at)
+    TextView txtGoodAt;
+
     public TeamMemberListAdapter(Context context, List<TeamMemberListModel> teamMemberListModel) {
         super(context, teamMemberListModel);
     }
@@ -40,6 +47,11 @@ public class TeamMemberListAdapter extends BaseRecyclerViewAdapter<TeamMemberLis
 
         @Override
         protected void onBind(TeamMemberListModel teamMemberListModel) {
+
+
+            txtMemberName.setText(teamMemberListModel.getName() == null ? "N/A" : teamMemberListModel.getName());
+            txtTeamPosition.setText(teamMemberListModel.getPosition() == null ? "N/A" : teamMemberListModel.getPosition());
+            txtGoodAt.setText(teamMemberListModel.getGoodAt() == null ? "N/A" : teamMemberListModel.getGoodAt());
         }
 
     }

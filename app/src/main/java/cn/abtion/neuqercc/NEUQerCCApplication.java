@@ -2,8 +2,12 @@ package cn.abtion.neuqercc;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +26,20 @@ public class NEUQerCCApplication extends Application {
     private static List<Activity> activityList = new ArrayList<>();
     private static CacheUtil cacheUtil;
 
+
+    private RefWatcher refWatcher;
+    public static RefWatcher getRefWatcher(Context context) {
+        NEUQerCCApplication application = (NEUQerCCApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        LeakCanary.install(this);
     }
 
     /**
@@ -125,4 +138,5 @@ public class NEUQerCCApplication extends Application {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
 }

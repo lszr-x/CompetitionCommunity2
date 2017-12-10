@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -13,8 +14,16 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.mine.adapters.MineTeamListAdapter;
+import cn.abtion.neuqercc.mine.models.GoodAtRequest;
 import cn.abtion.neuqercc.mine.models.MineTeamListModel;
+import cn.abtion.neuqercc.mine.models.MineTeamListRequest;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * @author fhyPayaso
@@ -27,7 +36,8 @@ public class MineTeamListActivity extends ToolBarActivity {
     @BindView(R.id.rec_mine_team)
     RecyclerView recMineTeam;
 
-    private ArrayList<MineTeamListModel> mineTeamListModels;
+    private List<MineTeamListModel> mineTeamListModelList = new ArrayList<MineTeamListModel>();
+    private List<MineTeamListRequest> mineTeamListRequestList = new ArrayList<MineTeamListRequest>();
 
     @Override
     protected int getLayoutId() {
@@ -53,18 +63,50 @@ public class MineTeamListActivity extends ToolBarActivity {
 
     }
 
+    public void initMineTeamList() {
+
+        RestClient.getService().mineTeamList().enqueue(new DataCallback<APIResponse<List<MineTeamListRequest>>>() {
+
+            @Override
+            public void onDataResponse(Call<APIResponse<List<MineTeamListRequest>>> call, Response<APIResponse<List<MineTeamListRequest>>> response) {
+
+                mineTeamListRequestList = response.body().getData();
+                initContestRecyclerView();
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<MineTeamListRequest>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+
+        });
+
+
+    }
+
+
 
     public void initContestRecyclerView() {
 
 
         recMineTeam.setNestedScrollingEnabled(false);
-        mineTeamListModels = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            //test
-            mineTeamListModels.add(new MineTeamListModel("无敌最强队","5","组长","数学建模"));
+
+        for (int i = 0; i < mineTeamListRequestList.size(); i++) {
+
+            MineTeamListRequest mineTeamListRequest = mineTeamListRequestList.get(i);
+            mineTeamListModelList.add(new MineTeamListModel(mineTeamListRequest.getTeamId(),
+                    mineTeamListRequest.getTeamName(),
+                    mineTeamListRequest.getCompetitionDesc(),
+                    mineTeamListRequest.getTeamMemberNum()));
         }
 
-        MineTeamListAdapter mineTeamListAdapter =new MineTeamListAdapter(MineTeamListActivity.this,mineTeamListModels);
+        MineTeamListAdapter mineTeamListAdapter =new MineTeamListAdapter(MineTeamListActivity.this,mineTeamListModelList);
         recMineTeam.setAdapter(mineTeamListAdapter);
         recMineTeam.setLayoutManager(new LinearLayoutManager(MineTeamListActivity.this, LinearLayoutManager.VERTICAL, false));
 
@@ -75,6 +117,7 @@ public class MineTeamListActivity extends ToolBarActivity {
             public void onItemClicked(MineTeamListModel mineTeamListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
 
                 Intent intent = new Intent(MineTeamListActivity.this,MineTeamIfromationActivity.class);
+                intent.putExtra("teamId",mineTeamListModelList.get(viewHolder.getAdapterPosition()).getId());
                 startActivity(intent);
 
             }

@@ -2,6 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@color/bg_gray">
 
 
@@ -34,17 +36,21 @@
                 android:layout_width="222dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="16dp"
                 android:layout_toRightOf="@+id/mine_update_avatar">
 
                 <EditText
                     android:id="@+id/edit_nick_name"
-                    android:layout_width="207dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:hint="@string/hint_student_name"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="right"
+                    android:layout_marginBottom="5dp"
+                    />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -207,19 +213,35 @@
 
 
             <LinearLayout
+                android:id="@+id/spinner_student_grade"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/mine_update_grade"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/contest_spinner"
-                android:textSize="16sp">
+                android:gravity="center_vertical"
+                >
 
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
-                </Spinner>
+                    <TextView
+                        android:id="@+id/txt_update_grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="2dp"
+
+                        />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_spinner"
+                    android:layout_gravity="center"/>
+
 
             </LinearLayout>
 
@@ -252,19 +274,30 @@
                 android:text="@string/txt_good_at_field" />
 
             <LinearLayout
+                android:id="@+id/spinner_good_at"
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/mine_update_field"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/contest_spinner"
-                android:textSize="16sp">
+                android:textSize="16sp"
+                android:gravity="center_vertical">
 
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/txt_update_good_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:textSize="16sp" />
 
-                </Spinner>
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/ic_spinner"
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
 

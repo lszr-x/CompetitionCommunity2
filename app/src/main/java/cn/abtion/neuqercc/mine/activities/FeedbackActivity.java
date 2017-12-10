@@ -11,7 +11,13 @@ import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.mine.models.FeedBackRequest;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * @author fhyPayaso
@@ -26,6 +32,8 @@ public class FeedbackActivity extends ToolBarActivity {
     Button btnSubmit;
     @BindView(R.id.edit_feedback)
     EditText editFeedback;
+
+    FeedBackRequest feedBackRequest;
 
     @Override
     protected int getLayoutId() {
@@ -59,11 +67,41 @@ public class FeedbackActivity extends ToolBarActivity {
 
         } else {
 
+            commitFeedBack();
+
             Intent intent = new Intent(FeedbackActivity.this, SettingActivity.class);
             startActivity(intent);
-            ToastUtil.showToast(getString(R.string.toast_commit_successful));
             finish();
         }
     }
+
+
+    public void commitFeedBack() {
+
+
+        feedBackRequest = new FeedBackRequest();
+        feedBackRequest.setContent(editFeedback.getText().toString().trim());
+
+        RestClient.getService().feedBack(feedBackRequest).enqueue(new Callback<APIResponse>() {
+            @Override
+            public void onResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                ToastUtil.showToast(getString(R.string.toast_commit_successful));
+            }
+
+            @Override
+            public void onFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+
+
+            public void dismissDialog() {
+
+            }
+
+        });
+    }
+
+
 
 }

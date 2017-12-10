@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
@@ -25,7 +26,13 @@ import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.activities.CompetitionActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
+import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import static android.view.MotionEvent.ACTION_UP;
 import static cn.abtion.neuqercc.common.Config.FLING_MIN_DISTANCE;
@@ -238,5 +245,8 @@ public class HomeFragment extends BaseFragment {
         outtoRight.setInterpolator(new AccelerateInterpolator());
         return outtoRight;
     }
+
+
+
 
 }

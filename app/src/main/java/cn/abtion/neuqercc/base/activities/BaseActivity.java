@@ -15,9 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.Explode;
 import android.transition.Slide;
 
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
+
 import butterknife.ButterKnife;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.exceptions.LogicErrorException;
+import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.utils.Utility;
 
 /**
@@ -172,6 +177,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             progressDialog.dismiss();
         }
         super.onDestroy();
+
+
+//        RefWatcher refWatcher = NEUQerCCApplication.getRefWatcher(getApplicationContext());
+//        refWatcher.watch(this);
     }
 
 

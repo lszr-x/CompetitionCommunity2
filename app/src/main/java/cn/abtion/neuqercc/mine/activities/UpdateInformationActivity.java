@@ -3,7 +3,7 @@ package cn.abtion.neuqercc.mine.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -11,10 +11,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,10 +26,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,11 +44,24 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
+import cn.abtion.neuqercc.mine.models.GoodAtRequest;
 import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
+import cn.abtion.neuqercc.mine.models.ShowHonorRequest;
+import cn.abtion.neuqercc.mine.models.StudentGradeRequest;
+import cn.abtion.neuqercc.mine.models.UpdatePersonInformationRequest;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.DialogUtil;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.HonorGridView;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * @author fhyPayaso
@@ -59,15 +79,34 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public static int flagNameEye = 1;
     public static int flagPhoneEye = 1;
 
-
     /**
      * 动态申请权限
      */
-    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_EXTERNAL_STORAGE = 100;
     public final int TAKE_PHOTO_FLAG = 1;
     public final int SET_IMG_FLAG = 100;
-    private boolean flagUpLoad =false;
+
+    private boolean flagUpLoad = true;
+
+
+    /**
+     * 获取默认的年级和擅长领域信息
+     */
+    private String currentGrade;
+    private String currentGoodAt;
+
+    /**
+     * 获取当前item在列表的第几项
+     */
+    private int flagGrade = -1;
+    private int flagGoodAt = -1;
+
+    /**
+     * 列表中点击时暂存点击位置
+     */
+    private int flagTempGoodAt = 0;
+    private int flagTempGrade = 0;
 
 
     Button btnAddHonor;
@@ -97,10 +136,22 @@ public class UpdateInformationActivity extends ToolBarActivity {
     EditText editUpdateProfession;
     @BindView(R.id.edit_update_stu_id)
     EditText editUpdateStuId;
+    @BindView(R.id.mine_grid_honor)
+    HonorGridView gridHonor;
+    @BindView(R.id.txt_update_grade)
+    TextView txtUpdateGrade;
+    @BindView(R.id.txt_update_good_at)
+    TextView txtUpdateGoodAt;
+
 
     private GridHonorAdapter gridHonorAdapter;
     private boolean isShowDelete;
+    private UpdatePersonInformationRequest updatePersonInformationRequest;
     private List<HonorCertificateModel> honorCertificateModelList = new ArrayList<HonorCertificateModel>();
+    private List<ShowHonorRequest> showHonorRequestList = new ArrayList<ShowHonorRequest>();
+    private String[] studentGradeList;
+    private String[] goodAtList;
+    private String filePath;
 
 
     @Override
@@ -117,28 +168,49 @@ public class UpdateInformationActivity extends ToolBarActivity {
     @Override
     protected void initView() {
 
+        initToolBar();
         initCheckbox();
-        initGrid();
-        initTitle();
 
     }
 
     @Override
     protected void loadData() {
 
+        loadPersonalInformation();
+        initHonorWall();
+        loadListData();
     }
 
 
-    protected void initTitle() {
+    /**
+     * 初始化ToolBar
+     */
+    protected void initToolBar() {
 
         setActivityTitle(getString(R.string.title_update_information));
         setTextOver(getString(R.string.title_over));
 
+        //完成按钮点击设置
         TextView txtTitleOver = (TextView) getToolbar().findViewById(R.id.txt_toolbar_over);
-
         txtTitleOver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                updatePersonInformationRequest = new UpdatePersonInformationRequest();
+                updatePersonInformationRequest.setUsername(editNickName.getText().toString().trim());
+                updatePersonInformationRequest.setName(editRealName.getText().toString().trim());
+                updatePersonInformationRequest.setPhone(editPhoneNumber.getText().toString().trim());
+                updatePersonInformationRequest.setMajor(editUpdateProfession.getText().toString().trim());
+                updatePersonInformationRequest.setStudentId(editUpdateStuId.getText().toString().trim());
+                updatePersonInformationRequest.setGoodAt(txtUpdateGoodAt.getText().toString().trim());
+                updatePersonInformationRequest.setGrade(txtUpdateGrade.getText().toString().trim());
+
+                if (checkBoxBoy.isChecked() && !checkBoxGirl.isChecked()) {
+                    updatePersonInformationRequest.setGender("0");
+                } else if (!checkBoxBoy.isChecked() && checkBoxGirl.isChecked()) {
+                    updatePersonInformationRequest.setGender("1");
+                }
+
 
                 switch (isDataTrue()) {
 
@@ -149,8 +221,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
                         ToastUtil.showToast(getString(R.string.error_phone_number_illegal));
                         break;
                     default:
-                        ToastUtil.showToast(getString(R.string.toast_edit_successful));
-                        finish();
+
+                        updatePersonalInformation();
                         break;
 
                 }
@@ -161,67 +233,41 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
     /**
-     * 初始化荣誉墙
+     * 提交修改信息网络请求
      */
-    public void initGrid() {
+    public void updatePersonalInformation() {
 
 
-        HonorGridView gridView = (HonorGridView) findViewById(R.id.mine_grid_honor);
-        gridHonorAdapter = new GridHonorAdapter(this, honorCertificateModelList,true);
-        gridView.setAdapter(gridHonorAdapter);
+        //ToastUtil.showToast(filePath);
 
-        //如果点击添加图片部分
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        File file = new File(filePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+
+        //网络请求
+
+        RestClient.getService().updatePersonalInformation(updatePersonInformationRequest,requestBody).enqueue(new DataCallback<APIResponse>() {
+
+
+            //请求成功时回调
+            @Override
+            public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                ToastUtil.showToast(getString(R.string.toast_edit_successful));
+                finish();
+            }
+
+            //请求失败时回调
+            @Override
+            public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+            }
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == parent.getChildCount() - 1) {
+            public void dismissDialog() {
 
-                    initHonorDialog();
-                    addDatas();
-                } else  {
-                    Intent intent = new Intent(UpdateInformationActivity.this, HonorUpdateActivity.class);
-                    startActivity(intent);
-                }
-                isShowDelete = false;
             }
+
         });
-
-
-
-
-        //如果长按图片
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if (position < honorCertificateModelList.size()) {
-
-                    if (isShowDelete) {
-                        isShowDelete = false;
-                        gridHonorAdapter.setIsShowDelete(isShowDelete);
-                    } else {
-                        isShowDelete = true;
-                        gridHonorAdapter.setIsShowDelete(isShowDelete);
-                    }
-                }
-                //返回true只处理长按事件
-                return true;
-            }
-        });
-    }
-
-    /**
-     * 荣誉墙添加item
-     */
-    public void addDatas() {
-
-        HonorCertificateModel honorCertificateAdd = new HonorCertificateModel(R.drawable.bg_account_title);
-        honorCertificateModelList.add(honorCertificateAdd);
-        gridHonorAdapter.notifyDataSetChanged();
-
     }
 
 
@@ -285,13 +331,173 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
     /**
-     * 初始化添加荣誉底部弹窗
+     * 加载个人信息
      */
-    public void initHonorDialog() {
+    public void loadPersonalInformation() {
+
+        Intent intent = getIntent();
+
+        editNickName.setText(intent.getStringExtra("userName"));
+        editRealName.setText(intent.getStringExtra("name"));
+        editPhoneNumber.setText(intent.getStringExtra("phoneNumber"));
+        editUpdateStuId.setText(intent.getStringExtra("studentId"));
+        editUpdateProfession.setText(intent.getStringExtra("major"));
+
+        currentGoodAt = intent.getStringExtra("goodAt");
+        txtUpdateGoodAt.setText(currentGoodAt);
+
+        currentGrade = intent.getStringExtra("grade");
+        txtUpdateGrade.setText(currentGrade);
+
+        Glide.with(this).load(intent.getStringExtra("avatarUrl")).into(imgUpdateAvatar);
+
+        if (intent.getIntExtra("gender", 0) == 0) {
+            checkBoxBoy.setChecked(true);
+            checkBoxGirl.setChecked(false);
+        } else {
+
+            checkBoxBoy.setChecked(false);
+            checkBoxGirl.setChecked(true);
+        }
+
+    }
 
 
+    /**
+     * 初始化荣誉墙
+     */
+    public void initHonorWall() {
 
-        final  AlertDialog dialogAddHonor = new AlertDialog.Builder(this,R.style.dialog_bottom).create();
+
+        RestClient.getService().showHonorRequest().enqueue(new DataCallback<APIResponse<List<ShowHonorRequest>>>() {
+
+            //请求成功时回调
+            @Override
+            public void onDataResponse(Call<APIResponse<List<ShowHonorRequest>>> call, Response<APIResponse<List<ShowHonorRequest>>> response) {
+
+                showHonorRequestList = response.body().getData();
+
+                for (int i = 0; i < showHonorRequestList.size(); i++) {
+
+                    ShowHonorRequest showHonorRequestMode = showHonorRequestList.get(i);
+
+                    HonorCertificateModel honorCertificateAdd = new HonorCertificateModel();
+                    honorCertificateAdd.setOrder(showHonorRequestMode.getOrder());
+                    honorCertificateAdd.setGloryName(showHonorRequestMode.getGloryName());
+                    honorCertificateAdd.setGloryTime(showHonorRequestMode.getGloryTime());
+                    honorCertificateAdd.setGloryPicUrl(showHonorRequestMode.getGloryPicUrl());
+
+                    honorCertificateModelList.add(honorCertificateAdd);
+                }
+
+                initGrid();
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<ShowHonorRequest>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+        });
+    }
+
+
+    /**
+     * 初始化Grid
+     */
+    public void initGrid() {
+
+        gridHonorAdapter = new GridHonorAdapter(UpdateInformationActivity.this, honorCertificateModelList, true);
+        gridHonor.setAdapter(gridHonorAdapter);
+
+
+        gridHonor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //如果点击添加图片部分
+                if (position == parent.getChildCount() - 1) {
+
+                    showHonorDialog();
+                    //addDatas();
+                } else {
+                    Intent intent = new Intent(UpdateInformationActivity.this, HonorUpdateActivity.class);
+
+                    intent.putExtra("picUrl", honorCertificateModelList.get(position).getGloryPicUrl());
+                    intent.putExtra("honorName", honorCertificateModelList.get(position).getGloryName());
+                    intent.putExtra("honorTime", honorCertificateModelList.get(position).getGloryTime());
+                    intent.putExtra("timeList",studentGradeList);
+
+                    startActivity(intent);
+                }
+                isShowDelete = false;
+            }
+        });
+
+
+        //如果长按图片
+        gridHonor.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position < honorCertificateModelList.size()) {
+
+                    if (isShowDelete) {
+                        isShowDelete = false;
+                        gridHonorAdapter.setIsShowDelete(isShowDelete);
+                    } else {
+                        isShowDelete = true;
+                        gridHonorAdapter.setIsShowDelete(isShowDelete);
+                    }
+                }
+                //返回true只处理长按事件
+                return true;
+            }
+        });
+    }
+
+
+    /**
+     * 荣誉墙添加item
+     */
+    public void addDatas() {
+
+        HonorCertificateModel honorCertificateAdd = new HonorCertificateModel();
+        honorCertificateAdd.setGloryPicUrl("http://www.thmaoqiu.cn/saiyou/storage/app/glory_pics/5a28f06a51898.jpg");
+        honorCertificateModelList.add(honorCertificateAdd);
+        gridHonorAdapter.notifyDataSetChanged();
+
+    }
+
+    /**
+     * 取消荣誉墙删除按钮点击事件
+     */
+    @OnClick(R.id.rlayout_mine_wrap)
+    public void onViewClicked() {
+
+        if (isShowDelete) {
+
+            isShowDelete = false;
+            gridHonorAdapter.setIsShowDelete(isShowDelete);
+        } else {
+            gridHonorAdapter.setIsShowDelete(isShowDelete);
+        }
+    }
+
+    /**
+     * 显示荣誉底部弹窗
+     */
+    public void showHonorDialog() {
+
+
+        final AlertDialog dialogAddHonor = new AlertDialog.Builder(this, R.style.dialog_bottom).create();
         dialogAddHonor.show();
         dialogAddHonor.getWindow().setContentView(R.layout.dialog_mine_honor);
 
@@ -306,8 +512,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
         btnAddHonor = (Button) dialogAddHonor.findViewById(R.id.btn_add_honor);
         btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
-
-
 
 
         btnAddHonor.setOnClickListener(new View.OnClickListener() {
@@ -337,12 +541,20 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
     /**
-     * 初始化更换头像底部弹窗
+     * 更换头像点击事件
      */
-    public void initAvatarDialog() {
+    @OnClick(R.id.mine_update_avatar)
+    public void onImgUpdateAvatarClicked() {
 
+        showAvatarDialog();
+    }
 
-        final  AlertDialog dialogAddHonor = new AlertDialog.Builder(this,R.style.dialog_bottom).create();
+    /**
+     * 显示更换头像底部弹窗
+     */
+    public void showAvatarDialog() {
+
+        final AlertDialog dialogAddHonor = new AlertDialog.Builder(this, R.style.dialog_bottom).create();
         dialogAddHonor.show();
         dialogAddHonor.getWindow().setContentView(R.layout.dialog_mine_avatar);
 
@@ -369,8 +581,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
                 Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takeIntent, TAKE_PHOTO_FLAG);
-
-
             }
         });
 
@@ -383,9 +593,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
                     dialogAddHonor.dismiss();
                 }
 
-                Intent intent = new Intent(Intent. ACTION_PICK,
-                        android.provider.MediaStore.Images.Media. EXTERNAL_CONTENT_URI);
-                intent.setType( "image/*");
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
                 startActivityForResult(intent, SET_IMG_FLAG);
 
             }
@@ -396,7 +606,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if ( dialogAddHonor.isShowing()) {
+                if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
             }
@@ -404,29 +614,143 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     }
 
-    /**
-     * 更换头像点击事件
-     */
-    @OnClick(R.id.mine_update_avatar)
-    public void onImgUpdateAvatarClicked() {
 
-        initAvatarDialog();
+    public void loadListData() {
+
+
+        //获取擅长领域列表网络请求
+
+        RestClient.getService().goodAtRequest().enqueue(new DataCallback<APIResponse<List<GoodAtRequest>>>() {
+
+            @Override
+            public void onDataResponse(Call<APIResponse<List<GoodAtRequest>>> call, Response<APIResponse<List<GoodAtRequest>>> response) {
+
+                List<GoodAtRequest> goodAtRequestList = response.body().getData();
+
+                goodAtList = new String[goodAtRequestList.size()];
+                for (int i = 0; i < goodAtRequestList.size(); i++) {
+                    goodAtList[i] = goodAtRequestList.get(i).getField().trim();
+
+                    if (goodAtList[i].equals(currentGoodAt)) {
+                        flagGoodAt = i;
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<GoodAtRequest>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+
+        });
+
+
+        //获取学生年级列表网络请求
+
+        RestClient.getService().studentGradeRequest().enqueue(new DataCallback<APIResponse<List<StudentGradeRequest>>>() {
+
+            @Override
+            public void onDataResponse(Call<APIResponse<List<StudentGradeRequest>>> call, Response<APIResponse<List<StudentGradeRequest>>> response) {
+
+                List<StudentGradeRequest> studentGradeRequestList = response.body().getData();
+
+                studentGradeList = new String[studentGradeRequestList.size()];
+                for (int i = 0; i < studentGradeRequestList.size(); i++) {
+                    studentGradeList[i] = studentGradeRequestList.get(i).getYear().trim();
+
+                    if (studentGradeList[i].equals(currentGrade)) {
+                        flagGrade = i;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<StudentGradeRequest>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+
+        });
+
     }
 
 
-    /**
-     * 取消荣誉墙删除按钮点击事件
-     */
-    @OnClick(R.id.rlayout_mine_wrap)
-    public void onViewClicked() {
+    @OnClick(R.id.spinner_student_grade)
+    public void onSpinnerStudentGradeClicked() {
 
-        if (isShowDelete) {
+        showGradeList();
+    }
 
-            isShowDelete = false;
-            gridHonorAdapter.setIsShowDelete(isShowDelete);
-        } else {
-            gridHonorAdapter.setIsShowDelete(isShowDelete);
-        }
+    @OnClick(R.id.spinner_good_at)
+    public void onSpinnerGoodAtClicked() {
+
+        showGoodAtList();
+    }
+
+    public void showGoodAtList() {
+
+
+        DialogUtil.NativeDialog nativeDialog = new DialogUtil().new NativeDialog().singleInit(UpdateInformationActivity.this);
+
+        nativeDialog.setSingleChoice(goodAtList, flagGoodAt, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                flagTempGoodAt = which;
+            }
+        });
+        nativeDialog.setNegativeButton("取消");
+        nativeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                flagGoodAt = flagTempGoodAt;
+                txtUpdateGoodAt.setText(goodAtList[flagGoodAt].trim());
+
+            }
+        });
+
+
+        nativeDialog.showNativeDialog();
+    }
+
+    public void showGradeList() {
+
+
+        DialogUtil.NativeDialog nativeDialog = new DialogUtil().new NativeDialog().singleInit(UpdateInformationActivity.this);
+
+        nativeDialog.setSingleChoice(studentGradeList, flagGrade, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                flagTempGrade = which;
+
+            }
+        });
+
+        nativeDialog.setNegativeButton("取消");
+        nativeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                flagGrade = flagTempGrade;
+                txtUpdateGrade.setText(studentGradeList[flagGrade].trim());
+            }
+        });
+
+        nativeDialog.showNativeDialog();
     }
 
 
@@ -452,13 +776,13 @@ public class UpdateInformationActivity extends ToolBarActivity {
         } else if (editUpdateStuId.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
 
             flag = FLAG_LACK_ERROR;
-        } else if (!checkBoxBoy.isChecked()&&!checkBoxGirl.isChecked()) {
+        } else if (!checkBoxBoy.isChecked() && !checkBoxGirl.isChecked()) {
 
             flag = FLAG_LACK_ERROR;
-        } else if (!flagUpLoad){
+        } else if (!flagUpLoad) {
 
             flag = FLAG_LACK_ERROR;
-        }else if(!RegexUtil.checkMobile(editPhoneNumber.getText().toString().trim())) {
+        } else if (!RegexUtil.checkMobile(editPhoneNumber.getText().toString().trim())) {
 
             flag = FLAG_PHONE_ERROR;
         }
@@ -468,6 +792,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     /**
      * 动态申请权限
+     *
      * @param activity
      */
     private void verifyStoragePermissions(Activity activity) {
@@ -482,6 +807,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     /**
      * 返回选择的图片
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -495,10 +821,12 @@ public class UpdateInformationActivity extends ToolBarActivity {
         if (requestCode == SET_IMG_FLAG && resultCode == RESULT_OK && null != data) {
 
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null , null);
+                    filePathColumn, null, null, null);
 
             cursor.moveToFirst();
 
@@ -506,22 +834,49 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
             String picturePath = cursor.getString(columnIndex);
 
+
+            filePath = picturePath;
+
+            ToastUtil.showToast(filePath);
+
             cursor.close();
 
             imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
             flagUpLoad = true;
 
-        } else if(requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
+        } else if (requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
+
 
             Bundle bundle = data.getExtras();
+
             Bitmap bitmap = (Bitmap) bundle.get("data");
             imgUpdateAvatar.setImageBitmap(bitmap);
 
             flagUpLoad = true;
+
+
+            String path = Environment.getExternalStorageDirectory().toString() + "/NUEQerCC";
+            File path1 = new File(path);
+            if (!path1.exists()) {
+                path1.mkdirs();
+            }
+
+            File file = new File(path1, System.currentTimeMillis() + ".jpg");
+
+            try {
+                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                bos.flush();
+                bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //filePath = file.getPath();
+
+            //ToastUtil.showToast(file.getPath());
+
         }
-
     }
-
-
 }

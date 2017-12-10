@@ -1,17 +1,17 @@
 package cn.abtion.neuqercc.mine.models;
 
-import java.util.List;
+import java.io.File;
 
 import cn.abtion.neuqercc.base.models.BaseModel;
-import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
 
 /**
  * @author fhyPayaso
- * @since 2017/11/29 18:07
+ * @since 2017/12/5 17:02
  * email fhyPayaso@qq.com
  */
 
-public class PersonInformationRequest extends BaseModel {
+public class UpdatePersonInformationRequest extends BaseModel {
+
 
     private String phone;
     private String username;
@@ -22,9 +22,8 @@ public class PersonInformationRequest extends BaseModel {
     private String grade;
     private String studentid;
     private String major;
-    private String pic;
 
-    public PersonInformationRequest() {
+    public UpdatePersonInformationRequest() {
 
     }
 
@@ -104,21 +103,6 @@ public class PersonInformationRequest extends BaseModel {
 
 
     /**
-     * 获取图片url
-     * @return
-     */
-    public String getPicture() {
-        return pic;
-        
-    }
-
-    public void setPicture(String picture) {
-        this.pic = picture;
-    }
-
-
-
-    /**
      * 获取年级
      */
     public String getGrade() {
@@ -152,6 +136,4 @@ public class PersonInformationRequest extends BaseModel {
     public void setMajor(String major) {
         this.major = major;
     }
-
-
 }

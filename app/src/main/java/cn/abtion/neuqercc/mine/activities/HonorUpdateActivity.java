@@ -3,6 +3,7 @@ package cn.abtion.neuqercc.mine.activities;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,19 +14,22 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.utils.DialogUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
@@ -37,16 +41,34 @@ import cn.abtion.neuqercc.utils.ToastUtil;
 public class HonorUpdateActivity extends ToolBarActivity {
 
 
-
-
     /**
      * 动态申请权限
      */
-    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_EXTERNAL_STORAGE = 100;
     public final int TAKE_PHOTO_FLAG = 1;
     public final int SET_IMG_FLAG = 100;
-    private boolean flagUpLoad =false;
+
+
+    /**
+     * 获取默认的年级和擅长领域信息
+     */
+    private String currentTime;
+
+    /**
+     * 获取当前item在列表的第几项
+     */
+    private int flagTime = 0;
+
+    /**
+     * 列表中点击时暂存点击位置
+     */
+    private int flagTempTime = 0;
+
+    private String[] honorTimeList;
+
+
+    private boolean flagUpLoad = false;
 
     Button btnTakePhoto;
     Button btnFromAlbum;
@@ -58,6 +80,9 @@ public class HonorUpdateActivity extends ToolBarActivity {
     Button btnHonorConfirmEdit;
     @BindView(R.id.edit_event_name)
     EditText editEventName;
+    @BindView(R.id.txt_update_time)
+    TextView txtUpdateTime;
+
 
 
     @Override
@@ -76,13 +101,12 @@ public class HonorUpdateActivity extends ToolBarActivity {
     @Override
     protected void initView() {
 
-
-
     }
 
     @Override
     protected void loadData() {
 
+        loadIntent();
     }
 
     @OnClick(R.id.img_add_honor)
@@ -91,11 +115,24 @@ public class HonorUpdateActivity extends ToolBarActivity {
         showHonorDialog();
     }
 
+    public void loadIntent() {
+
+        Intent intent = getIntent();
+        editEventName.setText(intent.getStringExtra("honorName"));
+        currentTime = intent.getStringExtra("honorTime");
+        txtUpdateTime.setText(currentTime);
+        honorTimeList = intent.getStringArrayExtra("timeList");
+
+        String picUrl = intent.getStringExtra("picUrl");
+        Glide.with(this).load(picUrl).into(imgAddHonor);
+
+    }
+
 
     public void showHonorDialog() {
 
 
-        final  AlertDialog dialogAddHonor = new AlertDialog.Builder(this,R.style.dialog_bottom).create();
+        final AlertDialog dialogAddHonor = new AlertDialog.Builder(this, R.style.dialog_bottom).create();
         dialogAddHonor.show();
         dialogAddHonor.getWindow().setContentView(R.layout.dialog_mine_avatar);
 
@@ -135,9 +172,9 @@ public class HonorUpdateActivity extends ToolBarActivity {
                     dialogAddHonor.dismiss();
                 }
 
-                Intent intent = new Intent(Intent. ACTION_PICK,
-                        android.provider.MediaStore.Images.Media. EXTERNAL_CONTENT_URI);
-                intent.setType( "image/*");
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
                 startActivityForResult(intent, SET_IMG_FLAG);
 
             }
@@ -148,7 +185,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if ( dialogAddHonor.isShowing()) {
+                if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
             }
@@ -158,6 +195,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
     /**
      * 返回选择的图片
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -171,10 +209,10 @@ public class HonorUpdateActivity extends ToolBarActivity {
         if (requestCode == SET_IMG_FLAG && resultCode == RESULT_OK && null != data) {
 
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null , null);
+                    filePathColumn, null, null, null);
 
             cursor.moveToFirst();
 
@@ -188,7 +226,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
             flagUpLoad = true;
 
-        } else if(requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
+        } else if (requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
 
             Bundle bundle = data.getExtras();
             Bitmap bitmap = (Bitmap) bundle.get("data");
@@ -206,7 +244,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
     @OnClick(R.id.btn_honor_confirm_edit)
     public void onBtnConfirmClicked() {
 
-        if(isDataTrue()) {
+        if (isDataTrue()) {
             ToastUtil.showToast(getString(R.string.toast_edit_successful));
             finish();
         } else {
@@ -218,6 +256,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
     /**
      * 动态申请权限
+     *
      * @param activity
      */
     private void verifyStoragePermissions(Activity activity) {
@@ -232,18 +271,69 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
     /**
      * 判断信息是否完整
+     *
      * @return
      */
     private boolean isDataTrue() {
         boolean flag = true;
 
         if (editEventName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            flag=false;
-        } else if(!flagUpLoad) {
-            flag=false;
+            flag = false;
+        } else if (!flagUpLoad) {
+            flag = false;
         }
 
         return flag;
+    }
+
+
+    @OnClick(R.id.txt_update_time)
+    public void onTxtUpdateTimeClicked() {
+
+        showTimeList();
+    }
+
+
+
+    public void showTimeList() {
+
+
+        for(int i=0 ;i< honorTimeList.length;i++) {
+
+            if (honorTimeList[i].equals(currentTime)) {
+                flagTime = i;
+            }
+        }
+
+
+        DialogUtil.NativeDialog nativeDialog = new DialogUtil().new NativeDialog().singleInit(HonorUpdateActivity.this);
+
+        nativeDialog.setSingleChoice(honorTimeList, flagTime, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                flagTempTime = which;
+
+            }
+        });
+
+        nativeDialog.setNegativeButton("取消");
+        nativeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                flagTime = flagTempTime;
+                txtUpdateTime.setText(honorTimeList[flagTime].trim());
+            }
+        });
+
+        nativeDialog.showNativeDialog();
+
+
+
+
+
+
     }
 
 }

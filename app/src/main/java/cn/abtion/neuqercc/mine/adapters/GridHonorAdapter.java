@@ -72,7 +72,7 @@ public class GridHonorAdapter extends BaseAdapter {
 
             convertView = LayoutInflater.from(context).inflate(R.layout.item_grid_honor,null,false);
             ImageView imgHonor = (ImageView) convertView.findViewById(R.id.img_grid_honor);
-            Glide.with(context).load(honorCertificateList.get(position).getImgHonor()).into(imgHonor);
+            Glide.with(context).load(honorCertificateList.get(position).getGloryPicUrl()).into(imgHonor);
 
             viewHolder.imgDelete=(ImageView)convertView.findViewById(R.id.img_show_delete);
             viewHolder.imgDelete.setVisibility(isShowDelete ? View.VISIBLE : View.GONE);

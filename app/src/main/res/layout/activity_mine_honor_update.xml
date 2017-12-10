@@ -72,15 +72,27 @@
 
         <LinearLayout
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/contest_spinner">
+            android:background="@drawable/contest_spinner"
+            android:gravity="center_vertical">
 
-            <Spinner
-                android:id="@+id/spinner_home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"></Spinner>
+            <TextView
+                android:id="@+id/txt_update_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:textSize="16sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="2dp"
+                />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="10dp"
+                android:src="@drawable/ic_spinner"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 

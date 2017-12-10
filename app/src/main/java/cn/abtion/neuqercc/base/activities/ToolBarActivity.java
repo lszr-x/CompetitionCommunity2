@@ -31,9 +31,9 @@ public abstract class ToolBarActivity extends BaseActivity {
      */
     private Toolbar toolbar;
     @BindView(R.id.txt_toolbar_title)
-    protected TextView toolBarTitle;
+    protected @Nullable TextView toolBarTitle;
     @BindView(R.id.txt_toolbar_over)
-    protected TextView toolBarOver;
+    protected @Nullable TextView toolBarOver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public abstract class ToolBarActivity extends BaseActivity {
      *
      * @param charSequence 页面标题
      */
-    protected void setActivityTitle(CharSequence charSequence) {
+    protected void setActivityTitle(@Nullable CharSequence charSequence) {
         if (toolbar != null) {
 
             toolBarTitle.setText(charSequence);
@@ -107,7 +107,7 @@ public abstract class ToolBarActivity extends BaseActivity {
     }
 
 
-    protected void setTextOver(CharSequence charSequence) {
+    protected void setTextOver(@Nullable CharSequence charSequence) {
         if (toolbar != null) {
 
             toolBarOver.setText(charSequence);

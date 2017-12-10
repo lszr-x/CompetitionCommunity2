@@ -51,7 +51,7 @@ public class EstablishTeamFinishActivity extends ToolBarActivity {
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         teamMemberListModels = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            teamMemberListModels.add(new TeamMemberListModel());
+            teamMemberListModels.add(new TeamMemberListModel("asd","afa","af"));
         }
         TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberListModels);
 
