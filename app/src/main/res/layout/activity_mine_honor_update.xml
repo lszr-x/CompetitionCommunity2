@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@null"
-            android:hint="@string/test_sample"
+            android:hint="请输入赛事名称"
             android:textSize="16sp"
             android:gravity="right"/>
 
@@ -71,6 +71,7 @@
             android:textSize="16sp" />
 
         <LinearLayout
+            android:id="@+id/liner_update_time"
             android:layout_width="80dp"
             android:layout_height="20dp"
             android:layout_alignParentRight="true"

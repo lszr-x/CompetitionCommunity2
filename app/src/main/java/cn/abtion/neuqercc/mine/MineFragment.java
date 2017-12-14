@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,14 +15,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.mine.activities.HonorInformationActivity;
@@ -32,13 +31,13 @@ import cn.abtion.neuqercc.mine.activities.MineTeamListActivity;
 import cn.abtion.neuqercc.mine.activities.SettingActivity;
 import cn.abtion.neuqercc.mine.activities.UpdateInformationActivity;
 import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
-import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
-import cn.abtion.neuqercc.mine.models.PersonInformationRequest;
-import cn.abtion.neuqercc.mine.models.ShowHonorRequest;
+import cn.abtion.neuqercc.mine.models.PersonInformationResponse;
+import cn.abtion.neuqercc.mine.models.ShowHonorResponse;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.DensityUtil;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.GradientScrollView;
 import cn.abtion.neuqercc.widget.HonorGridView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -112,10 +111,9 @@ public class MineFragment extends BaseFragment {
     RelativeLayout mineHonor;
 
 
-    private List<ShowHonorRequest> showHonorRequestList = new ArrayList<ShowHonorRequest>();
-    private List<HonorCertificateModel> honorCertificateModelList = new ArrayList<HonorCertificateModel>();
+    private List<ShowHonorResponse> showHonorResponseList = new ArrayList<ShowHonorResponse>();
+    private PersonInformationResponse informationResponse;
     private String imgAvatarUrl;
-    private int gender = 0;
 
     @Override
     protected int getLayoutId() {
@@ -138,6 +136,14 @@ public class MineFragment extends BaseFragment {
 
         initPersonalInformation();
         initHonorWall();
+    }
+
+    @Override
+    public void onResume() {
+
+        initPersonalInformation();
+        initHonorWall();
+        super.onResume();
     }
 
     /**
@@ -178,16 +184,17 @@ public class MineFragment extends BaseFragment {
      */
     public void initPersonalInformation() {
 
-        RestClient.getService().personalInformation().enqueue(new DataCallback<APIResponse<PersonInformationRequest>>() {
+        RestClient.getService().personalInformation(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<PersonInformationResponse>>() {
 
             @Override
-            public void onDataResponse(Call<APIResponse<PersonInformationRequest>> call, Response<APIResponse<PersonInformationRequest>> response) {
+            public void onDataResponse(Call<APIResponse<PersonInformationResponse>> call, Response<APIResponse<PersonInformationResponse>> response) {
 
-                setPersonalInformation(call, response);
+                informationResponse = response.body().getData();
+                setPersonalInformation();
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<PersonInformationRequest>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<PersonInformationResponse>> call, Throwable t) {
 
             }
 
@@ -201,33 +208,26 @@ public class MineFragment extends BaseFragment {
 
     /**
      * 初始化个人信息
-     *
-     * @param call
-     * @param response
      */
-    public void setPersonalInformation(Call<APIResponse<PersonInformationRequest>> call, Response<APIResponse<PersonInformationRequest>> response) {
+    public void setPersonalInformation() {
 
-        txtGoodAt.setText(response.body().getData().getGoodAt().trim());
-        txtTeamNum.setText(response.body().getData().getTeamNum() + "");
-        txtPhoneNumber.setText(response.body().getData().getPhone().trim());
-        txtName.setText(response.body().getData().getName().trim());
-        txtUserName.setText(response.body().getData().getUsername().trim());
-        txtMajor.setText(response.body().getData().getMajor().trim());
-        txtGrade.setText(response.body().getData().getGrade().trim());
-        txtStudentId.setText(response.body().getData().getStudentId().trim());
+        txtPhoneNumber.setText(informationResponse.getPhone().trim());
+        txtUserName.setText(informationResponse.getUsername().trim());
+        txtName.setText(informationResponse.getName().trim());
+        txtGoodAt.setText(informationResponse.getGoodAt().trim());
+        txtMajor.setText(informationResponse.getMajor().trim());
+        txtTeamNum.setText(String.valueOf(informationResponse.getTeamNum()));
+        txtGrade.setText(String.valueOf(informationResponse.getGrade()));
+        txtStudentId.setText(String.valueOf(informationResponse.getStudentId()));
 
-
-        if (response.body().getData().getGender().equals("0")) {
-            gender = 0;
+        if (informationResponse.getGender() == 0) {
             imgGender.setImageResource(R.drawable.ic_mine_man);
-        } else if (response.body().getData().getGender().equals("1")) {
-            gender = 1;
+        } else if (informationResponse.getGender() == 1) {
             imgGender.setImageResource(R.drawable.ic_mine_woman);
         }
 
-        imgAvatarUrl = response.body().getData().getPicture();
+        imgAvatarUrl = informationResponse.getPicture();
         Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
-
     }
 
 
@@ -236,34 +236,19 @@ public class MineFragment extends BaseFragment {
      */
     public void initHonorWall() {
 
-
-        RestClient.getService().showHonorRequest().enqueue(new DataCallback<APIResponse<List<ShowHonorRequest>>>() {
+        RestClient.getService().showHonorRequest(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<ShowHonorResponse>>>() {
 
             //请求成功时回调
             @Override
-            public void onDataResponse(Call<APIResponse<List<ShowHonorRequest>>> call, Response<APIResponse<List<ShowHonorRequest>>> response) {
+            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call, Response<APIResponse<List<ShowHonorResponse>>> response) {
 
-                showHonorRequestList = response.body().getData();
-
-                for (int i = 0; i < showHonorRequestList.size(); i++) {
-
-                    HonorCertificateModel honorCertificateAdd = new HonorCertificateModel();
-
-                    honorCertificateAdd.setOrder(showHonorRequestList.get(i).getOrder());
-                    honorCertificateAdd.setGloryName(showHonorRequestList.get(i).getGloryName());
-                    honorCertificateAdd.setGloryTime(showHonorRequestList.get(i).getGloryTime());
-                    honorCertificateAdd.setGloryPicUrl(showHonorRequestList.get(i).getGloryPicUrl());
-
-                    honorCertificateModelList.add(honorCertificateAdd);
-                }
-
+                showHonorResponseList = response.body().getData();
                 initGrid();
-
             }
 
             //请求失败时回调
             @Override
-            public void onDataFailure(Call<APIResponse<List<ShowHonorRequest>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<List<ShowHonorResponse>>> call, Throwable t) {
 
             }
 
@@ -279,19 +264,17 @@ public class MineFragment extends BaseFragment {
      */
     public void initGrid() {
 
-        GridHonorAdapter gridHonorAdapter = new GridHonorAdapter(getContext(), honorCertificateModelList, false);
+        GridHonorAdapter gridHonorAdapter = new GridHonorAdapter(getContext(), showHonorResponseList, false);
         gridHonor.setAdapter(gridHonorAdapter);
         gridHonor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                ShowHonorResponse showHonorResponse = showHonorResponseList.get(position);
                 Intent intent = new Intent(getContext(), HonorInformationActivity.class);
-                intent.putExtra("picUrl", honorCertificateModelList.get(position).getGloryPicUrl());
-                intent.putExtra("honorName", honorCertificateModelList.get(position).getGloryName());
-                intent.putExtra("honorTime", honorCertificateModelList.get(position).getGloryTime());
+                intent.putExtra("honor", new Gson().toJson(showHonorResponse));
                 startActivity(intent);
-
             }
         });
     }
@@ -337,7 +320,9 @@ public class MineFragment extends BaseFragment {
                     dialog.dismiss();
                 }
 
-                toUpdateInformationActivity();
+                Intent intent = new Intent(getContext(), UpdateInformationActivity.class);
+                intent.putExtra("personInformation", new Gson().toJson(informationResponse));
+                startActivity(intent);
             }
         });
 
@@ -368,25 +353,6 @@ public class MineFragment extends BaseFragment {
         });
     }
 
-    public void toUpdateInformationActivity() {
-
-        Intent intent = new Intent(getContext(), UpdateInformationActivity.class);
-
-        intent.putExtra("goodAt", txtGoodAt.getText().toString().trim());
-        //intent.putExtra("teamNum",txtTeamNum.getText().toString().trim());
-        intent.putExtra("phoneNumber", txtPhoneNumber.getText().toString().trim());
-        intent.putExtra("name", txtName.getText().toString().trim());
-        intent.putExtra("userName", txtUserName.getText().toString().trim());
-        intent.putExtra("major", txtMajor.getText().toString().trim());
-        intent.putExtra("grade", txtGrade.getText().toString().trim());
-        intent.putExtra("studentId", txtStudentId.getText().toString().trim());
-        intent.putExtra("avatarUrl", imgAvatarUrl);
-        intent.putExtra("gender", gender);
-
-        startActivity(intent);
-
-    }
-
 
     /**
      * 查看头像大图点击事件
@@ -407,6 +373,5 @@ public class MineFragment extends BaseFragment {
         builder.show();
 
     }
-
 
 }

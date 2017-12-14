@@ -11,20 +11,25 @@ import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
  * email fhyPayaso@qq.com
  */
 
-public class PersonInformationRequest extends BaseModel {
+public class PersonInformationResponse extends BaseModel {
 
-    private String phone;
+
     private String username;
+    private String phone;
+    private int phonesee;
+    private String pic;
     private String name;
-    private String gender;
+    private int namesee;
+    private String major;
+    private int grade;
+    private int studentid;
+    private int gender;
     private String good_at;
     private int team_num;
-    private String grade;
-    private String studentid;
-    private String major;
-    private String pic;
 
-    public PersonInformationRequest() {
+
+
+    public PersonInformationResponse() {
 
     }
 
@@ -70,11 +75,11 @@ public class PersonInformationRequest extends BaseModel {
      * 获取性别
      * @return
      */
-    public String getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
@@ -121,11 +126,11 @@ public class PersonInformationRequest extends BaseModel {
     /**
      * 获取年级
      */
-    public String getGrade() {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 
@@ -133,11 +138,11 @@ public class PersonInformationRequest extends BaseModel {
     /**
      * 获取学号
      */
-    public String getStudentId() {
+    public int getStudentId() {
         return studentid;
     }
 
-    public void setStudentId(String studentid) {
+    public void setStudentId(int studentid) {
         this.studentid = studentid;
     }
 
@@ -152,6 +157,34 @@ public class PersonInformationRequest extends BaseModel {
     public void setMajor(String major) {
         this.major = major;
     }
+
+
+    /**
+     * 获取电话是否可见
+     * @return
+     */
+    public int getPhoneSee() {
+        return phonesee;
+    }
+
+    public void setPhoneSee(int phoneSee) {
+
+        this.phonesee = phoneSee;
+    }
+
+
+    /**
+     * 获取姓名是否可见
+     * @return
+     */
+    public int getNameSee() {
+        return namesee;
+    }
+
+    public void setNameSee(int nameSee) {
+        this.namesee = nameSee;
+    }
+
 
 
 }

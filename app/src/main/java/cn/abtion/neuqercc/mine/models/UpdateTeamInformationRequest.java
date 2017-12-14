@@ -16,55 +16,38 @@ public class UpdateTeamInformationRequest extends BaseModel {
     private String declaration;
     private String good_at;
 
-
-    public void UpdateTeamInformationRequest() {
-
+    public UpdateTeamInformationRequest(int team_id, String team_name, String competition_desc, String declaration, String good_at) {
+        this.team_id = team_id;
+        this.team_name = team_name;
+        this.competition_desc = competition_desc;
+        this.declaration = declaration;
+        this.good_at = good_at;
     }
 
-
-    /**
-     * 获取队伍id
-     * @return
-     */
-    public int getTeamId() {
+    public int getTeam_id() {
         return team_id;
     }
 
-    public void setTeamId(int teamId) {
-        this.team_id = teamId;
+    public void setTeam_id(int team_id) {
+        this.team_id = team_id;
     }
 
-
-    /**
-     * 获取队伍名称
-     * @return
-     */
-    public String getTeamName() {
-        return  team_name;
+    public String getTeam_name() {
+        return team_name;
     }
 
-    public void setTeamName(String teamName) {
-        this.team_name = teamName;
+    public void setTeam_name(String team_name) {
+        this.team_name = team_name;
     }
 
-
-    /**
-     * 获取比赛名称
-     * @return
-     */
-    public String getCompetitionDesc() {
+    public String getCompetition_desc() {
         return competition_desc;
     }
 
-    public void setCompetitionDesc(String competitionDesc) {
-        this.competition_desc = competitionDesc;
+    public void setCompetition_desc(String competition_desc) {
+        this.competition_desc = competition_desc;
     }
 
-
-    /**
-     * 获取队伍宣言
-     * @return
-     */
     public String getDeclaration() {
         return declaration;
     }
@@ -73,16 +56,11 @@ public class UpdateTeamInformationRequest extends BaseModel {
         this.declaration = declaration;
     }
 
-    /**
-     * 获取擅长方向
-     * @return
-     */
-    public String getGoodAt() {
+    public String getGood_at() {
         return good_at;
     }
 
-    public void setGoodAt(String goodAt) {
-
-        this.good_at = goodAt;
+    public void setGood_at(String good_at) {
+        this.good_at = good_at;
     }
 }

@@ -6,11 +6,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.mine.models.MineTeamInformationRequest;
 import cn.abtion.neuqercc.mine.models.UpdateTeamInformationRequest;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
@@ -39,6 +42,7 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
 
 
     public static int teamId;
+    UpdateTeamInformationRequest updateTeamInformationRequest;
 
     @Override
     protected int getLayoutId() {
@@ -96,10 +100,12 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
     protected void loadTeamInformation() {
 
         Intent intent = getIntent();
-        teamId = intent.getIntExtra("teamId",-1);
-        editTeamName.setText(intent.getStringExtra("teamName"));
-        editWantJoin.setText(intent.getStringExtra("contestName"));
-        editTeamDeclaration.setText(intent.getStringExtra("teamDeclaration"));
+        MineTeamInformationRequest teamInformationRequest = new Gson()
+                .fromJson(intent.getStringExtra("teamInformation"), MineTeamInformationRequest.class);
+        teamId = teamInformationRequest.getId();
+        editTeamName.setText(teamInformationRequest.getTeamName());
+        editWantJoin.setText(teamInformationRequest.getCompetitionDesc());
+        editTeamDeclaration.setText(teamInformationRequest.getDeclaration());
 
     }
 
@@ -107,21 +113,23 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
     /**
      * 提交队伍修改信息
      */
-    protected  void commitTeamInformation() {
+    protected void commitTeamInformation() {
 
 
-        UpdateTeamInformationRequest updateTeamInformationRequest = new UpdateTeamInformationRequest();
+        updateTeamInformationRequest = new UpdateTeamInformationRequest(teamId,
 
-        updateTeamInformationRequest.setTeamId(teamId);
-        updateTeamInformationRequest.setTeamName(editTeamName.getText().toString().trim());
-        updateTeamInformationRequest.setCompetitionDesc(editTeamDeclaration.toString().trim());
-        updateTeamInformationRequest.setDeclaration(editTeamDeclaration.toString().trim());
+                editTeamName.getText().toString(),
+                editWantJoin.getText().toString(),
+                editTeamDeclaration.getText().toString(),
+                "前端后端安卓"
+        );
+
 
         RestClient.getService().updateTeamInformation(updateTeamInformationRequest).enqueue(new DataCallback<APIResponse>() {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-                ToastUtil.showToast(R.string.toast_edit_successful);
+                ToastUtil.showToast("编辑成功");
                 finish();
             }
 
@@ -151,7 +159,6 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
         }
         return flag;
     }
-
 
 
 }

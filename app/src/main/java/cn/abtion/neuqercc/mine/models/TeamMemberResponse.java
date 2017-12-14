@@ -8,7 +8,7 @@ import cn.abtion.neuqercc.base.models.BaseModel;
  * email fhyPayaso@qq.com
  */
 
-public class TeamMemberRequest extends BaseModel{
+public class TeamMemberResponse extends BaseModel{
 
 
     private String name;
@@ -16,10 +16,12 @@ public class TeamMemberRequest extends BaseModel{
     private String good_at;
     private  String team_position;
 
-    public void TeamMemberRequest() {
-
+    public TeamMemberResponse(String name, int namesee, String good_at, String team_position) {
+        this.name = name;
+        this.namesee = namesee;
+        this.good_at = good_at;
+        this.team_position = team_position;
     }
-
 
     /**
      * 获取队员姓名

@@ -53,7 +53,6 @@ public class CompetitionViewPagerAdapter extends FragmentPagerAdapter {
         return currentFragment;
     }
 
-
     @Override
     public  int getCount(){
         return Config.PAGE_COMPETITION_LIMIT;

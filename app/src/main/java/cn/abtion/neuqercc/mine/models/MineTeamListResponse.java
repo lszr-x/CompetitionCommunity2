@@ -8,13 +8,12 @@ import cn.abtion.neuqercc.base.models.BaseModel;
  * email fhyPayaso@qq.com
  */
 
-public class MineTeamListRequest extends BaseModel {
+public class MineTeamListResponse extends BaseModel {
 
     private int team_id;
     private String team_name;
     private String competition_desc;
     private int team_member_num;
-
 
 
     public void MineTeamListRequest() {

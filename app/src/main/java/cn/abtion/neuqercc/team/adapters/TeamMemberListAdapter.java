@@ -11,6 +11,7 @@ import java.util.List;
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
+import cn.abtion.neuqercc.mine.models.TeamMemberResponse;
 import cn.abtion.neuqercc.team.models.TeamMemberListModel;
 
 /**
@@ -19,16 +20,11 @@ import cn.abtion.neuqercc.team.models.TeamMemberListModel;
  * email wsyglszr@gmail.com
  */
 
-public class TeamMemberListAdapter extends BaseRecyclerViewAdapter<TeamMemberListModel> {
+public class TeamMemberListAdapter extends BaseRecyclerViewAdapter<TeamMemberResponse> {
 
-    @BindView(R.id.txt_team_position)
-    TextView txtTeamPosition;
-    @BindView(R.id.txt_member_name)
-    TextView txtMemberName;
-    @BindView(R.id.txt_good_at)
-    TextView txtGoodAt;
 
-    public TeamMemberListAdapter(Context context, List<TeamMemberListModel> teamMemberListModel) {
+
+    public TeamMemberListAdapter(Context context, List<TeamMemberResponse> teamMemberListModel) {
         super(context, teamMemberListModel);
     }
 
@@ -38,7 +34,14 @@ public class TeamMemberListAdapter extends BaseRecyclerViewAdapter<TeamMemberLis
         return new ItemHolder(view);
     }
 
-    private class ItemHolder extends ViewHolder<TeamMemberListModel> {
+    static class ItemHolder extends ViewHolder<TeamMemberResponse> {
+
+        @BindView(R.id.txt_team_position)
+        TextView txtTeamPosition;
+        @BindView(R.id.txt_member_name)
+        TextView txtMemberName;
+        @BindView(R.id.txt_good_at)
+        TextView txtGoodAt;
 
 
         ItemHolder(View itemView) {
@@ -46,11 +49,10 @@ public class TeamMemberListAdapter extends BaseRecyclerViewAdapter<TeamMemberLis
         }
 
         @Override
-        protected void onBind(TeamMemberListModel teamMemberListModel) {
-
+        protected void onBind(TeamMemberResponse teamMemberListModel) {
 
             txtMemberName.setText(teamMemberListModel.getName() == null ? "N/A" : teamMemberListModel.getName());
-            txtTeamPosition.setText(teamMemberListModel.getPosition() == null ? "N/A" : teamMemberListModel.getPosition());
+            txtTeamPosition.setText(teamMemberListModel.getTeamPosition() == null ? "N/A" : teamMemberListModel.getTeamPosition());
             txtGoodAt.setText(teamMemberListModel.getGoodAt() == null ? "N/A" : teamMemberListModel.getGoodAt());
         }
 

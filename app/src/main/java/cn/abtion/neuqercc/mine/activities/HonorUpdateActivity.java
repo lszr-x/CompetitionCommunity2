@@ -23,14 +23,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.mine.models.ShowHonorResponse;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.DialogUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * @author fhyPayaso
@@ -67,8 +80,21 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
     private String[] honorTimeList;
 
+    /**
+     * 信息上传类型，0为修改，1为添加
+     */
+    private int uploadType = 0;
 
-    private boolean flagUpLoad = false;
+
+    /**
+     * 判断证书图片是否为空
+     */
+    private boolean flagUpLoad = true;
+    private int currentOrder;
+
+    private String filePath;
+    private Intent intent;
+    private ShowHonorResponse honorResponse;
 
     Button btnTakePhoto;
     Button btnFromAlbum;
@@ -82,7 +108,6 @@ public class HonorUpdateActivity extends ToolBarActivity {
     EditText editEventName;
     @BindView(R.id.txt_update_time)
     TextView txtUpdateTime;
-
 
 
     @Override
@@ -117,14 +142,28 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
     public void loadIntent() {
 
-        Intent intent = getIntent();
-        editEventName.setText(intent.getStringExtra("honorName"));
-        currentTime = intent.getStringExtra("honorTime");
-        txtUpdateTime.setText(currentTime);
+        intent = getIntent();
         honorTimeList = intent.getStringArrayExtra("timeList");
+        honorResponse = new Gson().fromJson(intent.getStringExtra("honorInformation"), ShowHonorResponse.class);
 
-        String picUrl = intent.getStringExtra("picUrl");
-        Glide.with(this).load(picUrl).into(imgAddHonor);
+        //0代表编辑证书，1代表添加证书
+        if (intent.getStringExtra("honorWall").equals("0")) {
+
+            uploadType = 0;
+            editEventName.setText(honorResponse.getGloryName());
+            currentTime = honorResponse.getGloryTime();
+            txtUpdateTime.setText(currentTime);
+            currentOrder = honorResponse.getOrder();
+            String picUrl = honorResponse.getGloryPicUrl();
+            Glide.with(this).load(picUrl).into(imgAddHonor);
+
+        } else {
+
+            uploadType = 1;
+            flagUpLoad = false;
+            imgAddHonor.setImageResource(R.drawable.bg_add_honor);
+            txtUpdateTime.setText(honorTimeList[0]);
+        }
 
     }
 
@@ -159,8 +198,6 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
                 Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(takeIntent, TAKE_PHOTO_FLAG);
-
-
             }
         });
 
@@ -213,13 +250,11 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
-
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-
             String picturePath = cursor.getString(columnIndex);
-
+            filePath = picturePath;
             cursor.close();
 
             imgAddHonor.setImageBitmap(BitmapFactory.decodeFile(picturePath));
@@ -245,12 +280,78 @@ public class HonorUpdateActivity extends ToolBarActivity {
     public void onBtnConfirmClicked() {
 
         if (isDataTrue()) {
-            ToastUtil.showToast(getString(R.string.toast_edit_successful));
-            finish();
+
+            uploadHonorInformation();
         } else {
             ToastUtil.showToast(getString(R.string.toast_lack_information));
         }
 
+    }
+
+
+    public void uploadHonorInformation() {
+
+
+        File file = new File(filePath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("glory_pic", file.getName(), requestBody);
+
+
+        //修改证书网络请求
+        if (uploadType == 0) {
+
+            RestClient.getService().uploadHonor(LoginActivity.phoneNumber,
+                    honorResponse.setHonorMap(), part).enqueue(new DataCallback<APIResponse>() {
+
+                @Override
+                public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                    ToastUtil.showToast(getString(R.string.toast_edit_successful));
+                    finish();
+                }
+
+                @Override
+                public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+                }
+
+                @Override
+                public void dismissDialog() {
+
+                }
+            });
+
+
+        } else {
+
+
+            /**
+             * 添加证书网络请求
+             */
+            honorResponse = new ShowHonorResponse(editEventName.getText().toString(),
+                    txtUpdateTime.getText().toString(), filePath);
+
+            RestClient.getService().addHonor(LoginActivity.phoneNumber,
+                    honorResponse.setHonorMap(), part).enqueue(new DataCallback<APIResponse>() {
+
+                @Override
+                public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                    ToastUtil.showToast("添加成功");
+                    finish();
+                }
+
+                @Override
+                public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+                }
+
+                @Override
+                public void dismissDialog() {
+
+                }
+            });
+        }
     }
 
 
@@ -287,18 +388,17 @@ public class HonorUpdateActivity extends ToolBarActivity {
     }
 
 
-    @OnClick(R.id.txt_update_time)
-    public void onTxtUpdateTimeClicked() {
+    @OnClick(R.id.liner_update_time)
+    public void onLinerUpdateTimeClicked() {
 
         showTimeList();
     }
 
 
-
     public void showTimeList() {
 
 
-        for(int i=0 ;i< honorTimeList.length;i++) {
+        for (int i = 0; i < honorTimeList.length; i++) {
 
             if (honorTimeList[i].equals(currentTime)) {
                 flagTime = i;
@@ -328,10 +428,6 @@ public class HonorUpdateActivity extends ToolBarActivity {
         });
 
         nativeDialog.showNativeDialog();
-
-
-
-
 
 
     }

@@ -2,13 +2,11 @@ package cn.abtion.neuqercc.mine.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
@@ -45,7 +43,7 @@ public class SettingActivity extends ToolBarActivity {
     protected void initVariable() {
 
         setActivityTitle(getString(R.string.title_setting));
-        txtCurrentAccount.setText(LoginActivity.phonenumber);
+        txtCurrentAccount.setText(LoginActivity.phoneNumber);
     }
 
     @Override

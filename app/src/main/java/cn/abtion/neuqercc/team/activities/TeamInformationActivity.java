@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.mine.models.TeamMemberResponse;
 import cn.abtion.neuqercc.team.adapters.TeamMemberListAdapter;
 import cn.abtion.neuqercc.team.models.TeamMemberListModel;
 import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
@@ -30,7 +31,7 @@ public class TeamInformationActivity extends ToolBarActivity {
 
 
 
-    private ArrayList<TeamMemberListModel> teamMemberListModels;
+    private ArrayList<TeamMemberResponse> teamMemberListModels;
 
     @BindView(R.id.recylerview_team_member)
     RecyclerView recylerviewTeamMember;
@@ -53,7 +54,7 @@ public class TeamInformationActivity extends ToolBarActivity {
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         teamMemberListModels = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            teamMemberListModels.add(new TeamMemberListModel("af","afa","afa"));
+            teamMemberListModels.add(new TeamMemberResponse("af",12,"afa","afa"));
         }
         TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberListModels);
 

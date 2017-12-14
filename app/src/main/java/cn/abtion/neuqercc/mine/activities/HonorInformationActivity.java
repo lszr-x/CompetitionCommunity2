@@ -10,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.mine.models.ShowHonorResponse;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
  * @author fhyPayaso
@@ -60,11 +63,11 @@ public class HonorInformationActivity extends ToolBarActivity {
     public void loadIntent() {
 
         Intent intent = getIntent();
-        txtEventName.setText(intent.getStringExtra("honorName"));
-        txtEventTime.setText(intent.getStringExtra("honorTime"));
-        picUrl = intent.getStringExtra("picUrl");
+        ShowHonorResponse honorResponse = new Gson().fromJson(intent.getStringExtra("honor"), ShowHonorResponse.class);
+        txtEventName.setText(honorResponse.getGloryName());
+        txtEventTime.setText(honorResponse.getGloryTime());
+        picUrl = honorResponse.getGloryPicUrl();
         Glide.with(this).load(picUrl).into(imgHonor);
-
     }
 
 

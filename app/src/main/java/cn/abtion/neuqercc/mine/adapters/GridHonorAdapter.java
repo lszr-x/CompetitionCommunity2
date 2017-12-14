@@ -12,8 +12,13 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
-import cn.abtion.neuqercc.utils.ToastUtil;
+import cn.abtion.neuqercc.account.activities.LoginActivity;
+
+import cn.abtion.neuqercc.mine.models.ShowHonorResponse;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
+import retrofit2.Call;
 
 /**
  * @author fhyPayaso
@@ -24,16 +29,15 @@ import cn.abtion.neuqercc.utils.ToastUtil;
 public class GridHonorAdapter extends BaseAdapter {
 
     private Context context;
-    private List<HonorCertificateModel> honorCertificateList;
-    final int position =0;
+    private List<ShowHonorResponse> honorCertificateList;
     private boolean isShowLast;
-    private  boolean isShowDelete;
+    private boolean isShowDelete;
 
 
-    public  GridHonorAdapter(Context context, List<HonorCertificateModel> honorCertificateList,boolean isShowLast) {
+    public GridHonorAdapter(Context context, List<ShowHonorResponse> honorCertificateList, boolean isShowLast) {
 
-        this.isShowLast=isShowLast;
-        this.context=context;
+        this.isShowLast = isShowLast;
+        this.context = context;
         this.honorCertificateList = honorCertificateList;
     }
 
@@ -42,7 +46,7 @@ public class GridHonorAdapter extends BaseAdapter {
     public int getCount() {
 
         if (isShowLast) {
-            return honorCertificateList.size()+1;
+            return honorCertificateList.size() + 1;
         } else {
             return honorCertificateList.size();
         }
@@ -66,21 +70,22 @@ public class GridHonorAdapter extends BaseAdapter {
         ViewHolder viewHolder = new ViewHolder();
 
 
-        if (position<honorCertificateList.size()) {
+        if (position < honorCertificateList.size()) {
 
 
-
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_grid_honor,null,false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_grid_honor, null, false);
             ImageView imgHonor = (ImageView) convertView.findViewById(R.id.img_grid_honor);
             Glide.with(context).load(honorCertificateList.get(position).getGloryPicUrl()).into(imgHonor);
 
-            viewHolder.imgDelete=(ImageView)convertView.findViewById(R.id.img_show_delete);
+            viewHolder.imgDelete = (ImageView) convertView.findViewById(R.id.img_show_delete);
             viewHolder.imgDelete.setVisibility(isShowDelete ? View.VISIBLE : View.GONE);
 
-            if(isShowDelete) {
+            if (isShowDelete) {
                 viewHolder.imgDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        deleteHonor(honorCertificateList.get(position).getOrder());
                         honorCertificateList.remove(position);
                         setIsShowDelete(false);
                     }
@@ -89,13 +94,13 @@ public class GridHonorAdapter extends BaseAdapter {
 
             return convertView;
 
-        } else if (isShowLast){
+        } else if (isShowLast) {
 
 
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_grid_honor,null,false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_grid_honor, null, false);
             ImageView imgHonor = (ImageView) convertView.findViewById(R.id.img_grid_honor);
             Glide.with(context).load(R.drawable.bg_add_honor).into(imgHonor);
-            viewHolder.imgDelete=(ImageView)convertView.findViewById(R.id.img_show_delete);
+            viewHolder.imgDelete = (ImageView) convertView.findViewById(R.id.img_show_delete);
             viewHolder.imgDelete.setVisibility(View.GONE);
 
             return convertView;
@@ -107,18 +112,38 @@ public class GridHonorAdapter extends BaseAdapter {
     }
 
 
+    class ViewHolder {
 
-
-    class ViewHolder{
-
-        ImageView imgHonor,imgDelete;
+        ImageView imgHonor, imgDelete;
     }
 
-    public void setIsShowDelete (boolean isShowDelete) {
+    public void setIsShowDelete(boolean isShowDelete) {
 
-            this.isShowDelete=isShowDelete;
-            notifyDataSetChanged();
+        this.isShowDelete = isShowDelete;
+        notifyDataSetChanged();
 
     }
 
+
+    private void deleteHonor(int order) {
+
+
+        RestClient.getService().deleteHonor(LoginActivity.phoneNumber, order + 1).enqueue(new DataCallback<APIResponse>() {
+            @Override
+            public void onDataResponse(Call<APIResponse> call, retrofit2.Response<APIResponse> response) {
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+        });
+
+    }
 }

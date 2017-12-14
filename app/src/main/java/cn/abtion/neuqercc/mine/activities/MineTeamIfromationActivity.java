@@ -1,21 +1,21 @@
 package cn.abtion.neuqercc.mine.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.mine.models.MineTeamInformationRequest;
-import cn.abtion.neuqercc.mine.models.TeamMemberRequest;
+import cn.abtion.neuqercc.mine.models.TeamMemberResponse;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
@@ -34,13 +34,12 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     TextView txtContestName;
     @BindView(R.id.txt_team_declaration)
     TextView txtTeamDeclaration;
-    private List<TeamMemberListModel> teamMemberListModels = new ArrayList<TeamMemberListModel>();
-    private List<TeamMemberRequest> teamMemberRequestList = new ArrayList<TeamMemberRequest>();
-
-    public static int teamId;
-
     @BindView(R.id.recylerview_team_member)
     RecyclerView recylerviewTeamMember;
+
+    private List<TeamMemberResponse> teamMemberResponseList = new ArrayList<TeamMemberResponse>();
+    MineTeamInformationRequest teamInformationRequest;
+    public static int teamId;
 
     @Override
     protected int getLayoutId() {
@@ -64,28 +63,23 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     protected void loadData() {
 
         loadTeamInformation();
+
         loadTeamMemberInformation();
     }
-
 
 
     protected void initTitle() {
 
         setActivityTitle(getString(R.string.title_team_information));
         setTextOver(getString(R.string.txt_edit));
-
-
         TextView txtTitleEdit = (TextView) getToolbar().findViewById(R.id.txt_toolbar_over);
 
         txtTitleEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MineTeamIfromationActivity.this, UpdateTeamInformationActivity.class);
-                intent.putExtra("teamId",teamId);
-                intent.putExtra("teamName",txtTeamName.getText().toString());
-                intent.putExtra("contestName",txtContestName.getText().toString());
-                intent.putExtra("teamDeclaration",txtTeamDeclaration.getText().toString());
 
+                Intent intent = new Intent(MineTeamIfromationActivity.this, UpdateTeamInformationActivity.class);
+                intent.putExtra("teamInformation", new Gson().toJson(teamInformationRequest));
                 startActivity(intent);
             }
         });
@@ -100,14 +94,14 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
         Intent intent = getIntent();
         teamId = intent.getIntExtra("teamId", -1);
 
-        RestClient.getService().mineTeamInformation().enqueue(new DataCallback<APIResponse<MineTeamInformationRequest>>() {
+        RestClient.getService().mineTeamInformation(teamId).enqueue(new DataCallback<APIResponse<MineTeamInformationRequest>>() {
             @Override
             public void onDataResponse(Call<APIResponse<MineTeamInformationRequest>> call, Response<APIResponse<MineTeamInformationRequest>> response) {
 
-                MineTeamInformationRequest request = response.body().getData();
-                txtTeamName.setText(request.getTeamName());
-                txtContestName.setText(request.getCompetitionDesc());
-                txtTeamDeclaration.setText(request.getDeclaration());
+                teamInformationRequest = response.body().getData();
+                txtTeamName.setText(teamInformationRequest.getTeamName());
+                txtContestName.setText(teamInformationRequest.getCompetitionDesc());
+                txtTeamDeclaration.setText(teamInformationRequest.getDeclaration());
 
             }
 
@@ -132,17 +126,17 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     protected void loadTeamMemberInformation() {
 
 
-        RestClient.getService().mineTeamMember().enqueue(new DataCallback<APIResponse<List<TeamMemberRequest>>>() {
+        RestClient.getService().mineTeamMember(teamId).enqueue(new DataCallback<APIResponse<List<TeamMemberResponse>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<List<TeamMemberRequest>>> call, Response<APIResponse<List<TeamMemberRequest>>> response) {
+            public void onDataResponse(Call<APIResponse<List<TeamMemberResponse>>> call, Response<APIResponse<List<TeamMemberResponse>>> response) {
 
-                teamMemberRequestList = response.body().getData();
+                teamMemberResponseList = response.body().getData();
                 initRecyclerView();
 
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<List<TeamMemberRequest>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<List<TeamMemberResponse>>> call, Throwable t) {
 
             }
 
@@ -157,15 +151,8 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
     protected void initRecyclerView() {
 
-
         recylerviewTeamMember.setNestedScrollingEnabled(false);
-        for(int i = 0; i<teamMemberRequestList.size(); i++) {
-
-            TeamMemberRequest request= teamMemberRequestList.get(i);
-            teamMemberListModels.add(new TeamMemberListModel(request.getTeamPosition(),request.getName(),request.getGoodAt()));
-        }
-
-        TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberListModels);
+        TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberResponseList);
         recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager.VERTICAL, false));
         recylerviewTeamMember.setAdapter(teamMemberListAdapter);
 

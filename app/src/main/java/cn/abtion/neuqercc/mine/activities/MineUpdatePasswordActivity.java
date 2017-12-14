@@ -1,20 +1,15 @@
 package cn.abtion.neuqercc.mine.activities;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
-import cn.abtion.neuqercc.account.activities.UpdatePasswordActivity;
 import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
-import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
@@ -86,7 +81,7 @@ public class MineUpdatePasswordActivity extends ToolBarActivity {
             default:
 
                 updatePasswordRequest = new UpdatePasswordRequest();
-                updatePasswordRequest.setPhone(LoginActivity.phonenumber);
+                updatePasswordRequest.setPhone(LoginActivity.phoneNumber);
                 updatePasswordRequest.setPassword(editNewPassword.getText().toString().trim());
                 updatePassword();
 

@@ -1,5 +1,10 @@
 package cn.abtion.neuqercc.mine.models;
 
+import android.support.annotation.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.abtion.neuqercc.base.models.BaseModel;
 
 /**
@@ -8,7 +13,7 @@ import cn.abtion.neuqercc.base.models.BaseModel;
  * email fhyPayaso@qq.com
  */
 
-public class ShowHonorRequest extends BaseModel {
+public class ShowHonorResponse extends BaseModel {
 
     private int order;
     private String glory_name;
@@ -16,10 +21,20 @@ public class ShowHonorRequest extends BaseModel {
     private String glory_pic;
 
 
-    public void ShowHonorRequest() {
-
+    public ShowHonorResponse( int order, String glory_name, String glory_time, String glory_pic) {
+        this.order = order;
+        this.glory_name = glory_name;
+        this.glory_time = glory_time;
+        this.glory_pic = glory_pic;
     }
 
+
+    public ShowHonorResponse( String glory_name, String glory_time, String glory_pic) {
+
+        this.glory_name = glory_name;
+        this.glory_time = glory_time;
+        this.glory_pic = glory_pic;
+    }
 
     /**
      * 获取荣誉序号
@@ -76,4 +91,21 @@ public class ShowHonorRequest extends BaseModel {
     public void setGloryPicUrl(String gloryPicUrl) {
         this.glory_pic = gloryPicUrl;
     }
+
+
+
+    public Map<String, Object> setHonorMap() {
+
+        Map<String,Object> map = new HashMap<>();
+
+        map.put("order",order);
+        map.put("glory_name",glory_name);
+        map.put("glory_time",glory_time);
+        map.put("glory_pic",glory_pic);
+
+        return map;
+    }
+
+
+
 }

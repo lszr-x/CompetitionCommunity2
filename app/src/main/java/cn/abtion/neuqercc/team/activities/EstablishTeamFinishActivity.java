@@ -15,6 +15,7 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.mine.models.TeamMemberResponse;
 import cn.abtion.neuqercc.team.adapters.TeamMemberListAdapter;
 import cn.abtion.neuqercc.team.models.TeamMemberListModel;
 import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
@@ -27,7 +28,7 @@ import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
 
 public class EstablishTeamFinishActivity extends ToolBarActivity {
 
-    private ArrayList<TeamMemberListModel> teamMemberListModels;
+    private ArrayList<TeamMemberResponse> teamMemberListModels;
 
     @BindView(R.id.recylerview_team_member)
     RecyclerView recylerviewTeamMember;
@@ -50,14 +51,16 @@ public class EstablishTeamFinishActivity extends ToolBarActivity {
 
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         teamMemberListModels = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            teamMemberListModels.add(new TeamMemberListModel("asd","afa","af"));
-        }
-        TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberListModels);
 
+        for (int i = 0; i < 20; i++) {
+
+            TeamMemberResponse teamMemberResponse = new TeamMemberResponse("asfmca", 12, "asfhnc", "ausfa");
+            teamMemberListModels.add(teamMemberResponse);
+        }
+
+        TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberListModels);
         recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager.VERTICAL, false));
         recylerviewTeamMember.setAdapter(teamMemberListAdapter);
-
     }
 
     @Override
@@ -66,19 +69,15 @@ public class EstablishTeamFinishActivity extends ToolBarActivity {
     }
 
 
-
-
-
-
     @OnClick(R.id.btn_invite_friend)
     public void onInviteFriendViewClicked() {
 
     }
 
-    public void initTitle(){
+    public void initTitle() {
         setActivityTitle(getString(R.string.title_team_information));
         setTextOver(getString(R.string.title_confirm));
-        TextView textView=(TextView)getToolbar().findViewById(R.id.txt_toolbar_over);
+        TextView textView = (TextView) getToolbar().findViewById(R.id.txt_toolbar_over);
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override

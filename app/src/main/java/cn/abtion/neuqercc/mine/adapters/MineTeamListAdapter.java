@@ -11,7 +11,7 @@ import java.util.List;
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
-import cn.abtion.neuqercc.mine.models.MineTeamListModel;
+import cn.abtion.neuqercc.mine.models.MineTeamListResponse;
 
 /**
  * @author fhyPayaso
@@ -19,10 +19,10 @@ import cn.abtion.neuqercc.mine.models.MineTeamListModel;
  * email fhyPayaso@qq.com
  */
 
-public class MineTeamListAdapter extends BaseRecyclerViewAdapter<MineTeamListModel> {
+public class MineTeamListAdapter extends BaseRecyclerViewAdapter<MineTeamListResponse> {
 
 
-    public MineTeamListAdapter(Context context, List<MineTeamListModel> teamListModels) {
+    public MineTeamListAdapter(Context context, List<MineTeamListResponse> teamListModels) {
 
         super(context, teamListModels);
     }
@@ -34,7 +34,7 @@ public class MineTeamListAdapter extends BaseRecyclerViewAdapter<MineTeamListMod
     }
 
 
-    static class ItemHolder extends ViewHolder<MineTeamListModel> {
+    static class ItemHolder extends ViewHolder<MineTeamListResponse> {
 
         @BindView(R.id.txt_team_name)
         TextView txtTeamName;
@@ -50,12 +50,11 @@ public class MineTeamListAdapter extends BaseRecyclerViewAdapter<MineTeamListMod
         }
 
         @Override
-        protected void onBind(MineTeamListModel mineTeamListModel) {
+        protected void onBind(MineTeamListResponse mineTeamListModel) {
 
             txtTeamName.setText(mineTeamListModel.getTeamName() == null ? "N/A" : mineTeamListModel.getTeamName());
-            txtTeamNumber.setText(mineTeamListModel.getNumber()+"" == null ? "N/A" : mineTeamListModel.getNumber()+"");
-            //txtTeamPosition.setText(mineTeamListModel.getPosition() == null ? "N/A" :mineTeamListModel.getPosition());
-            txtTeamSpecies.setText(mineTeamListModel.getCompetitionName() == null ? "N/A" : mineTeamListModel.getCompetitionName());
+            txtTeamNumber.setText(String.valueOf(mineTeamListModel.getTeamMemberNum()) == null ? "N/A" : String.valueOf(mineTeamListModel.getTeamMemberNum()));
+            txtTeamSpecies.setText(mineTeamListModel.getCompetitionDesc() == null ? "N/A" : mineTeamListModel.getCompetitionDesc());
 
         }
 

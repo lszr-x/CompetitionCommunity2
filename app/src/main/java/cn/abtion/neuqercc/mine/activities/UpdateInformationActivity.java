@@ -28,25 +28,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
 import cn.abtion.neuqercc.mine.models.GoodAtRequest;
-import cn.abtion.neuqercc.mine.models.HonorCertificateModel;
-import cn.abtion.neuqercc.mine.models.ShowHonorRequest;
+import cn.abtion.neuqercc.mine.models.PersonInformationResponse;
+import cn.abtion.neuqercc.mine.models.ShowHonorResponse;
 import cn.abtion.neuqercc.mine.models.StudentGradeRequest;
 import cn.abtion.neuqercc.mine.models.UpdatePersonInformationRequest;
 import cn.abtion.neuqercc.network.APIResponse;
@@ -87,7 +88,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public final int TAKE_PHOTO_FLAG = 1;
     public final int SET_IMG_FLAG = 100;
 
-    private boolean flagUpLoad = true;
+    private boolean flagUpLoad = false;
 
 
     /**
@@ -146,9 +147,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     private GridHonorAdapter gridHonorAdapter;
     private boolean isShowDelete;
-    private UpdatePersonInformationRequest updatePersonInformationRequest;
-    private List<HonorCertificateModel> honorCertificateModelList = new ArrayList<HonorCertificateModel>();
-    private List<ShowHonorRequest> showHonorRequestList = new ArrayList<ShowHonorRequest>();
+    private List<ShowHonorResponse> showHonorResponseList = new ArrayList<ShowHonorResponse>();
     private String[] studentGradeList;
     private String[] goodAtList;
     private String filePath;
@@ -182,6 +181,13 @@ public class UpdateInformationActivity extends ToolBarActivity {
     }
 
 
+    @Override
+    protected void onPostResume() {
+
+        initHonorWall();
+        super.onPostResume();
+    }
+
     /**
      * 初始化ToolBar
      */
@@ -196,22 +202,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                updatePersonInformationRequest = new UpdatePersonInformationRequest();
-                updatePersonInformationRequest.setUsername(editNickName.getText().toString().trim());
-                updatePersonInformationRequest.setName(editRealName.getText().toString().trim());
-                updatePersonInformationRequest.setPhone(editPhoneNumber.getText().toString().trim());
-                updatePersonInformationRequest.setMajor(editUpdateProfession.getText().toString().trim());
-                updatePersonInformationRequest.setStudentId(editUpdateStuId.getText().toString().trim());
-                updatePersonInformationRequest.setGoodAt(txtUpdateGoodAt.getText().toString().trim());
-                updatePersonInformationRequest.setGrade(txtUpdateGrade.getText().toString().trim());
-
-                if (checkBoxBoy.isChecked() && !checkBoxGirl.isChecked()) {
-                    updatePersonInformationRequest.setGender("0");
-                } else if (!checkBoxBoy.isChecked() && checkBoxGirl.isChecked()) {
-                    updatePersonInformationRequest.setGender("1");
-                }
-
-
                 switch (isDataTrue()) {
 
                     case FLAG_LACK_ERROR:
@@ -221,8 +211,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
                         ToastUtil.showToast(getString(R.string.error_phone_number_illegal));
                         break;
                     default:
-
-                        updatePersonalInformation();
+                        uploadPersonalInformation();
                         break;
 
                 }
@@ -233,30 +222,42 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
     /**
-     * 提交修改信息网络请求
+     * 上传个人信息
      */
-    public void updatePersonalInformation() {
+    public void uploadPersonalInformation() {
 
-
-        //ToastUtil.showToast(filePath);
 
         File file = new File(filePath);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("pic", file.getName(), requestBody);
 
 
-        //网络请求
+        int flagGender = 0;
+        if (checkBoxBoy.isChecked() && !checkBoxGirl.isChecked()) {
+            flagGender = 0;
+        } else if (!checkBoxBoy.isChecked() && checkBoxGirl.isChecked()) {
+            flagGender = 1;
+        }
 
-        RestClient.getService().updatePersonalInformation(updatePersonInformationRequest,requestBody).enqueue(new DataCallback<APIResponse>() {
+        UpdatePersonInformationRequest updatePersonInformationRequest = new UpdatePersonInformationRequest(
+                editPhoneNumber.getText().toString().trim(),
+                editNickName.getText().toString().trim(),
+                editRealName.getText().toString().trim(),
+                txtUpdateGoodAt.getText().toString().trim(),
+                editUpdateProfession.getText().toString(),
+                Integer.valueOf(editUpdateStuId.getText().toString().trim()),
+                flagGender, Integer.valueOf(txtUpdateGrade.getText().toString().trim()),
+                flagNameEye, flagPhoneEye);
 
+        RestClient.getService().uploadPersonInformation(updatePersonInformationRequest.createCommitParams(), part).enqueue(new DataCallback<APIResponse>() {
 
-            //请求成功时回调
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
                 ToastUtil.showToast(getString(R.string.toast_edit_successful));
                 finish();
             }
 
-            //请求失败时回调
             @Override
             public void onDataFailure(Call<APIResponse> call, Throwable t) {
 
@@ -266,7 +267,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
             public void dismissDialog() {
 
             }
-
         });
     }
 
@@ -336,26 +336,27 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public void loadPersonalInformation() {
 
         Intent intent = getIntent();
+        PersonInformationResponse informationResponse = new Gson().fromJson(
+                intent.getStringExtra("personInformation"), PersonInformationResponse.class);
 
-        editNickName.setText(intent.getStringExtra("userName"));
-        editRealName.setText(intent.getStringExtra("name"));
-        editPhoneNumber.setText(intent.getStringExtra("phoneNumber"));
-        editUpdateStuId.setText(intent.getStringExtra("studentId"));
-        editUpdateProfession.setText(intent.getStringExtra("major"));
+        editNickName.setText(informationResponse.getUsername());
+        editRealName.setText(informationResponse.getName());
+        editPhoneNumber.setText(informationResponse.getPhone());
+        editUpdateStuId.setText(String.valueOf(informationResponse.getStudentId()));
+        editUpdateProfession.setText(informationResponse.getMajor());
 
-        currentGoodAt = intent.getStringExtra("goodAt");
+        currentGoodAt = informationResponse.getGoodAt();
         txtUpdateGoodAt.setText(currentGoodAt);
 
-        currentGrade = intent.getStringExtra("grade");
+        currentGrade = String.valueOf(informationResponse.getGrade());
         txtUpdateGrade.setText(currentGrade);
 
-        Glide.with(this).load(intent.getStringExtra("avatarUrl")).into(imgUpdateAvatar);
+        Glide.with(this).load(informationResponse.getPicture()).into(imgUpdateAvatar);
 
-        if (intent.getIntExtra("gender", 0) == 0) {
+        if (informationResponse.getGender() == 0) {
             checkBoxBoy.setChecked(true);
             checkBoxGirl.setChecked(false);
         } else {
-
             checkBoxBoy.setChecked(false);
             checkBoxGirl.setChecked(true);
         }
@@ -369,33 +370,19 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public void initHonorWall() {
 
 
-        RestClient.getService().showHonorRequest().enqueue(new DataCallback<APIResponse<List<ShowHonorRequest>>>() {
+        RestClient.getService().showHonorRequest(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<ShowHonorResponse>>>() {
 
             //请求成功时回调
             @Override
-            public void onDataResponse(Call<APIResponse<List<ShowHonorRequest>>> call, Response<APIResponse<List<ShowHonorRequest>>> response) {
+            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call, Response<APIResponse<List<ShowHonorResponse>>> response) {
 
-                showHonorRequestList = response.body().getData();
-
-                for (int i = 0; i < showHonorRequestList.size(); i++) {
-
-                    ShowHonorRequest showHonorRequestMode = showHonorRequestList.get(i);
-
-                    HonorCertificateModel honorCertificateAdd = new HonorCertificateModel();
-                    honorCertificateAdd.setOrder(showHonorRequestMode.getOrder());
-                    honorCertificateAdd.setGloryName(showHonorRequestMode.getGloryName());
-                    honorCertificateAdd.setGloryTime(showHonorRequestMode.getGloryTime());
-                    honorCertificateAdd.setGloryPicUrl(showHonorRequestMode.getGloryPicUrl());
-
-                    honorCertificateModelList.add(honorCertificateAdd);
-                }
-
+                showHonorResponseList = response.body().getData();
                 initGrid();
 
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<List<ShowHonorRequest>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<List<ShowHonorResponse>>> call, Throwable t) {
 
             }
 
@@ -406,13 +393,12 @@ public class UpdateInformationActivity extends ToolBarActivity {
         });
     }
 
-
     /**
      * 初始化Grid
      */
     public void initGrid() {
 
-        gridHonorAdapter = new GridHonorAdapter(UpdateInformationActivity.this, honorCertificateModelList, true);
+        gridHonorAdapter = new GridHonorAdapter(UpdateInformationActivity.this, showHonorResponseList, true);
         gridHonor.setAdapter(gridHonorAdapter);
 
 
@@ -424,15 +410,14 @@ public class UpdateInformationActivity extends ToolBarActivity {
                 if (position == parent.getChildCount() - 1) {
 
                     showHonorDialog();
-                    //addDatas();
+
                 } else {
+
                     Intent intent = new Intent(UpdateInformationActivity.this, HonorUpdateActivity.class);
-
-                    intent.putExtra("picUrl", honorCertificateModelList.get(position).getGloryPicUrl());
-                    intent.putExtra("honorName", honorCertificateModelList.get(position).getGloryName());
-                    intent.putExtra("honorTime", honorCertificateModelList.get(position).getGloryTime());
-                    intent.putExtra("timeList",studentGradeList);
-
+                    ShowHonorResponse response = showHonorResponseList.get(position);
+                    intent.putExtra("honorInformation", new Gson().toJson(response));
+                    intent.putExtra("timeList", studentGradeList);
+                    intent.putExtra("honorWall", "0");
                     startActivity(intent);
                 }
                 isShowDelete = false;
@@ -447,7 +432,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (position < honorCertificateModelList.size()) {
+                if (position < showHonorResponseList.size()) {
 
                     if (isShowDelete) {
                         isShowDelete = false;
@@ -463,18 +448,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
         });
     }
 
-
-    /**
-     * 荣誉墙添加item
-     */
-    public void addDatas() {
-
-        HonorCertificateModel honorCertificateAdd = new HonorCertificateModel();
-        honorCertificateAdd.setGloryPicUrl("http://www.thmaoqiu.cn/saiyou/storage/app/glory_pics/5a28f06a51898.jpg");
-        honorCertificateModelList.add(honorCertificateAdd);
-        gridHonorAdapter.notifyDataSetChanged();
-
-    }
 
     /**
      * 取消荣誉墙删除按钮点击事件
@@ -522,6 +495,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
                     dialogAddHonor.dismiss();
                 }
                 Intent intent = new Intent(UpdateInformationActivity.this, HonorUpdateActivity.class);
+                intent.putExtra("honorWall", "1");
+                intent.putExtra("timeList", studentGradeList);
                 startActivity(intent);
 
             }
@@ -821,35 +796,23 @@ public class UpdateInformationActivity extends ToolBarActivity {
         if (requestCode == SET_IMG_FLAG && resultCode == RESULT_OK && null != data) {
 
             Uri selectedImage = data.getData();
-
-
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
 
             cursor.moveToFirst();
-
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-
             String picturePath = cursor.getString(columnIndex);
-
-
             filePath = picturePath;
-
-            ToastUtil.showToast(filePath);
-
             cursor.close();
 
             imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
             flagUpLoad = true;
 
         } else if (requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
 
 
             Bundle bundle = data.getExtras();
-
             Bitmap bitmap = (Bitmap) bundle.get("data");
             imgUpdateAvatar.setImageBitmap(bitmap);
 
@@ -872,10 +835,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            //filePath = file.getPath();
-
-            //ToastUtil.showToast(file.getPath());
 
         }
     }
