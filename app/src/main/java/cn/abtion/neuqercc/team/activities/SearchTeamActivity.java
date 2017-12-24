@@ -63,6 +63,7 @@ public class SearchTeamActivity extends NoBarActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
+
                     Intent intent = new Intent(SearchTeamActivity.this, SearchTeamResultActivity.class);
                     startActivity(intent);
                 }

@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.mine.models.ShowHonorResponse;
 import cn.abtion.neuqercc.utils.ToastUtil;
 
@@ -63,7 +64,7 @@ public class HonorInformationActivity extends ToolBarActivity {
     public void loadIntent() {
 
         Intent intent = getIntent();
-        ShowHonorResponse honorResponse = new Gson().fromJson(intent.getStringExtra("honor"), ShowHonorResponse.class);
+        ShowHonorResponse honorResponse = new Gson().fromJson(intent.getStringExtra(Config.INTENT_EXTRA_HONOR), ShowHonorResponse.class);
         txtEventName.setText(honorResponse.getGloryName());
         txtEventTime.setText(honorResponse.getGloryTime());
         picUrl = honorResponse.getGloryPicUrl();

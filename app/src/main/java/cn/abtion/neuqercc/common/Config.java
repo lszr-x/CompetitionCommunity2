@@ -127,4 +127,29 @@ public class Config {
     public static final int TITLE_BG_G=108;
     public static final int TITLE_BG_B=97;
 
+
+    /**
+     * intent信息
+     */
+    public static final String INTENT_EXTRA_HONOR = "honor";
+    public static final String INTENT_EXTRA_PERSON_INFORMATION = "personInformation";
+
+
+
+    public static final int DIALOG_PADDING_RIGHT_DP = 73;
+    public static final int DIALOG_PADDING_BOTTOM_DP = 25;
+    public static final int LP_WIDTH = 170;
+    public static final int LP_HEIGHT = 300;
+
+
+
+    /**
+     * 性别标志
+     */
+    public static final int FLAG_BOY = 0;
+    public static final int FLAG_GIRL = 1;
+
+
+
+
 }

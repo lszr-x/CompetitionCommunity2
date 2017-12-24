@@ -53,8 +53,9 @@ public class MineTeamListAdapter extends BaseRecyclerViewAdapter<MineTeamListRes
         protected void onBind(MineTeamListResponse mineTeamListModel) {
 
             txtTeamName.setText(mineTeamListModel.getTeamName() == null ? "N/A" : mineTeamListModel.getTeamName());
-            txtTeamNumber.setText(String.valueOf(mineTeamListModel.getTeamMemberNum()) == null ? "N/A" : String.valueOf(mineTeamListModel.getTeamMemberNum()));
             txtTeamSpecies.setText(mineTeamListModel.getCompetitionDesc() == null ? "N/A" : mineTeamListModel.getCompetitionDesc());
+            txtTeamNumber.setText(String.valueOf(mineTeamListModel.getTeamMemberNum()));
+
 
         }
 

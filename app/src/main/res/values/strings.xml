@@ -113,6 +113,8 @@
     <string name="toast_feedback_empty">请填写反馈内容</string>
     <string name="dialog_if_sign_out">是否退出当前账号?</string>
     <string name="title_honor_information">荣誉信息</string>
+    <string name="dialog_btn_confirm">确认</string>
+    <string name="dialog_btn_cancel">取消</string>
 
 
     <string name="btn_return">返回</string>

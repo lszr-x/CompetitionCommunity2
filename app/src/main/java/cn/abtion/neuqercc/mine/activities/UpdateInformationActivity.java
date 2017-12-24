@@ -72,23 +72,27 @@ import retrofit2.Response;
 
 public class UpdateInformationActivity extends ToolBarActivity {
 
-    public static final int FLAG_EYE_OPEN = 1;
-    public static final int FLAG_EYE_CLOSE = 0;
+
+
+    /**
+     * 数据信息错误类型标志
+     */
     public static final int FLAG_CORRECT = 0;
     public static final int FLAG_LACK_ERROR = 1;
     public static final int FLAG_PHONE_ERROR = 2;
-    public static int flagNameEye = 1;
-    public static int flagPhoneEye = 1;
+
 
     /**
-     * 动态申请权限
+     * 眼睛显示标志
      */
-    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-    private static final int REQUEST_EXTERNAL_STORAGE = 100;
-    public final int TAKE_PHOTO_FLAG = 1;
-    public final int SET_IMG_FLAG = 100;
+    public static final int FLAG_EYE_OPEN = 1;
+    public static final int FLAG_EYE_CLOSE = 0;
 
-    private boolean flagUpLoad = false;
+    /**
+     * 姓名电话是否可见
+     */
+    public static int flagNameEye = 1;
+    public static int flagPhoneEye = 1;
 
 
     /**
@@ -110,10 +114,18 @@ public class UpdateInformationActivity extends ToolBarActivity {
     private int flagTempGrade = 0;
 
 
-    Button btnAddHonor;
-    Button btnTakePhoto;
-    Button btnFromAlbum;
-    Button btnCancel;
+
+    private boolean flagUpLoad = false;
+
+
+    /**
+     * 动态申请权限
+     */
+    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final int REQUEST_EXTERNAL_STORAGE = 100;
+    public final int TAKE_PHOTO_FLAG = 1;
+    public final int SET_IMG_FLAG = 100;
+
 
     @BindView(R.id.img_mine_name_eye)
     ImageView imgNameEye;
@@ -483,8 +495,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
         window.setAttributes(lp);
 
 
-        btnAddHonor = (Button) dialogAddHonor.findViewById(R.id.btn_add_honor);
-        btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
+        Button btnAddHonor = (Button) dialogAddHonor.findViewById(R.id.btn_add_honor);
+        Button btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
 
 
         btnAddHonor.setOnClickListener(new View.OnClickListener() {
@@ -506,7 +518,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
-                if (dialogAddHonor != null && dialogAddHonor.isShowing()) {
+                if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
             }
@@ -542,9 +554,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
         window.setAttributes(lp);
 
 
-        btnTakePhoto = (Button) dialogAddHonor.findViewById(R.id.btn_take_photo);
-        btnFromAlbum = (Button) dialogAddHonor.findViewById(R.id.btn_from_album);
-        btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
+        Button btnTakePhoto = (Button) dialogAddHonor.findViewById(R.id.btn_take_photo);
+        Button btnFromAlbum = (Button) dialogAddHonor.findViewById(R.id.btn_from_album);
+        Button btnCancel = (Button) dialogAddHonor.findViewById(R.id.btn_cancel);
 
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -686,8 +698,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
                 flagTempGoodAt = which;
             }
         });
-        nativeDialog.setNegativeButton("取消");
-        nativeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        nativeDialog.setNegativeButton(getString(R.string.dialog_btn_cancel));
+        nativeDialog.setPositiveButton(getString(R.string.dialog_btn_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -715,8 +727,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
             }
         });
 
-        nativeDialog.setNegativeButton("取消");
-        nativeDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        nativeDialog.setNegativeButton(getString(R.string.dialog_btn_cancel));
+        nativeDialog.setPositiveButton(getString(R.string.dialog_btn_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

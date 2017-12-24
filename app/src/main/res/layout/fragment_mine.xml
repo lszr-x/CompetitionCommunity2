@@ -275,17 +275,6 @@
 
             </RelativeLayout>
 
-            <!--<Button-->
-            <!--android:id="@+id/btn_setting"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="45dp"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_below="@+id/mine_honor"-->
-            <!--android:layout_marginTop="6dp"-->
-            <!--android:background="@color/bg_white"-->
-            <!--android:text="@string/txt_account_setting"-->
-            <!--android:textColor="@color/text_warning"-->
-            <!--android:textSize="17sp" />-->
 
         </RelativeLayout>
 
@@ -302,7 +291,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|bottom"
-            android:text="我的"
+            android:text="@string/tab_bottom_mine"
             android:textColor="#00000000"
             android:textSize="18sp" />
 

@@ -37,7 +37,6 @@ import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.DensityUtil;
-import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.GradientScrollView;
 import cn.abtion.neuqercc.widget.HonorGridView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -220,9 +219,9 @@ public class MineFragment extends BaseFragment {
         txtGrade.setText(String.valueOf(informationResponse.getGrade()));
         txtStudentId.setText(String.valueOf(informationResponse.getStudentId()));
 
-        if (informationResponse.getGender() == 0) {
+        if (informationResponse.getGender() == Config.FLAG_BOY) {
             imgGender.setImageResource(R.drawable.ic_mine_man);
-        } else if (informationResponse.getGender() == 1) {
+        } else if (informationResponse.getGender() == Config.FLAG_GIRL) {
             imgGender.setImageResource(R.drawable.ic_mine_woman);
         }
 
@@ -273,7 +272,7 @@ public class MineFragment extends BaseFragment {
 
                 ShowHonorResponse showHonorResponse = showHonorResponseList.get(position);
                 Intent intent = new Intent(getContext(), HonorInformationActivity.class);
-                intent.putExtra("honor", new Gson().toJson(showHonorResponse));
+                intent.putExtra(Config.INTENT_EXTRA_HONOR, new Gson().toJson(showHonorResponse));
                 startActivity(intent);
             }
         });
@@ -301,11 +300,12 @@ public class MineFragment extends BaseFragment {
 
         Window window = dialog.getWindow();
         window.setGravity(Gravity.END | Gravity.TOP);
-        window.getDecorView().setPadding(0, DensityUtil.dip2px(getContext(), 73), DensityUtil.dip2px(getContext(), 25), 0);
+        window.getDecorView().setPadding(0, DensityUtil.dip2px(getContext(), Config.DIALOG_PADDING_RIGHT_DP),
+                DensityUtil.dip2px(getContext(), Config.DIALOG_PADDING_BOTTOM_DP), 0);
 
         WindowManager.LayoutParams lp = window.getAttributes();
-        lp.width = DensityUtil.dip2px(getContext(), 170);
-        lp.height = DensityUtil.dip2px(getContext(), 300);
+        lp.width = DensityUtil.dip2px(getContext(), Config.LP_WIDTH);
+        lp.height = DensityUtil.dip2px(getContext(), Config.LP_HEIGHT);
         window.setAttributes(lp);
 
         CardView txtEditInformation = (CardView) dialog.findViewById(R.id.card_update_information);
@@ -321,7 +321,7 @@ public class MineFragment extends BaseFragment {
                 }
 
                 Intent intent = new Intent(getContext(), UpdateInformationActivity.class);
-                intent.putExtra("personInformation", new Gson().toJson(informationResponse));
+                intent.putExtra(Config.INTENT_EXTRA_PERSON_INFORMATION, new Gson().toJson(informationResponse));
                 startActivity(intent);
             }
         });

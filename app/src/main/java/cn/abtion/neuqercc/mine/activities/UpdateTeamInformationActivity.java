@@ -115,13 +115,11 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
      */
     protected void commitTeamInformation() {
 
-
         updateTeamInformationRequest = new UpdateTeamInformationRequest(teamId,
-
                 editTeamName.getText().toString(),
                 editWantJoin.getText().toString(),
                 editTeamDeclaration.getText().toString(),
-                "前端后端安卓"
+                "test"
         );
 
 
@@ -129,7 +127,7 @@ public class UpdateTeamInformationActivity extends ToolBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-                ToastUtil.showToast("编辑成功");
+                ToastUtil.showToast(R.string.toast_edit_successful);
                 finish();
             }
 
