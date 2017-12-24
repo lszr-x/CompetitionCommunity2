@@ -11,9 +11,9 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        >
+        android:layout_alignParentStart="true">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -38,12 +38,12 @@
                     android:src="@drawable/ic_before_team_name" />
 
                 <TextView
+                    android:id="@+id/txt_team_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="50dp"
                     android:layout_marginTop="13dp"
-                    android:text="我是标标准准的十五个"
                     android:textColor="@color/text_black"
                     android:textSize="18sp" />
 
@@ -77,7 +77,6 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="200dp"
                     android:layout_marginTop="30dp"
-                    android:text="@string/txt_contest_name"
                     android:textColor="@color/text_black"
                     android:textSize="16dp" />
             </android.support.v7.widget.CardView>
@@ -103,10 +102,10 @@
                 android:background="@drawable/bg_input_box">
 
                 <TextView
+                    android:id="@+id/txt_team_declaration"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="15dp"
-                    android:text="  安居客健康的年份加拿大尽可能吃点吧夫奥卡福和骄傲登记单健康大粑粑而返回iOS城内的就看看八度发货的农村拉不动"
                     android:textColor="@color/text_black"
                     android:textSize="18sp" />
             </android.support.v7.widget.CardView>

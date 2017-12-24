@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.fragments.DetailsFragment;
 import cn.abtion.neuqercc.home.fragments.RaidersFragment;
+import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
 
 /**
  * @author fhyPayaso
@@ -17,16 +18,18 @@ import cn.abtion.neuqercc.home.fragments.RaidersFragment;
  * email fhyPayaso@qq.com
  */
 
-public class CompetitionViewPagerAdapter extends FragmentPagerAdapter {
+public class CompetitionViewPagerAdapter<T> extends FragmentPagerAdapter {
 
 
     private String[] titles = new String[]{Config.TAB_TITLE_DETAILS,Config.TAB_TITLE_RAIDERS};
     private DetailsFragment detailsFragment;
     private RaidersFragment raidersFragment;
     private android.support.v4.app.Fragment currentFragment;
+    private RaidersAndDetailsRequest data;
 
-    public CompetitionViewPagerAdapter(FragmentManager fm) {
+    public CompetitionViewPagerAdapter(FragmentManager fm,RaidersAndDetailsRequest raidersAndDetailsRequestdata) {
         super(fm);
+        data=raidersAndDetailsRequestdata;
     }
 
     @Override
@@ -36,13 +39,13 @@ public class CompetitionViewPagerAdapter extends FragmentPagerAdapter {
         switch (position){
             case Config.FLAG_DETAILS:
                 if (detailsFragment==null){
-                    detailsFragment = new DetailsFragment();
+                    detailsFragment = new DetailsFragment(data);
                 }
                 currentFragment = detailsFragment;
                 break;
             case Config.FLAG_RAIDERS:
                 if (raidersFragment==null){
-                    raidersFragment=new RaidersFragment();
+                    raidersFragment=new RaidersFragment(data);
                 }
                 currentFragment=raidersFragment;
                 break;
@@ -62,5 +65,7 @@ public class CompetitionViewPagerAdapter extends FragmentPagerAdapter {
     public  CharSequence getPageTitle(int position){
         return titles[position];
     }
+
+
 
 }

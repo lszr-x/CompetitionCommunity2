@@ -31,6 +31,8 @@ public abstract class ToolBarActivity extends BaseActivity {
      */
     private Toolbar toolbar;
     @BindView(R.id.txt_toolbar_title)
+    protected TextView toolBarTitle;
+    protected TextView toolBarOver;
     protected @Nullable TextView toolBarTitle;
     @BindView(R.id.txt_toolbar_over)
     protected @Nullable TextView toolBarOver;
@@ -66,6 +68,7 @@ public abstract class ToolBarActivity extends BaseActivity {
         toolbar = (Toolbar) root.findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        toolBarOver = (TextView) toolbar.findViewById(R.id.txt_toolbar_over);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -109,7 +112,6 @@ public abstract class ToolBarActivity extends BaseActivity {
 
     protected void setTextOver(@Nullable CharSequence charSequence) {
         if (toolbar != null) {
-
             toolBarOver.setText(charSequence);
             toolBarOver.setTextColor(getResources().getColor(R.color.white));
         }
@@ -124,4 +126,7 @@ public abstract class ToolBarActivity extends BaseActivity {
         this.finish();
     }
 
+    protected void setOnOverTextListener(View.OnClickListener listener)  {
+        toolBarOver.setOnClickListener(listener);
+    }
 }

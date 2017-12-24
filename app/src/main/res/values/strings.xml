@@ -52,6 +52,10 @@
     <string name="contest_list_time_upper">比赛时间：2017.10.15-2017.10.18</string>
     <string name="contest_list_time_lower">报名时间：2017.10.15-2017.10.18</string>
     <string name="btn_search_team">寻找队伍</string>
+    <string name="edit_search_contest">请输入查询的队伍名</string>
+    <string name="search_contest_null">请输入比赛关键字</string>
+
+
 
 
     <!--个人页面-->
@@ -152,6 +156,8 @@
     <string name="edit_search_team">请输入查询的队伍名</string>
     <string name="txt_search_result">搜索结果</string>
     <string name="title_confirm">确认</string>
+    <string name="search_team_null">请输入队伍关键字</string>
+    <string name="establish_team_success">创建队伍成功</string>
 
 
 </resources>

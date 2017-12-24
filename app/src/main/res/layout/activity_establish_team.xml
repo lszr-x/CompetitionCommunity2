@@ -181,6 +181,7 @@
 
 
             <EditText
+                android:id="@+id/edit_declaration"
                 android:layout_width="300dp"
                 android:layout_height="160dp"
                 android:layout_below="@id/txt_team_declaration"

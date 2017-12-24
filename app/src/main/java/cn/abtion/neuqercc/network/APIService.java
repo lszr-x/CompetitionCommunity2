@@ -1,12 +1,25 @@
 package cn.abtion.neuqercc.network;
 
 import java.util.List;
+
+import java.util.List;
 import java.util.Map;
 
 import cn.abtion.neuqercc.account.models.LoginRequest;
 import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.account.models.RegisterRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
+import cn.abtion.neuqercc.home.activities.CompetitionActivity;
+import cn.abtion.neuqercc.home.fragments.HomeFragment;
+import cn.abtion.neuqercc.home.models.InitContestRecylerViewDataRequest;
+import cn.abtion.neuqercc.home.models.InitContestRecylerViewItemRequest;
+import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
+import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
+import cn.abtion.neuqercc.team.models.EstablishTeamRequest;
+import cn.abtion.neuqercc.team.models.InitAllTeamDataResponse;
+import cn.abtion.neuqercc.team.models.InitAllTeamResponse;
+import cn.abtion.neuqercc.team.models.InitRecommendTeamDataResponse;
+import cn.abtion.neuqercc.team.models.InitRecommendTeamResponse;
 import cn.abtion.neuqercc.mine.models.FeedBackRequest;
 import cn.abtion.neuqercc.mine.models.GoodAtRequest;
 import cn.abtion.neuqercc.mine.models.MineTeamInformationRequest;
@@ -19,10 +32,12 @@ import cn.abtion.neuqercc.mine.models.UpdateTeamInformationRequest;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -60,6 +75,59 @@ public interface APIService {
      */
     @POST("saiyou/public/index.php/forgot")
     Call<APIResponse> updatePassword(@Body UpdatePasswordRequest updatePasswordRequest);
+
+    /**
+     * 轮播图GET请求
+     */
+    @GET("saiyou/public/index.php/carousel/show")
+    Call<APIResponse<List<InitCrouselFigureRequest>>> initCrouselFigure();
+
+
+    /**
+     * 比赛详情列表GET请求
+     */
+    @GET("saiyou/public/index.php/descs/show")
+    Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> initContestRecylerView(@Query("page")int page,@Query("size")int size);
+
+
+    /**
+     * 大神攻略和比赛详情内容GET
+     */
+    @GET("saiyou/public/index.php/raider/show" )
+    Call<APIResponse<RaidersAndDetailsRequest>> getRaidersAndDetails(@Query("id")int contestItemId);
+
+    /**
+     * 搜索队伍POST请求
+     */
+    @POST("saiyou/public/index.php/team/search" )
+    Call<APIResponse<List<InitAllTeamResponse>>> searchTeam(@Query("content")String seachTeamName);
+
+    /**
+     * 查询多支队伍GET请求
+     */
+    @GET("saiyou/public/index.php/teams/show" )
+    Call<APIResponse<InitAllTeamDataResponse<List<InitAllTeamResponse>>>> initAllTeam(@Query("page")int page, @Query("size") int teamSize);
+
+    /**
+     * 查询推荐队伍队伍GET请求
+     */
+    @GET("saiyou/public/index.php/team/recommend" )
+    Call<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>> initRecommendTeam(@Query("phone")String contestName,@Query("page")int page, @Query("size") int teamSize);
+
+
+    /**
+     * 创建队伍POST请求
+     */
+    @POST("saiyou/public/index.php/team/add")
+    Call<APIResponse> establishTeam(@Body EstablishTeamRequest establishTeamRequest);
+
+
+
+    /**
+     * 搜索比赛POST请求
+     */
+    @POST("saiyou/public/index.php/desc/search" )
+    Call<APIResponse<List<InitContestRecylerViewItemRequest>>> searchContest(@Query("content")String seachContestName);
 
 
     /**

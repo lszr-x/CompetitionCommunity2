@@ -21,12 +21,30 @@ import android.widget.Toast;
 
 public final class DialogUtil {
 
-    public class NativeDialog{
 
-        private AlertDialog.Builder builder;
+    /**
+     * 原生Dialog类，包括builder的初始化方法：singleInit；showNativeDialog方法；
+     * 设置两个按钮的方法：setPositiveButton和setNegativeButton
+     * 设置单选框方法：setSingleChoice，复选框：setMultiChoice
+     * 设置title和Message方法
+     *
+     * 使用时实例化一个对象，同时先调用singleInit方法，使用对象调用方法
+     *
+     */
+    public class NativeDialog{
+        public AlertDialog.Builder getBuilder() {
+            return builder;
+        }
+
+        private  AlertDialog.Builder builder;
+
+        public NativeDialog() {
+
+        }
 
         /**
          * show
+
          * @return
          */
         public AlertDialog.Builder showNativeDialog(){
@@ -57,13 +75,9 @@ public final class DialogUtil {
             return this;
         }
 
-        /**
-         * 设置取消按钮
-         * @param negativeButton
-         * @return
-         */
         public NativeDialog setNegativeButton(String negativeButton){
             builder.setNegativeButton(negativeButton,null);
+
             return this;
         }
 
@@ -79,14 +93,29 @@ public final class DialogUtil {
             return this;
         }
 
+        public NativeDialog setPositiveButton(String positiveButton){
+            builder.setPositiveButton(positiveButton,null);
+
+            return this;
+        }
+
         /**
          * 设置单选框（原生）
          * @param singleItemString
          * @param onClickListener
          * @return
          */
-        public NativeDialog setSingleChoice(final String singleItemString[],int position, DialogInterface.OnClickListener onClickListener){
-            builder.setSingleChoiceItems(singleItemString, position, onClickListener);
+        public NativeDialog setSingleChoice(final String singleItemString[], DialogInterface.OnClickListener onClickListener){
+            if(singleItemString!=null){
+                builder.setSingleChoiceItems(singleItemString, -1, onClickListener);
+            }
+            return this;
+        }
+
+        public NativeDialog setSingleChoice(final String singleItemString[],int checkedId, DialogInterface.OnClickListener onClickListener){
+            if(singleItemString!=null){
+                builder.setSingleChoiceItems(singleItemString, checkedId, onClickListener);
+            }
             return this;
         }
 
@@ -99,16 +128,33 @@ public final class DialogUtil {
             return this;
         }
 
-
+        /**
+         * 设置复选框
+         * @param multiItemString
+         * @param onClickListener
+         * @return
+         */
+        public NativeDialog setMultiChoice(final String multiItemString[],DialogInterface.OnMultiChoiceClickListener onClickListener){
+            if(multiItemString!=null) {
+                builder.setMultiChoiceItems(multiItemString, null, onClickListener);
+            }
+            return this;
+        }
 
 
     }
 
 
-    static class CustomAlertDialog {
+    /**
+     * 自定义Dialog类：
+     * 使用时要先调用initDialog方法：参数：context，自定义布局id，style的id
+     * 类中有view成员，可以使用getView得到，从而使用findViewById绑定对应布局的控件
+     *
+     */
+    public class CustomAlertDialog {
 
-        private static AlertDialog.Builder builder;
-        private static View view;
+        private  AlertDialog.Builder builder;
+        private  View view;
 
         public CustomAlertDialog showDialog(){
             builder.show();
@@ -131,6 +177,14 @@ public final class DialogUtil {
          */
         public CustomAlertDialog initDialog(Context context, @LayoutRes int itemView, int styleId){
             builder=new AlertDialog.Builder(context,styleId);
+            view=View.inflate(context,itemView,null);
+            builder.setView(view);
+
+            return this;
+        }
+
+        public CustomAlertDialog initDialog(Context context, @LayoutRes int itemView){
+            builder=new AlertDialog.Builder(context);
             view=View.inflate(context,itemView,null);
             builder.setView(view);
 
@@ -209,7 +263,7 @@ public final class DialogUtil {
             return this;
         }
 
-        public static AlertDialog.Builder getBuilder() {
+        public  AlertDialog.Builder getBuilder() {
             return builder;
         }
 
@@ -232,17 +286,22 @@ public final class DialogUtil {
 
 
     }
-    static class CustomProgressDialog {
 
-        private static ProgressDialog customProgressDialog;
 
-        public CustomProgressDialog initDialog(Context context){
-            customProgressDialog=new ProgressDialog(context);
+    /**
+     *
+     */
+    public class NativeProgressDialog {
+
+        private  ProgressDialog nativeProgressDialog;
+
+        public NativeProgressDialog initDialog(Context context){
+            nativeProgressDialog =new ProgressDialog(context);
             return this;
         }
 
-        public CustomProgressDialog setContent(){
-
+        public NativeProgressDialog setMessage(String message){
+            nativeProgressDialog.setMessage(message);
 
             return this;
         }
@@ -252,8 +311,8 @@ public final class DialogUtil {
          * @param context
          * @return
          */
-        public CustomProgressDialog showDialog(Context context){
-            customProgressDialog.show();
+        public NativeProgressDialog showDialog(Context context){
+            nativeProgressDialog.show();
 
             return this;
         }
@@ -263,8 +322,8 @@ public final class DialogUtil {
          * @param title
          * @return
          */
-        public CustomProgressDialog setDialogTitle(String title){
-            customProgressDialog.setTitle(title);
+        public NativeProgressDialog setDialogTitle(String title){
+            nativeProgressDialog.setTitle(title);
 
             return  this;
         }
@@ -274,8 +333,8 @@ public final class DialogUtil {
          * @param bool
          * @return
          */
-        public CustomProgressDialog setCanceledOutside(boolean bool){
-            customProgressDialog.setCanceledOnTouchOutside(bool);
+        public NativeProgressDialog setCanceledOutside(boolean bool){
+            nativeProgressDialog.setCanceledOnTouchOutside(bool);
 
             return this;
         }
@@ -285,8 +344,8 @@ public final class DialogUtil {
          * @param style
          * @return
          */
-        public CustomProgressDialog setProgressDialogStyle(int style){
-            customProgressDialog.setProgressStyle(style);
+        public NativeProgressDialog setProgressDialogStyle(int style){
+            nativeProgressDialog.setProgressStyle(style);
 
             return this;
         }
@@ -296,8 +355,8 @@ public final class DialogUtil {
          * @param titleImage
          * @return
          */
-        public CustomProgressDialog setIcon(int titleImage){
-            customProgressDialog.setIcon(titleImage);
+        public NativeProgressDialog setIcon(int titleImage){
+            nativeProgressDialog.setIcon(titleImage);
 
             return this;
         }
@@ -307,8 +366,8 @@ public final class DialogUtil {
          * @param message
          * @return
          */
-        public CustomProgressDialog setDialogMessage(String message){
-            customProgressDialog.setMessage(message);
+        public NativeProgressDialog setDialogMessage(String message){
+            nativeProgressDialog.setMessage(message);
 
             return this;
         }

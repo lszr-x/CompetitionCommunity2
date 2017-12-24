@@ -127,6 +127,13 @@ public class Config {
     public static final int TITLE_BG_G=108;
     public static final int TITLE_BG_B=97;
 
+    /**
+     * 列表一页的item的数量
+     */
+    public static final int size=20;
+
+
+
 
     /**
      * intent信息

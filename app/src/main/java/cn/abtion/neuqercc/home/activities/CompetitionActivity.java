@@ -1,19 +1,32 @@
 package cn.abtion.neuqercc.home.activities;
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import java.lang.reflect.Field;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.CompetitionViewPagerAdapter;
+import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
 import cn.abtion.neuqercc.main.MainActivity;
-import butterknife.BindView;
-import butterknife.OnClick;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.team.activities.SearchTeamActivity;
+import cn.abtion.neuqercc.utils.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * @author abtion.
@@ -21,27 +34,32 @@ import butterknife.OnClick;
  * email caiheng@hrsoft.net.
  */
 
-public class CompetitionActivity extends ToolBarActivity{
+public class CompetitionActivity<T> extends ToolBarActivity {
 
     @BindView(R.id.table_header_navigation)
     TabLayout headerTitleTable;
     @BindView(R.id.viewpager_body)
     ViewPager competitionViewPager;
 
+    private int contestItemId;
+
 
     @Override
-    protected  int getLayoutId(){
+    protected int getLayoutId() {
         return R.layout.activity_competion;
     }
 
 
     @Override
-    protected  void initVariable(){
+    protected void initVariable() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            contestItemId = intent.getExtras().getInt("contestId");
+        }
 
-        CompetitionViewPagerAdapter competitionPagerAdapter =new CompetitionViewPagerAdapter(getSupportFragmentManager());
-        competitionViewPager.setAdapter(competitionPagerAdapter);
-        //tabLayout和ViewPager联动
-        headerTitleTable.setupWithViewPager(competitionViewPager);
+        processGetRaidersAndDetails();
+
+
     }
 
     @Override
@@ -49,26 +67,17 @@ public class CompetitionActivity extends ToolBarActivity{
 
         this.setActivityTitle(getString(R.string.title_competition));
 
+
+
+
         //修改tab指示器长度
-        setIndicator(headerTitleTable,Config.TAB_INDICATOR_WIDTH,Config.TAB_INDICATOR_WIDTH);
+        setIndicator(headerTitleTable, Config.TAB_INDICATOR_WIDTH, Config.TAB_INDICATOR_WIDTH);
     }
 
     @Override
-    protected  void loadData(){
+    protected void loadData() {
 
     }
-
-    /**
-     * 寻找队伍按钮点击事件
-     */
-
-    @OnClick(R.id.btn_search)
-    public void onBtnSearchClicked(){
-
-        MainActivity.start(this,Config.FLAG_TEAM);
-        finish();
-    }
-
 
     /**
      * 修改指示器长度的方法
@@ -103,5 +112,51 @@ public class CompetitionActivity extends ToolBarActivity{
             child.invalidate();
         }
     }
+
+    @OnClick(R.id.btn_search)
+    public void onBtnSearchViewClicked() {
+        Intent intent = new Intent(CompetitionActivity.this, SearchTeamActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void processGetRaidersAndDetails() {
+
+        //弹出progressDialog
+        progressDialog.setMessage(getString(R.string.dialog_wait_moment));
+        progressDialog.show();
+
+        //网络请求
+        RestClient.getService().getRaidersAndDetails(contestItemId).enqueue(new DataCallback<APIResponse<RaidersAndDetailsRequest>>() {
+            @Override
+            public void onDataResponse(Call<APIResponse<RaidersAndDetailsRequest>> call, Response<APIResponse<RaidersAndDetailsRequest>> response) {
+
+
+                CompetitionViewPagerAdapter competitionPagerAdapter = new CompetitionViewPagerAdapter(getSupportFragmentManager(),response.body().getData());
+                competitionViewPager.setAdapter(competitionPagerAdapter);
+                //tabLayout和ViewPager联动
+                headerTitleTable.setupWithViewPager(competitionViewPager);
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<RaidersAndDetailsRequest>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+                if (progressDialog.isShowing()) {
+                    disMissProgressDialog();
+                }
+            }
+        });
+
+
+    }
+
+
+
+
+
 
 }

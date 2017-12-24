@@ -10,6 +10,7 @@ import cn.abtion.neuqercc.base.fragments.BaseFragment;
  */
 
 public class MessageFragment extends BaseFragment {
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_message;
@@ -29,4 +30,8 @@ public class MessageFragment extends BaseFragment {
     protected void loadData() {
 
     }
+
+
+
+
 }

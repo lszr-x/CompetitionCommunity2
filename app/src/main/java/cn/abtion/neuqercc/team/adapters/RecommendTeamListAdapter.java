@@ -4,9 +4,11 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.team.models.RecommendTeamListModel;
@@ -19,6 +21,8 @@ import cn.abtion.neuqercc.team.models.RecommendTeamListModel;
 
 public class RecommendTeamListAdapter extends BaseRecyclerViewAdapter<RecommendTeamListModel> {
 
+
+
     public RecommendTeamListAdapter(Context context, List<RecommendTeamListModel> recommendTeamListModels) {
         super(context, recommendTeamListModels);
     }
@@ -29,7 +33,16 @@ public class RecommendTeamListAdapter extends BaseRecyclerViewAdapter<RecommendT
         return new ItemHolder(view);
     }
 
-    private class ItemHolder extends ViewHolder<RecommendTeamListModel> {
+    static class ItemHolder extends ViewHolder<RecommendTeamListModel> {
+
+        @BindView(R.id.txt_team_name)
+        TextView txtTeamName;
+        @BindView(R.id.txt_contest_name)
+        TextView txtContestName;
+        @BindView(R.id.txt_want)
+        TextView txtWant;
+        @BindView(R.id.txt_declaration)
+        TextView txtDeclaration;
 
 
         ItemHolder(View itemView) {
@@ -38,7 +51,10 @@ public class RecommendTeamListAdapter extends BaseRecyclerViewAdapter<RecommendT
 
         @Override
         protected void onBind(RecommendTeamListModel recommendTeamListModel) {
-
+            txtTeamName.setText(recommendTeamListModel.getTeamName() == null ? "N/A" : recommendTeamListModel.getTeamName());
+            txtContestName.setText(recommendTeamListModel.getContestName()==null?"N/A":recommendTeamListModel.getContestName());
+            txtDeclaration.setText(recommendTeamListModel.getDeclaration()==null?"N/A":recommendTeamListModel.getDeclaration());
+            txtWant.setText(recommendTeamListModel.getWantDirection()==null?"N/A":recommendTeamListModel.getWantDirection());
         }
 
     }

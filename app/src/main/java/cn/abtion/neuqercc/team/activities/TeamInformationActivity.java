@@ -2,12 +2,15 @@ package cn.abtion.neuqercc.team.activities;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -16,8 +19,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.mine.models.TeamMemberResponse;
 import cn.abtion.neuqercc.team.adapters.TeamMemberListAdapter;
+import cn.abtion.neuqercc.team.models.AllTeamListModel;
 import cn.abtion.neuqercc.team.models.TeamMemberListModel;
 import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
 
@@ -32,6 +37,13 @@ public class TeamInformationActivity extends ToolBarActivity {
 
 
     private ArrayList<TeamMemberResponse> teamMemberListModels;
+    @BindView(R.id.txt_team_name)
+    TextView txtTeamName;
+    @BindView(R.id.txt_contest_name)
+    TextView txtContestName;
+    @BindView(R.id.txt_team_declaration)
+    TextView txtTeamDeclaration;
+    private ArrayList<TeamMemberListModel> teamMemberListModels;
 
     @BindView(R.id.recylerview_team_member)
     RecyclerView recylerviewTeamMember;
@@ -50,6 +62,14 @@ public class TeamInformationActivity extends ToolBarActivity {
     protected void initView() {
         this.setActivityTitle(getString(R.string.title_team_information));
 
+        //获得队伍信息
+        Intent intent = getIntent();
+        String jsonData = intent.getStringExtra("teamInformation");
+        AllTeamListModel allTeamListModel = new Gson().fromJson(jsonData, AllTeamListModel.class);
+
+        txtTeamName.setText(allTeamListModel.getTeamName());
+        txtContestName.setText(allTeamListModel.getContestName());
+        txtTeamDeclaration.setText(allTeamListModel.getDeclaration());
 
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         teamMemberListModels = new ArrayList<>();
@@ -75,7 +95,7 @@ public class TeamInformationActivity extends ToolBarActivity {
 
 
         View view = View.inflate(TeamInformationActivity.this, R.layout.item_dialog_join_team, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(TeamInformationActivity.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(TeamInformationActivity.this);
         builder.setCancelable(true);
 
         TextView txtDialogTitle = (TextView) view.findViewById(R.id.txt_dialog_title);
@@ -96,6 +116,7 @@ public class TeamInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
+
             }
         });
 
@@ -104,11 +125,14 @@ public class TeamInformationActivity extends ToolBarActivity {
             public void onClick(View v) {
 
             }
+
+
         });
 
         builder.setView(view);
-
-
         builder.show();
     }
+
+
+
 }

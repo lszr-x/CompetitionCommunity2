@@ -66,6 +66,9 @@ public class LoginActivity extends NoBarActivity {
         loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
         loginRequest.setPassword(editPassword.getText().toString().trim());
 
+        phonenumber=editIdentifier.getText().toString().trim();
+        password=editPassword.getText().toString().trim();
+
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

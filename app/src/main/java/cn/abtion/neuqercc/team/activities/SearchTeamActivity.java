@@ -15,6 +15,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
  * @author lszr
@@ -63,15 +65,17 @@ public class SearchTeamActivity extends NoBarActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-
-                    Intent intent = new Intent(SearchTeamActivity.this, SearchTeamResultActivity.class);
-                    startActivity(intent);
+                    if (editSearchTeam.getText().toString().equals(Config.EMPTY_FIELD)) {
+                        ToastUtil.showToast(getString(R.string.search_team_null));
+                    } else {
+                        Intent intent = new Intent(SearchTeamActivity.this, SearchTeamResultActivity.class);
+                        intent.putExtra("searchTeamName", editSearchTeam.getText().toString());
+                        startActivity(intent);
+                    }
                 }
                 return false;
-
             }
         });
-
     }
 
 
@@ -82,10 +86,14 @@ public class SearchTeamActivity extends NoBarActivity {
     }
 
 
-
     @OnClick(R.id.img_search_team)
     public void onSearchViewClicked() {
-        Intent intent = new Intent(SearchTeamActivity.this, SearchTeamResultActivity.class);
-        startActivity(intent);
+        if (editSearchTeam.getText().toString().equals(Config.EMPTY_FIELD)) {
+            ToastUtil.showToast(getString(R.string.search_team_null));
+        } else {
+            Intent intent = new Intent(SearchTeamActivity.this, SearchTeamResultActivity.class);
+            intent.putExtra("searchTeamName", editSearchTeam.getText().toString());
+            startActivity(intent);
+        }
     }
 }

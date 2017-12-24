@@ -12,6 +12,10 @@ public class InitCrouselFigureRequest extends BaseModel {
     private int order;
     private String url;
 
+    public InitCrouselFigureRequest() {
+
+    }
+
     public int getOrder() {
         return order;
     }

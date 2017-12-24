@@ -2,11 +2,14 @@ package cn.abtion.neuqercc.home.fragments;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -15,22 +18,37 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.activities.CompetitionActivity;
+import cn.abtion.neuqercc.home.activities.SearchContestActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
 import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.home.models.InitContestRecylerViewDataRequest;
+import cn.abtion.neuqercc.home.models.InitContestRecylerViewItemRequest;
+import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Response;
+import cn.abtion.neuqercc.widget.EndLessOnScrollListener;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -52,7 +70,13 @@ public class HomeFragment extends BaseFragment {
 
     private ArrayList<ContestListModel> contestListModels;
 
+    private InitCrouselFigureRequest initCrouselFigureRequest;
+
     private int downX = Config.VIEW_FLIPPER_INITAIL_VALUE;
+
+    private static int page = 1;
+    private HomeAdapter homeAdapter;
+    private LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
 
     @BindView(R.id.spinner_home)
@@ -76,6 +100,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+        processInitCarouselFigure();
 
         initViewFlipper();
 
@@ -94,14 +119,63 @@ public class HomeFragment extends BaseFragment {
 
         recHome.setNestedScrollingEnabled(false);
         contestListModels = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            contestListModels.add(new ContestListModel(getString(R.string.contest_list_title), getString(R.string.contest_list_summary),
-                    getString(R.string.contest_list_time_upper), getString(R.string.contest_list_time_lower)));
-        }
 
-        HomeAdapter homeAdapter = new HomeAdapter(getContext(), contestListModels);
+        //弹出progressDialog
+        progressDialog.setMessage(getString(R.string.dialog_wait_moment));
+        progressDialog.show();
+
+        //网络请求
+        RestClient.getService().initContestRecylerView(page,Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
+            @Override
+            public void onDataResponse(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Response<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> response) {
+                List<InitContestRecylerViewItemRequest> list = response.body().getData().getItem();
+
+                for (int i = 0; i < list.size(); i++) {
+                    contestListModels.add(new ContestListModel(
+                            list.get(i).getId(),
+                            list.get(i).getName(),
+                            list.get(i).getShort_desc(),
+                            list.get(i).getRegistration_time(),
+                            list.get(i).getCompetition_time()));
+                }
+
+                initAdapter(contestListModels);
+
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+                if (progressDialog.isShowing()) {
+                    disMissProgressDialog();
+                }
+            }
+        });
+
+
+    }
+
+    /**
+     * Recylerview的setAdapter和点击事件
+     *
+     * @param contestListModels
+     */
+    private void initAdapter(final ArrayList<ContestListModel> contestListModels) {
+        homeAdapter = new HomeAdapter(getContext(), contestListModels);
         recHome.setAdapter(homeAdapter);
-        recHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recHome.setLayoutManager(linearLayoutManager);
+
+        recHome.addOnScrollListener(new EndLessOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                loadMoreData();
+            }
+        });
 
         //点击事件
         homeAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<ContestListModel>() {
@@ -109,11 +183,82 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
                 Intent intent = new Intent(getContext(), CompetitionActivity.class);
+                intent.putExtra("contestId", contestListModel.getId());
                 startActivity(intent);
-
             }
         });
     }
+
+    private void loadMoreData() {
+        RestClient.getService().initContestRecylerView(++page,Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
+            @Override
+            public void onDataResponse(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Response<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> response) {
+                List<InitContestRecylerViewItemRequest> list = response.body().getData().getItem();
+                if (list!=null){
+
+                    for (int i = 0; i < list.size(); i++) {
+                        contestListModels.add(new ContestListModel(
+                                list.get(i).getId(),
+                                list.get(i).getName(),
+                                list.get(i).getShort_desc(),
+                                list.get(i).getRegistration_time(),
+                                list.get(i).getCompetition_time()));
+                    }
+
+                    homeAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+        });
+
+
+    }
+
+
+    public void processInitCarouselFigure() {
+
+        //弹出progressDialog
+        progressDialog.setMessage(getString(R.string.dialog_wait_moment));
+        progressDialog.show();
+
+        //网络请求
+        RestClient.getService().initCrouselFigure().enqueue(new DataCallback<APIResponse<List<InitCrouselFigureRequest>>>() {
+            @Override
+            public void onDataResponse(Call<APIResponse<List<InitCrouselFigureRequest>>> call, Response<APIResponse<List<InitCrouselFigureRequest>>> response) {
+                List<InitCrouselFigureRequest> list = response.body().getData();
+                for (int i = 0; i < list.size(); i++) {
+                    ImageView imageView = new ImageView(getContext());
+                    Glide.with(HomeFragment.this).load(list.get(i).getUrl()).into(imageView);
+                    vfContest.addView(imageView);
+                }
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<InitCrouselFigureRequest>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+                if (progressDialog.isShowing()) {
+                    disMissProgressDialog();
+                }
+            }
+        });
+
+    }
+
 
     private ImageView getImageView(int id) {
         ImageView imageView = new ImageView(this.getContext());
@@ -124,11 +269,6 @@ public class HomeFragment extends BaseFragment {
 
     public void initViewFlipper() {
 
-        vfContest.addView(getImageView(R.drawable.img_home_view));
-        vfContest.addView(getImageView(R.drawable.ic_register_password));
-        vfContest.addView(getImageView(R.drawable.ic_back));
-        vfContest.addView(getImageView(R.drawable.ic_contest_before_title));
-
         vfContest.setInAnimation(inFromRightAnimation());
         vfContest.setOutAnimation(outToLeftAnimation());
         vfContest.setFlipInterval(Config.FLIPPER_TIME_INTERVAL);
@@ -136,12 +276,11 @@ public class HomeFragment extends BaseFragment {
         vfContest.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 //解决viewFlipper和view的冲突
                 vfContest.getParent().requestDisallowInterceptTouchEvent(true);
                 //手势滑动
                 int x;
-                long downTime=0;
+                long downTime = 0;
                 switch (event.getAction()) {
 
                     case MotionEvent.ACTION_DOWN:
@@ -249,4 +388,12 @@ public class HomeFragment extends BaseFragment {
 
 
 
+
+
+
+    @OnClick(R.id.search_home)
+    public void onViewClicked() {
+        Intent intent = new Intent(getContext(), SearchContestActivity.class);
+        startActivity(intent);
+    }
 }

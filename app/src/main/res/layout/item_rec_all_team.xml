@@ -28,7 +28,7 @@
                 android:layout_below="@id/txt_team_name"/>
             <TextView
                 android:id="@+id/txt_contest_name"
-                android:layout_width="54dp"
+                android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:text="@string/test_sample"
                 android:layout_below="@id/view_deliver"
@@ -51,6 +51,7 @@
                 android:layout_alignTop="@id/txt_contest_name"
                 />
             <TextView
+                android:id="@+id/txt_want"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/test_sample"
@@ -61,6 +62,7 @@
                 android:textSize="11sp"
                 />
             <TextView
+                android:id="@+id/txt_declaration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/test_sample"

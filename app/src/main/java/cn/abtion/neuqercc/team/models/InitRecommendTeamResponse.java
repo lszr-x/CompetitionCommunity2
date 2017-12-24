@@ -4,28 +4,25 @@ import cn.abtion.neuqercc.base.models.BaseModel;
 
 /**
  * @author lszr
- * @since 2017/11/28 下午7:46
+ * @since 2017/12/12 下午11:19
  * email wsyglszr@gmail.com
  */
 
-public class SearchResultTeamModel extends BaseModel{
+public class InitRecommendTeamResponse extends BaseModel{
+
+    private int id;
     private String team_name;
     private String competition_desc;
     private String declaration;
     private String good_at;
     private String team_member;
     private String team_position;
-    private int id;
 
-    public SearchResultTeamModel(int id, String team_name, String competition_desc, String declaration, String good_at) {
-        this.id = id;
-        this.team_name = team_name;
-        this.competition_desc = competition_desc;
-        this.declaration = declaration;
-        this.good_at = good_at;
+    public InitRecommendTeamResponse() {
     }
 
     public int getId() {
+
         return id;
     }
 
