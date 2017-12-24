@@ -35,6 +35,8 @@ public abstract class DataCallback<T> implements Callback<T> {
     public void onFailure(Call<T> call, Throwable t) {
         onDataFailure(call, t);
         dismissDialog();
+
+        ToastUtil.showToast(t.toString());
         if (t instanceof ResultException) {
             GlobalAPIErrorHandler.handler((ResultException) t);
         } else {

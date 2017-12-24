@@ -117,4 +117,46 @@ public class Config {
     public static final int FLIPPER_TIME_INTERVAL=5000;
     public static final int FLIPPER_ACTION_SPEED=200;
 
+
+    /**
+     * 颜色
+     */
+    public static final int COLOR_MIN=0;
+    public static final int COLOR_MAX=255;
+    public static final int TITLE_BG_R=255;
+    public static final int TITLE_BG_G=108;
+    public static final int TITLE_BG_B=97;
+
+    /**
+     * 列表一页的item的数量
+     */
+    public static final int size=20;
+
+
+
+
+    /**
+     * intent信息
+     */
+    public static final String INTENT_EXTRA_HONOR = "honor";
+    public static final String INTENT_EXTRA_PERSON_INFORMATION = "personInformation";
+
+
+
+    public static final int DIALOG_PADDING_RIGHT_DP = 73;
+    public static final int DIALOG_PADDING_BOTTOM_DP = 25;
+    public static final int LP_WIDTH = 170;
+    public static final int LP_HEIGHT = 300;
+
+
+
+    /**
+     * 性别标志
+     */
+    public static final int FLAG_BOY = 0;
+    public static final int FLAG_GIRL = 1;
+
+
+
+
 }

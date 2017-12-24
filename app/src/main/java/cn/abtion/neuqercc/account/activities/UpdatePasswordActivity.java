@@ -7,10 +7,10 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.account.models.CaptchaCountDownTimer;
 import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
+
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
@@ -18,6 +18,7 @@ import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import cn.abtion.neuqercc.widget.CaptchaCountDownTimer;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -79,9 +80,9 @@ public class UpdatePasswordActivity extends NoBarActivity {
 
         smsRequest.setPhone(editPhone.getText().toString().trim());
 
-        captchaTimer.timerStart(true);
-
         if (isPhoneTrue()) {
+
+            captchaTimer.timerStart(true);
             getVerifyCode();
         }
     }
@@ -101,7 +102,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
                 verifyCode = response.body().getData().toString().trim();
-                ToastUtil.showToast(getString(R.string.toast_send_successful));
+                ToastUtil.showToast(verifyCode);
+                //ToastUtil.showToast(getString(R.string.toast_send_successful));
 
             }
 
@@ -173,7 +175,7 @@ public class UpdatePasswordActivity extends NoBarActivity {
         if (editPhone.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editPhone, getString(R.string.error_phone_number_empty_illegal));
             flag = false;
-        } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
+        } else if (!RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
             showError(editPhone, getString(R.string.error_phone_number_illegal));
             flag = false;
         }
@@ -187,7 +189,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
     @OnClick(R.id.btn_over)
     public void onBtnOverClicked() {
 
-        updatePasswordRequest.setPhone(getIntent().getStringExtra("phoneNumber"));
+        //updatePasswordRequest.setPhone(getIntent().getStringExtra("phoneNumber"));
+        updatePasswordRequest.setPhone(editPhone.getText().toString().trim());
         updatePasswordRequest.setPassword(editPassword.getText().toString().trim());
 
         if (isDataTrue()) {
@@ -270,13 +273,14 @@ public class UpdatePasswordActivity extends NoBarActivity {
      */
     private boolean isDataTrue() {
         boolean flag = true;
-        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
-            flag = false;
-        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
-            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
-            flag = false;
-        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+//        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
+//            flag = false;
+//        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
+//            flag = false;
+//        } else
+        if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, getString(R.string.error_password_min_limit));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {

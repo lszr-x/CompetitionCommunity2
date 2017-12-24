@@ -18,6 +18,7 @@ import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.HomeViewPagerAdapter;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import cn.abtion.neuqercc.widget.MainViewPager;
 
 
 /**
@@ -46,7 +47,7 @@ public class MainActivity extends NoBarActivity {
     @BindView(R.id.txt_tab_menu_mine)
     TextView txtTabMenuMine;
     @BindView(R.id.vp_main_container)
-    ViewPager mainViewPager;
+    MainViewPager mainViewPager;
 
 
     public static void start(BaseActivity context, int flag) {
@@ -191,6 +192,21 @@ public class MainActivity extends NoBarActivity {
     }
 
 
+    long startTime=0;
+    @Override
+    public void onBackPressed() {
+
+        long currentTime=System.currentTimeMillis();
+
+        if((currentTime-startTime)>2000) {
+            ToastUtil.showToast("再按一次退出聚点");
+            startTime=currentTime;
+        } else {
+            finish();
+        }
+
+    }
+
     /**
      * 点击Home
      */
@@ -233,5 +249,6 @@ public class MainActivity extends NoBarActivity {
         mainViewPager.setCurrentItem(Config.FLAG_MINE,false);
 
     }
+
 
 }

@@ -82,6 +82,7 @@
                 android:src="@drawable/img_mine_selector" />
 
 
+
             <TextView
                 android:id="@+id/txt_tab_menu_mine"
                 android:layout_width="wrap_content"
@@ -106,12 +107,12 @@
         android:fitsSystemWindows="false">
 
 
-        <android.support.v4.view.ViewPager
+        <cn.abtion.neuqercc.widget.MainViewPager
             android:id="@+id/vp_main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </android.support.v4.view.ViewPager>
+        </cn.abtion.neuqercc.widget.MainViewPager>
 
     </FrameLayout>
 
