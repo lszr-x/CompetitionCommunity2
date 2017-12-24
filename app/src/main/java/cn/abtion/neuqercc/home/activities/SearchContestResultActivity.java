@@ -3,6 +3,7 @@ package cn.abtion.neuqercc.home.activities;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -16,6 +17,7 @@ import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
 import cn.abtion.neuqercc.home.models.InitContestRecylerViewItemRequest;
+import cn.abtion.neuqercc.home.models.SearchContestNameRequest;
 import cn.abtion.neuqercc.home.models.SearchResultContestModel;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
@@ -41,7 +43,8 @@ public class SearchContestResultActivity extends ToolBarActivity {
     @BindView(R.id.recyler_search_team_result)
     RecyclerView recylerSearchTeamResult;
 
-    private ArrayList<ContestListModel> searchResultContest;
+    private List<ContestListModel> searchResultContest = new ArrayList<>();
+    private List<InitContestRecylerViewItemRequest> initContestRecylerViewItemRequests = new ArrayList<>();
 
     private HomeAdapter homeAdapter;
     private LinearLayoutManager linearLayoutManager=new LinearLayoutManager(SearchContestResultActivity.this, LinearLayoutManager.VERTICAL, false);
@@ -65,6 +68,60 @@ public class SearchContestResultActivity extends ToolBarActivity {
 
     @Override
     protected void loadData() {
+
+        loadSearchResult();
+
+    }
+
+
+
+    public void loadSearchResult() {
+
+
+//        Intent intent = getIntent();
+//        String searchContestName = intent.getStringExtra("searchContestName");
+
+
+        SearchContestNameRequest searchContestNameRequest = new SearchContestNameRequest();
+        searchContestNameRequest.setContent("毛球");
+
+
+        RestClient.getService().searchContest(searchContestNameRequest).enqueue(new DataCallback<APIResponse<List<InitContestRecylerViewItemRequest>>>() {
+            @Override
+            public void onDataResponse(Call<APIResponse<List<InitContestRecylerViewItemRequest>>> call, Response<APIResponse<List<InitContestRecylerViewItemRequest>>> response) {
+
+                initContestRecylerViewItemRequests = response.body().getData();
+
+
+
+                ToastUtil.showToast("akjfnajk");
+
+
+
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<InitContestRecylerViewItemRequest>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+        });
+
+
+
+
+
+
 
     }
 

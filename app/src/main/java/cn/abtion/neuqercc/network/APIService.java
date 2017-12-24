@@ -15,6 +15,7 @@ import cn.abtion.neuqercc.home.models.InitContestRecylerViewDataRequest;
 import cn.abtion.neuqercc.home.models.InitContestRecylerViewItemRequest;
 import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
 import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
+import cn.abtion.neuqercc.home.models.SearchContestNameRequest;
 import cn.abtion.neuqercc.team.models.EstablishTeamRequest;
 import cn.abtion.neuqercc.team.models.InitAllTeamDataResponse;
 import cn.abtion.neuqercc.team.models.InitAllTeamResponse;
@@ -127,7 +128,7 @@ public interface APIService {
      * 搜索比赛POST请求
      */
     @POST("saiyou/public/index.php/desc/search" )
-    Call<APIResponse<List<InitContestRecylerViewItemRequest>>> searchContest(@Query("content")String seachContestName);
+    Call<APIResponse<List<InitContestRecylerViewItemRequest>>> searchContest(@Body SearchContestNameRequest searchContestNameRequest);
 
 
     /**
