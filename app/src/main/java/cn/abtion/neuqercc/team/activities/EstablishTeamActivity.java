@@ -60,7 +60,7 @@ public class EstablishTeamActivity extends ToolBarActivity {
                 Intent intent = new Intent(EstablishTeamActivity.this, EstablishTeamFinishActivity.class);
 
                 EstablishTeamRequest establishTeamRequest = new EstablishTeamRequest(
-                        LoginActivity.phonenumber,
+                        LoginActivity.phoneNumber,
                         editTeamName.getText().toString(),
                         editWantJoin.getText().toString(),
                         editDeclaration.getText().toString(),

@@ -32,10 +32,8 @@ public abstract class ToolBarActivity extends BaseActivity {
     private Toolbar toolbar;
     @BindView(R.id.txt_toolbar_title)
     protected TextView toolBarTitle;
-    protected TextView toolBarOver;
-    protected @Nullable TextView toolBarTitle;
     @BindView(R.id.txt_toolbar_over)
-    protected @Nullable TextView toolBarOver;
+    protected TextView toolBarOver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

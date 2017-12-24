@@ -71,7 +71,7 @@ public class RecommendTeamFragment extends BaseFragment {
         progressDialog.show();
 
         //网络请求
-        RestClient.getService().initRecommendTeam(LoginActivity.phonenumber,page, Config.size).enqueue(new DataCallback<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>>() {
+        RestClient.getService().initRecommendTeam(LoginActivity.phoneNumber,page, Config.size).enqueue(new DataCallback<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>>() {
             @Override
             public void onDataResponse(Call<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>> call, Response<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>> response) {
                 recommendTeamListModels=new ArrayList<>();
@@ -129,7 +129,7 @@ public class RecommendTeamFragment extends BaseFragment {
     }
 
     private void loadMoreData() {
-        RestClient.getService().initRecommendTeam(LoginActivity.phonenumber,++page, Config.size).enqueue(new DataCallback<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>>() {
+        RestClient.getService().initRecommendTeam(LoginActivity.phoneNumber,++page, Config.size).enqueue(new DataCallback<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>>() {
             @Override
             public void onDataResponse(Call<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>> call, Response<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>> response) {
                 if (response.body().getData().getItem()!=null){
