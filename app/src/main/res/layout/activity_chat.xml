@@ -4,13 +4,11 @@
     android:layout_height="match_parent">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/message_rec"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:text="这是聊天窗口"
+        android:gravity="center"
+        />
 
 </LinearLayout>

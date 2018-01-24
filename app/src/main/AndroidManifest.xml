@@ -48,6 +48,8 @@
         <activity android:name=".team.activities.SearchTeamActivity"/>
         <activity android:name=".team.activities.SearchTeamResultActivity"
             android:launchMode="singleTask"/>
+        <activity android:name=".message.activities.FriendInfoActivity"/>
+        <activity android:name=".message.activities.ChatWindowActivity"/>
 
     </application>
 

@@ -116,7 +116,6 @@ public class SearchTeamResultActivity extends ToolBarActivity {
 
 
         searchTeamResultAdapter = new SearchTeamResultAdapter(this, searchResultTeamModels);
-
         recylerSearchTeamResult.setLayoutManager(linearLayoutManager);
         recylerSearchTeamResult.setAdapter(searchTeamResultAdapter);
 

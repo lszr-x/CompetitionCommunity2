@@ -4,10 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import cn.abtion.neuqercc.common.Config;
-import cn.abtion.neuqercc.message.fragments.ChatFragment;
-import cn.abtion.neuqercc.message.fragments.FriendsFragment;
-import cn.abtion.neuqercc.message.fragments.GroupFragment;
+import cn.abtion.neuqercc.message.fragments.ChatListFragment;
+import cn.abtion.neuqercc.message.fragments.FriendListFragment;
+import cn.abtion.neuqercc.message.fragments.GroupListFragment;
 
 /**
  * @author fhyPayaso
@@ -19,9 +18,9 @@ public class MessageViewPagerAdapter extends FragmentPagerAdapter {
 
     private String[] titles = new String[]{"消息", "好友", "群组"};
 
-    private ChatFragment chatFragment;
-    private FriendsFragment friendsFragment;
-    private GroupFragment groupFragment;
+    private ChatListFragment mChatListFragment;
+    private FriendListFragment mFriendListFragment;
+    private GroupListFragment mGroupListFragment;
     private Fragment currentFrgment;
 
 
@@ -35,22 +34,22 @@ public class MessageViewPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                if (chatFragment == null) {
-                    chatFragment = new ChatFragment();
+                if (mChatListFragment == null) {
+                    mChatListFragment = new ChatListFragment();
                 }
-                currentFrgment = chatFragment;
+                currentFrgment = mChatListFragment;
                 break;
             case 1:
-                if (friendsFragment == null) {
-                    friendsFragment = new FriendsFragment();
+                if (mFriendListFragment == null) {
+                    mFriendListFragment = new FriendListFragment();
                 }
-                currentFrgment = friendsFragment;
+                currentFrgment = mFriendListFragment;
                 break;
             case 2:
-                if (groupFragment == null) {
-                    groupFragment = new GroupFragment();
+                if (mGroupListFragment == null) {
+                    mGroupListFragment = new GroupListFragment();
                 }
-                currentFrgment = groupFragment;
+                currentFrgment = mGroupListFragment;
                 break;
             default:
                 break;

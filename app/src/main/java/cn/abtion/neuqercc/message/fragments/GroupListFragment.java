@@ -10,7 +10,7 @@ import cn.abtion.neuqercc.base.fragments.BaseFragment;
  * @since 2018/1/7 on 上午12:52
  * fhyPayaso@qq.com
  */
-public class GroupFragment extends BaseFragment {
+public class GroupListFragment extends BaseFragment {
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_group;
