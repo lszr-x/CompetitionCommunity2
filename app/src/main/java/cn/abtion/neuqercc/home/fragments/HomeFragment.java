@@ -138,10 +138,7 @@ public class HomeFragment extends BaseFragment {
                             list.get(i).getRegistration_time(),
                             list.get(i).getCompetition_time()));
                 }
-
                 initAdapter(contestListModels);
-
-
             }
 
             @Override

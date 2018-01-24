@@ -476,6 +476,7 @@ public final class CacheUtil {
          * 计算缓存size和count
          */
         private void calculateCacheSizeAndCacheCount() {
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
