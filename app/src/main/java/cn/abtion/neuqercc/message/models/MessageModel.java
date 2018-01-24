@@ -11,17 +11,47 @@ public class MessageModel extends BaseModel{
 
 
 
-    private String message;
+    private String imgRes;
+    private String userName;
+    private String lastMessage;
+    private String lastTime;
 
-    public MessageModel(String message) {
-        this.message = message;
+    public MessageModel(String imgRes, String userName, String lastMessage, String lastTime) {
+        this.imgRes = imgRes;
+        this.userName = userName;
+        this.lastMessage = lastMessage;
+        this.lastTime = lastTime;
     }
 
-    public String getMessage() {
-        return message;
+    public String getImgRes() {
+        return imgRes;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setImgRes(String imgRes) {
+        this.imgRes = imgRes;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public String getLastTime() {
+        return lastTime;
+    }
+
+    public void setLastTime(String lastTime) {
+        this.lastTime = lastTime;
     }
 }

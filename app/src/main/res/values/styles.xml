@@ -46,6 +46,13 @@
         <item name="android:textSize">18sp</item>
 
     </style>
+
+    <!--赛事顶部导航字体 样式-->
+    <style name="tab_message_text_size"
+        parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">12sp</item>
+
+    </style>
     <!--<item name="android:textAllCaps">false</item>-->
 
 

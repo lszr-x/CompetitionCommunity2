@@ -29,6 +29,11 @@ public class MessageFragment extends BaseFragment {
     ViewPager viewpagerMessage;
     Unbinder unbinder;
 
+    private TabLayout.Tab mTabChat;
+    private TabLayout.Tab mTabFriends;
+    private TabLayout.Tab mTabGroup;
+
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_message;
@@ -37,15 +42,28 @@ public class MessageFragment extends BaseFragment {
     @Override
     protected void initVariable() {
 
+
+        MessageViewPagerAdapter messageViewPagerAdapter = new MessageViewPagerAdapter(getFragmentManager());
+        viewpagerMessage.setAdapter(messageViewPagerAdapter);
+        tableHeaderMessage.setupWithViewPager(viewpagerMessage);
+        mTabChat = tableHeaderMessage.getTabAt(0);
+        mTabFriends = tableHeaderMessage.getTabAt(1);
+        mTabGroup = tableHeaderMessage.getTabAt(2);
+
     }
 
     @Override
     protected void initView() {
 
 
-        MessageViewPagerAdapter messageViewPagerAdapter = new MessageViewPagerAdapter(getFragmentManager());
-        viewpagerMessage.setAdapter(messageViewPagerAdapter);
-        tableHeaderMessage.setupWithViewPager(viewpagerMessage);
+        mTabChat.setIcon(R.drawable.img_chat_selector);
+        mTabFriends.setIcon(R.drawable.img_friends_selector);
+        mTabGroup.setIcon(R.drawable.img_group_selector);
+
+
+
+
+
     }
 
     @Override
