@@ -61,6 +61,11 @@ dependencies {
     compile 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
 
 
+    //环信
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
+    compile 'com.hyphenate:hyphenate-sdk:3.3.0'
+
+
 
 
     compile'com.lcodecorex:tkrefreshlayout:1.0.3'

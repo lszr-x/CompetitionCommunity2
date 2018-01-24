@@ -29,12 +29,35 @@ public class MessageRecAdapter extends BaseRecyclerViewAdapter<MessageModel> {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.item_message, parent, false);
-        return new ItemHolder(view);
+
+        final View view = inflater.inflate(R.layout.item_message, parent, false);
+        final ItemHolder itemHolder = new ItemHolder(view);
+
+        View main = view.findViewById(R.id.rl_message_main);
+        View delete = view.findViewById(R.id.txt_delete_message);
+
+        //进入聊天窗口
+        main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatWindowActivity.startActivity(view.getContext());
+            }
+        });
+
+        //删除该条信息
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remove(getItem(itemHolder.getLayoutPosition()));
+            }
+        });
+
+
+        return itemHolder;
     }
 
 
-    public static class ItemHolder extends ViewHolder<MessageModel> implements View.OnClickListener{
+    public static class ItemHolder extends ViewHolder<MessageModel> {
 
         @BindView(R.id.message_name)
         TextView mMessageName;
@@ -44,42 +67,18 @@ public class MessageRecAdapter extends BaseRecyclerViewAdapter<MessageModel> {
         TextView mTxtLastTime;
 
 
-        public ItemHolder(View itemView) {
+        public ItemHolder(final View itemView) {
             super(itemView);
-
-            View main = itemView.findViewById(R.id.rl_message_main);
-            View delete = itemView.findViewById(R.id.txt_delete_message);
-
-            main.setOnClickListener(this);
-            delete.setOnClickListener(this);
 
         }
 
         @Override
-        protected void onBind(MessageModel messageModel) {
+        protected void onBind(final MessageModel messageModel) {
 
             mMessageName.setText(messageModel.getUserName() == null ? "N/A" : messageModel.getUserName());
             mMessageLast.setText(messageModel.getLastMessage() == null ? "N/A" : messageModel.getLastMessage());
             mTxtLastTime.setText(messageModel.getLastTime() == null ? "N/A" : messageModel.getLastTime());
         }
-
-        @Override
-        public void onClick(View v) {
-
-            switch (v.getId()) {
-
-                case R.id.rl_message_main:
-                    ChatWindowActivity.startActivity(v.getContext());
-                    break;
-                case R.id.txt_delete_message:
-                    ToastUtil.showToast("点击了删除");
-                    break;
-                default:
-                    break;
-            }
-
-
-
-        }
     }
+
 }
