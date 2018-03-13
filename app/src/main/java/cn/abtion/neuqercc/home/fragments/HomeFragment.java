@@ -238,7 +238,6 @@ public class HomeFragment extends BaseFragment {
                     Glide.with(HomeFragment.this).load(list.get(i).getUrl()).into(imageView);
                     vfContest.addView(imageView);
                 }
-
             }
 
             @Override

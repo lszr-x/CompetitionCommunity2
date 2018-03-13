@@ -51,13 +51,14 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
     public BaseRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         ItemHolder itemHolder = null;
+
         switch (viewType) {
             case MESSAGE_TYPE_RECV_TXT:
                 view = inflater.inflate(R.layout.item_recv_message, parent, false);
                 itemHolder = new ItemHolder(view);
                 break;
             case MESSAGE_TYPE_SENT_TXT:
-                view = inflater.inflate(R.layout.item_send_message,parent,false);
+                view = inflater.inflate(R.layout.item_send_message, parent, false);
                 itemHolder = new ItemHolder(view);
                 break;
             default:
@@ -73,7 +74,7 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
 
     @Override
     public int getItemCount() {
-        return messages==null?0:messages.size();
+        return messages == null ? 0 : messages.size();
     }
 
     @Override
@@ -94,7 +95,7 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
         return messages.get(position);
     }
 
-    static class ItemHolder extends BaseRecyclerViewAdapter.ViewHolder<EMMessage>{
+    class ItemHolder extends BaseRecyclerViewAdapter.ViewHolder<EMMessage> {
         @BindView(R.id.txt_message)
         TextView txtMessage;
 
