@@ -32,6 +32,7 @@ public final class DialogUtil {
      *
      */
     public class NativeDialog{
+
         public AlertDialog.Builder getBuilder() {
             return builder;
         }
@@ -179,7 +180,6 @@ public final class DialogUtil {
             builder=new AlertDialog.Builder(context,styleId);
             view=View.inflate(context,itemView,null);
             builder.setView(view);
-
             return this;
         }
 
