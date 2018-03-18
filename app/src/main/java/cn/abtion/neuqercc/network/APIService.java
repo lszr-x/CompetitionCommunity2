@@ -142,13 +142,21 @@ public interface APIService {
 
 
     /**
-     * 提交修改资料
+     * 提交修改资料(需要上传头像)
      *
      * @return
      */
     @Multipart
     @POST("saiyou/public/index.php/user/edit")
     Call<APIResponse> uploadPersonInformation(@QueryMap Map<String, Object> map, @Part MultipartBody.Part pic);
+
+    /**
+     * 提交修改资料(不需要上传头像)
+     *
+     * @return
+     */
+    @POST("saiyou/public/index.php/user/edit")
+    Call<APIResponse> uploadPersonInformation(@QueryMap Map<String, Object> map);
 
 
     /**
@@ -286,6 +294,7 @@ public interface APIService {
 
     /**
      * 搜索用户
+     *
      * @param content
      * @return
      */

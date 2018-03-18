@@ -1,6 +1,5 @@
 package cn.abtion.neuqercc.message.activities;
 
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -8,15 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.message.adapters.SearchUseRecAdapter;
 import cn.abtion.neuqercc.message.models.SearchUserModel;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
-import cn.abtion.neuqercc.widget.SwipeItemLayout;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -33,9 +31,6 @@ public class SearchUseResActivity extends ToolBarActivity {
     RecyclerView recUser;
 
     private List<SearchUserModel> mUserModelList;
-    private SearchUseRecAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private String content;
 
     @Override
     protected int getLayoutId() {
@@ -46,13 +41,12 @@ public class SearchUseResActivity extends ToolBarActivity {
     protected void initVariable() {
 
         mUserModelList = new ArrayList<>();
-        content = getIntent().getStringExtra("searchUsername");
     }
 
     @Override
     protected void initView() {
         setActivityTitle("搜索结果");
-        initRec();
+        loadUserList();
     }
 
     @Override
@@ -61,32 +55,44 @@ public class SearchUseResActivity extends ToolBarActivity {
     }
 
 
-
-
+    /**
+     * 初始化RecyclerView
+     */
     private void initRec() {
 
-        loadUserList();
-        mAdapter = new SearchUseRecAdapter(SearchUseResActivity.this, mUserModelList);
-        mLayoutManager = new LinearLayoutManager(SearchUseResActivity.this, LinearLayoutManager.VERTICAL, false);
-        recUser.setLayoutManager(mLayoutManager);
+
+        SearchUseRecAdapter mAdapter = new SearchUseRecAdapter(SearchUseResActivity.this, mUserModelList);
         recUser.setAdapter(mAdapter);
+        recUser.setLayoutManager(new LinearLayoutManager(
+                SearchUseResActivity.this, LinearLayoutManager.VERTICAL, false));
+        mAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<SearchUserModel>() {
+            @Override
+            public void onItemClicked(SearchUserModel searchUserModel, BaseRecyclerViewAdapter.ViewHolder holder) {
+                FriendInfoActivity.startActivity(SearchUseResActivity.this, searchUserModel.getUserName());
+            }
+        });
     }
 
 
+    /**
+     * 加载用户搜索结果
+     */
     private void loadUserList() {
 
-
+        String content = getIntent().getStringExtra("searchUserName");
         RestClient.getService().searchUser(content).enqueue(new DataCallback<APIResponse<List<String>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<List<String>>> call, Response<APIResponse<List<String>>> response) {
+            public void onDataResponse(Call<APIResponse<List<String>>> call, Response<APIResponse<List<String>>>
+                    response) {
 
-                List<String> reponseList = new ArrayList<>();
-                reponseList = response.body().getData();
+                List<String> responseList = response.body().getData();
+
                 mUserModelList.clear();
-
-                for (int i=0 ;i<reponseList.size();i++) {
-                    mUserModelList.add(new SearchUserModel("",mUserModelList.get(i).getUserName()));
+                for (int i = 0; i < responseList.size(); i++) {
+                    mUserModelList.add(new SearchUserModel("", responseList.get(i)));
                 }
+
+                initRec();
             }
 
             @Override

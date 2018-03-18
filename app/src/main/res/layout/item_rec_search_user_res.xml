@@ -5,9 +5,11 @@
     android:id="@+id/ly_user_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
     android:background="@color/white"
     android:gravity="center|left"
-    android:padding="15dp">
+    android:padding="15dp"
+    >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_user_avatar"

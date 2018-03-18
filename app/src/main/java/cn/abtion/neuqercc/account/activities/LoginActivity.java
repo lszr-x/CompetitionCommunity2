@@ -34,7 +34,7 @@ public class LoginActivity extends NoBarActivity {
 
 
     public static String password;
-    public static String phoneNumber;
+    public static String phoneNumber ;
     public final static String TAG = "LoginActivity";
 
     @BindView(R.id.edit_identifier)
@@ -70,6 +70,8 @@ public class LoginActivity extends NoBarActivity {
      */
     @OnClick(R.id.btn_login)
     public void onBtnLoginClicked() {
+
+
         if (isDataTrue()) {
             loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
             loginRequest.setPassword(editPassword.getText().toString().trim());
@@ -207,4 +209,8 @@ public class LoginActivity extends NoBarActivity {
         }
         return flag;
     }
+
+
+
+
 }

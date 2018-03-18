@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.BaseActivity;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
@@ -49,6 +50,7 @@ public class MainActivity extends NoBarActivity {
     @BindView(R.id.vp_main_container)
     MainViewPager mainViewPager;
 
+    private long startTime = 0;
 
     public static void start(BaseActivity context, int flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -199,7 +201,7 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuHomeClicked() {
 
         changeHomeMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_HOME,false);
+        mainViewPager.setCurrentItem(Config.FLAG_HOME, false);
 
     }
 
@@ -209,7 +211,7 @@ public class MainActivity extends NoBarActivity {
     @OnClick(R.id.ly_tab_menu_order)
     public void onLyTabMenuOrderClicked() {
         changeTeamMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_TEAM,false);
+        mainViewPager.setCurrentItem(Config.FLAG_TEAM, false);
 
     }
 
@@ -220,7 +222,7 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuMessageClicked() {
 
         changeMessageMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_MESSAGE,false);
+        mainViewPager.setCurrentItem(Config.FLAG_MESSAGE, false);
 
     }
 
@@ -231,9 +233,20 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuMineClicked() {
 
         changeMineMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_MINE,false);
+        mainViewPager.setCurrentItem(Config.FLAG_MINE, false);
 
     }
 
 
+    @Override
+    public void onBackPressed() {
+
+        long currentTime = System.currentTimeMillis();
+        if ((currentTime - startTime) > 2000) {
+            ToastUtil.showToast("再按一次退出聚点");
+            startTime = currentTime;
+        } else {
+            NEUQerCCApplication.getInstance().exitApp();
+        }
+    }
 }

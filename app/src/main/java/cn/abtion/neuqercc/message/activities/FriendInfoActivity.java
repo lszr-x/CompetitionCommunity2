@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,32 +47,66 @@ import retrofit2.Response;
 public class FriendInfoActivity extends NoBarActivity {
 
 
-
-    @BindView(R.id.mine_grid_honor)
-    HonorGridView gridHonor;
-    @BindView(R.id.mine_avatar)
-    CircleImageView imgAvatar;
-    @BindView(R.id.txt_mine_major)
-    TextView txtMajor;
-    @BindView(R.id.txt_mine_grade)
-    TextView txtGrade;
-    @BindView(R.id.txt_mine_student_id)
-    TextView txtStudentId;
-    @BindView(R.id.txt_mine_good_at)
-    TextView txtGoodAt;
-    @BindView(R.id.txt_mine_team_num)
-    TextView txtTeamNum;
-    @BindView(R.id.txt_mine_name)
-    TextView txtName;
-    @BindView(R.id.txt_mine_phone_number)
-    TextView txtPhoneNumber;
-    @BindView(R.id.txt_mine_user_name)
-    TextView txtUserName;
-    @BindView(R.id.img_mine_gender)
-    ImageView imgGender;
-
-
     public static String mFriendPhoneNumber;
+    @BindView(R.id.friend_header_bg)
+    LinearLayout friendHeaderBg;
+    @BindView(R.id.img_friend_gender)
+    ImageView imgFriendGender;
+    @BindView(R.id.friend_dividing_one)
+    View friendDividingOne;
+    @BindView(R.id.friend_dividing_two)
+    View friendDividingTwo;
+    @BindView(R.id.friend_direction)
+    TextView friendDirection;
+    @BindView(R.id.txt_friend_good_at)
+    TextView txtFriendGoodAt;
+    @BindView(R.id.friend_team)
+    TextView friendTeam;
+    @BindView(R.id.txt_friend_team_num)
+    TextView txtFriendTeamNum;
+    @BindView(R.id.rlayout_friend_team)
+    RelativeLayout rlayoutFriendTeam;
+    @BindView(R.id.friend_information)
+    RelativeLayout friendInformation;
+    @BindView(R.id.friend_avatar)
+    CircleImageView friendAvatar;
+    @BindView(R.id.txt_friend_user_name)
+    TextView txtFriendUserName;
+    @BindView(R.id.ic_name)
+    ImageView icName;
+    @BindView(R.id.ic_phone)
+    ImageView icPhone;
+    @BindView(R.id.txt_friend_name)
+    TextView txtFriendName;
+    @BindView(R.id.txt_friend_phone_number)
+    TextView txtFriendPhoneNumber;
+    @BindView(R.id.friend_phone)
+    RelativeLayout friendPhone;
+    @BindView(R.id.friend_profession)
+    TextView friendProfession;
+    @BindView(R.id.friend_grade)
+    TextView friendGrade;
+    @BindView(R.id.friend_id)
+    TextView friendId;
+    @BindView(R.id.txt_friend_major)
+    TextView txtFriendMajor;
+    @BindView(R.id.txt_friend_grade)
+    TextView txtFriendGrade;
+    @BindView(R.id.txt_friend_student_id)
+    TextView txtFriendStudentId;
+    @BindView(R.id.friend_message)
+    RelativeLayout friendMessage;
+    @BindView(R.id.mine_txt_honor)
+    TextView mineTxtHonor;
+    @BindView(R.id.mine_grid_honor)
+    HonorGridView mineGridHonor;
+    @BindView(R.id.mine_honor)
+    RelativeLayout mineHonor;
+    @BindView(R.id.scroll_friend_information)
+    GradientScrollView scrollFriendInformation;
+    @BindView(R.id.btn_add_friend)
+    Button btnAddFriend;
+
     private List<ShowHonorResponse> showHonorResponseList = new ArrayList<ShowHonorResponse>();
     private PersonInformationResponse informationResponse;
     private String imgAvatarUrl;
@@ -97,18 +132,16 @@ public class FriendInfoActivity extends NoBarActivity {
     }
 
 
-
-
     /**
      * 获取个人信息网络请求
      */
     public void initPersonalInformation() {
 
-        RestClient.getService().personalInformation(mFriendPhoneNumber).enqueue(new
-                                                                       DataCallback<APIResponse<PersonInformationResponse>>() {
+        RestClient.getService().personalInformation(mFriendPhoneNumber).enqueue(new DataCallback<APIResponse<PersonInformationResponse>>() {
 
             @Override
-            public void onDataResponse(Call<APIResponse<PersonInformationResponse>> call, Response<APIResponse<PersonInformationResponse>> response) {
+            public void onDataResponse(Call<APIResponse<PersonInformationResponse>> call,
+                                       Response<APIResponse<PersonInformationResponse>> response) {
 
                 informationResponse = response.body().getData();
                 setPersonalInformation();
@@ -133,23 +166,23 @@ public class FriendInfoActivity extends NoBarActivity {
      */
     public void setPersonalInformation() {
 
-        txtPhoneNumber.setText(informationResponse.getPhone().trim());
-        txtUserName.setText(informationResponse.getUsername().trim());
-        txtName.setText(informationResponse.getName().trim());
-        txtGoodAt.setText(informationResponse.getGoodAt().trim());
-        txtMajor.setText(informationResponse.getMajor().trim());
-        txtTeamNum.setText(String.valueOf(informationResponse.getTeamNum()));
-        txtGrade.setText(String.valueOf(informationResponse.getGrade()));
-        txtStudentId.setText(String.valueOf(informationResponse.getStudentId()));
+        txtFriendPhoneNumber.setText(informationResponse.getPhone().trim());
+        txtFriendUserName.setText(informationResponse.getUsername().trim());
+        txtFriendName.setText(informationResponse.getName().trim());
+        txtFriendGoodAt.setText(informationResponse.getGoodAt().trim());
+        txtFriendMajor.setText(informationResponse.getMajor().trim());
+        txtFriendTeamNum.setText(String.valueOf(informationResponse.getTeamNum()));
+        txtFriendGrade.setText(String.valueOf(informationResponse.getGrade()));
+        txtFriendStudentId.setText(String.valueOf(informationResponse.getStudentId()));
 
         if (informationResponse.getGender() == Config.FLAG_BOY) {
-            imgGender.setImageResource(R.drawable.ic_mine_man);
+            imgFriendGender.setImageResource(R.drawable.ic_mine_man);
         } else if (informationResponse.getGender() == Config.FLAG_GIRL) {
-            imgGender.setImageResource(R.drawable.ic_mine_woman);
+            imgFriendGender.setImageResource(R.drawable.ic_mine_woman);
         }
 
         imgAvatarUrl = informationResponse.getPicture();
-        Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
+        Glide.with(this).load(imgAvatarUrl).into(friendAvatar);
     }
 
 
@@ -162,7 +195,8 @@ public class FriendInfoActivity extends NoBarActivity {
 
             //请求成功时回调
             @Override
-            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call, Response<APIResponse<List<ShowHonorResponse>>> response) {
+            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call,
+                                       Response<APIResponse<List<ShowHonorResponse>>> response) {
 
                 showHonorResponseList = response.body().getData();
                 initGrid();
@@ -187,8 +221,8 @@ public class FriendInfoActivity extends NoBarActivity {
     public void initGrid() {
 
         GridHonorAdapter gridHonorAdapter = new GridHonorAdapter(this, showHonorResponseList, false);
-        gridHonor.setAdapter(gridHonorAdapter);
-        gridHonor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mineGridHonor.setAdapter(gridHonorAdapter);
+        mineGridHonor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -200,9 +234,6 @@ public class FriendInfoActivity extends NoBarActivity {
             }
         });
     }
-
-
-
 
 
     public static void startActivity(Context context, String friendPhoneNumber) {

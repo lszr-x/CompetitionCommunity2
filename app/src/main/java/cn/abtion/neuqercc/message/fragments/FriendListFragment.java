@@ -124,6 +124,9 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
 
                 List<String> responseList  = new ArrayList<>();
                 friendModelList.clear();
+
+
+
                 responseList = response.body().getData();
                 for (int i = 0;i<responseList.size();i++) {
                     friendModelList.add(new FriendModel("",responseList.get(i)));
