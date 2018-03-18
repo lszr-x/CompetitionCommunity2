@@ -210,11 +210,11 @@ public class MineFragment extends BaseFragment {
      */
     public void setPersonalInformation() {
 
-        txtPhoneNumber.setText(informationResponse.getPhone().trim());
-        txtUserName.setText(informationResponse.getUsername().trim());
-        txtName.setText(informationResponse.getName().trim());
-        txtGoodAt.setText(informationResponse.getGoodAt().trim());
-        txtMajor.setText(informationResponse.getMajor().trim());
+        txtPhoneNumber.setText(informationResponse.getPhone());
+        txtUserName.setText(informationResponse.getUsername() == null?"":informationResponse.getUsername().trim());
+        txtName.setText(informationResponse.getName());
+        txtGoodAt.setText(informationResponse.getGoodAt());
+        txtMajor.setText(informationResponse.getMajor());
         txtTeamNum.setText(String.valueOf(informationResponse.getTeamNum()));
         txtGrade.setText(String.valueOf(informationResponse.getGrade()));
         txtStudentId.setText(String.valueOf(informationResponse.getStudentId()));

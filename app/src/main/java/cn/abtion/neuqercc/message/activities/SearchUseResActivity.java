@@ -13,7 +13,12 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.message.adapters.SearchUseRecAdapter;
 import cn.abtion.neuqercc.message.models.SearchUserModel;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.widget.SwipeItemLayout;
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * @author FanHongyu.
@@ -30,6 +35,7 @@ public class SearchUseResActivity extends ToolBarActivity {
     private List<SearchUserModel> mUserModelList;
     private SearchUseRecAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private String content;
 
     @Override
     protected int getLayoutId() {
@@ -40,9 +46,7 @@ public class SearchUseResActivity extends ToolBarActivity {
     protected void initVariable() {
 
         mUserModelList = new ArrayList<>();
-        for (int i=0;i < 10;i++) {
-            mUserModelList.add(new SearchUserModel("11","用户"+i));
-        }
+        content = getIntent().getStringExtra("searchUsername");
     }
 
     @Override
@@ -56,12 +60,44 @@ public class SearchUseResActivity extends ToolBarActivity {
 
     }
 
+
+
+
     private void initRec() {
 
-        mAdapter = new SearchUseRecAdapter(SearchUseResActivity.this,mUserModelList);
-        mLayoutManager = new LinearLayoutManager(SearchUseResActivity.this, LinearLayoutManager.VERTICAL,false);
+        loadUserList();
+        mAdapter = new SearchUseRecAdapter(SearchUseResActivity.this, mUserModelList);
+        mLayoutManager = new LinearLayoutManager(SearchUseResActivity.this, LinearLayoutManager.VERTICAL, false);
         recUser.setLayoutManager(mLayoutManager);
-        recUser.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(SearchUseResActivity.this));
         recUser.setAdapter(mAdapter);
+    }
+
+
+    private void loadUserList() {
+
+
+        RestClient.getService().searchUser(content).enqueue(new DataCallback<APIResponse<List<String>>>() {
+            @Override
+            public void onDataResponse(Call<APIResponse<List<String>>> call, Response<APIResponse<List<String>>> response) {
+
+                List<String> reponseList = new ArrayList<>();
+                reponseList = response.body().getData();
+                mUserModelList.clear();
+
+                for (int i=0 ;i<reponseList.size();i++) {
+                    mUserModelList.add(new SearchUserModel("",mUserModelList.get(i).getUserName()));
+                }
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<String>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+        });
     }
 }

@@ -12,6 +12,7 @@ import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
 import cn.abtion.neuqercc.message.activities.FriendInfoActivity;
+import cn.abtion.neuqercc.message.activities.SearchUseResActivity;
 import cn.abtion.neuqercc.message.models.SearchUserModel;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,41 +26,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SearchUseRecAdapter extends BaseRecyclerViewAdapter<SearchUserModel> {
 
 
+    private Context mContext;
+    private List<SearchUserModel> mSearchUserModels;
+
 
     public SearchUseRecAdapter(Context context, List<SearchUserModel> searchUserModels) {
         super(context, searchUserModels);
+        mContext = context;
+        mSearchUserModels = searchUserModels;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        final View view = inflater.inflate(R.layout.item_rec_search_user_res, parent, false);
-
-        final ItemHolder itemHolder = new ItemHolder(view);
-
-        View main = itemHolder.itemView.findViewById(R.id.ly_user_info);
-        View add = itemHolder.itemView.findViewById(R.id.txt_add_friend);
-
-        main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FriendInfoActivity.startActivity(view.getContext());
-            }
-        });
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtil.showToast("添加对方为好友？");
-            }
-        });
-
-
-        return itemHolder;
+        View view = inflater.inflate(R.layout.item_rec_search_user_res, parent, false);
+        return new ItemHolder(view);
     }
 
 
-    public static class ItemHolder extends ViewHolder<SearchUserModel> {
+    class ItemHolder extends ViewHolder<SearchUserModel> implements View.OnClickListener {
 
         @BindView(R.id.img_user_avatar)
         CircleImageView imgUserAvatar;
@@ -74,9 +59,15 @@ public class SearchUseRecAdapter extends BaseRecyclerViewAdapter<SearchUserModel
         @Override
         protected void onBind(SearchUserModel searchUserModel) {
 
-            txtUserName.setText(searchUserModel.getUserName() == null ? "N/A":searchUserModel.getUserName());
+            txtUserName.setText(searchUserModel.getUserName() == null ? "N/A" : searchUserModel.getUserName());
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            if (v.getId() == R.id.ly_user_info) {
+                FriendInfoActivity.startActivity(mContext, mSearchUserModels.get(position).getUserName());
+            }
         }
     }
-
-
 }

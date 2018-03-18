@@ -41,6 +41,7 @@ public class SearchUserActivity extends NoBarActivity {
     @Override
     protected void initView() {
 
+        searchUser();
     }
 
     @Override
