@@ -73,7 +73,6 @@ import retrofit2.Response;
 public class UpdateInformationActivity extends ToolBarActivity {
 
 
-
     /**
      * 数据信息错误类型标志
      */
@@ -114,14 +113,14 @@ public class UpdateInformationActivity extends ToolBarActivity {
     private int flagTempGrade = 0;
 
 
-
     private boolean flagUpLoad = false;
 
 
     /**
      * 动态申请权限
      */
-    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission
+            .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private static final int REQUEST_EXTERNAL_STORAGE = 100;
     public final int TAKE_PHOTO_FLAG = 1;
     public final int SET_IMG_FLAG = 100;
@@ -238,18 +237,13 @@ public class UpdateInformationActivity extends ToolBarActivity {
      */
     public void uploadPersonalInformation() {
 
-
-        File file = new File(filePath);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("pic", file.getName(), requestBody);
-
-
         int flagGender = 0;
         if (checkBoxBoy.isChecked() && !checkBoxGirl.isChecked()) {
             flagGender = 0;
         } else if (!checkBoxBoy.isChecked() && checkBoxGirl.isChecked()) {
             flagGender = 1;
         }
+
 
         UpdatePersonInformationRequest updatePersonInformationRequest = new UpdatePersonInformationRequest(
                 editPhoneNumber.getText().toString().trim(),
@@ -261,25 +255,60 @@ public class UpdateInformationActivity extends ToolBarActivity {
                 flagGender, Integer.valueOf(txtUpdateGrade.getText().toString().trim()),
                 flagNameEye, flagPhoneEye);
 
-        RestClient.getService().uploadPersonInformation(updatePersonInformationRequest.createCommitParams(), part).enqueue(new DataCallback<APIResponse>() {
 
-            @Override
-            public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+        if (flagUpLoad) {
+            File file = new File(filePath);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("pic", file.getName(), requestBody);
 
-                ToastUtil.showToast(getString(R.string.toast_edit_successful));
-                finish();
-            }
 
-            @Override
-            public void onDataFailure(Call<APIResponse> call, Throwable t) {
+            RestClient.getService().uploadPersonInformation(updatePersonInformationRequest.createCommitParams(), part)
+                    .enqueue(new DataCallback<APIResponse>() {
 
-            }
+                        @Override
+                        public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-            @Override
-            public void dismissDialog() {
+                            ToastUtil.showToast(getString(R.string.toast_edit_successful));
+                            finish();
+                        }
 
-            }
-        });
+                        @Override
+                        public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+                        }
+
+                        @Override
+                        public void dismissDialog() {
+
+                        }
+                    });
+
+        } else {
+
+
+            RestClient.getService().uploadPersonInformation(updatePersonInformationRequest.createCommitParams())
+                    .enqueue(new DataCallback<APIResponse>() {
+
+                        @Override
+                        public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                            ToastUtil.showToast(getString(R.string.toast_edit_successful));
+                            finish();
+                        }
+
+                        @Override
+                        public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+                        }
+
+                        @Override
+                        public void dismissDialog() {
+
+                        }
+                    });
+
+
+        }
     }
 
 
@@ -386,7 +415,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
             //请求成功时回调
             @Override
-            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call, Response<APIResponse<List<ShowHonorResponse>>> response) {
+            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call,
+                                       Response<APIResponse<List<ShowHonorResponse>>> response) {
 
                 showHonorResponseList = response.body().getData();
                 initGrid();
@@ -610,7 +640,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
         RestClient.getService().goodAtRequest().enqueue(new DataCallback<APIResponse<List<GoodAtRequest>>>() {
 
             @Override
-            public void onDataResponse(Call<APIResponse<List<GoodAtRequest>>> call, Response<APIResponse<List<GoodAtRequest>>> response) {
+            public void onDataResponse(Call<APIResponse<List<GoodAtRequest>>> call,
+                                       Response<APIResponse<List<GoodAtRequest>>> response) {
 
                 List<GoodAtRequest> goodAtRequestList = response.body().getData();
 
@@ -644,7 +675,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
         RestClient.getService().studentGradeRequest().enqueue(new DataCallback<APIResponse<List<StudentGradeRequest>>>() {
 
             @Override
-            public void onDataResponse(Call<APIResponse<List<StudentGradeRequest>>> call, Response<APIResponse<List<StudentGradeRequest>>> response) {
+            public void onDataResponse(Call<APIResponse<List<StudentGradeRequest>>> call,
+                                       Response<APIResponse<List<StudentGradeRequest>>> response) {
 
                 List<StudentGradeRequest> studentGradeRequestList = response.body().getData();
 
@@ -689,7 +721,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public void showGoodAtList() {
 
 
-        DialogUtil.NativeDialog nativeDialog = new DialogUtil().new NativeDialog().singleInit(UpdateInformationActivity.this);
+        DialogUtil.NativeDialog nativeDialog = new DialogUtil().new NativeDialog().singleInit
+                (UpdateInformationActivity.this);
 
         nativeDialog.setSingleChoice(goodAtList, flagGoodAt, new DialogInterface.OnClickListener() {
             @Override
@@ -716,7 +749,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
     public void showGradeList() {
 
 
-        DialogUtil.NativeDialog nativeDialog = new DialogUtil().new NativeDialog().singleInit(UpdateInformationActivity.this);
+        DialogUtil.NativeDialog nativeDialog = new DialogUtil().new NativeDialog().singleInit
+                (UpdateInformationActivity.this);
 
         nativeDialog.setSingleChoice(studentGradeList, flagGrade, new DialogInterface.OnClickListener() {
             @Override
@@ -766,9 +800,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
         } else if (!checkBoxBoy.isChecked() && !checkBoxGirl.isChecked()) {
 
             flag = FLAG_LACK_ERROR;
-        } else if (!flagUpLoad) {
 
-            flag = FLAG_LACK_ERROR;
         } else if (!RegexUtil.checkMobile(editPhoneNumber.getText().toString().trim())) {
 
             flag = FLAG_PHONE_ERROR;

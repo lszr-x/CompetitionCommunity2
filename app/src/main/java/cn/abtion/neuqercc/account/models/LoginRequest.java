@@ -14,6 +14,7 @@ public class LoginRequest extends BaseModel {
     private String phone;
     private String password;
 
+
     public LoginRequest() {
 
     }

@@ -13,11 +13,21 @@ import java.util.TimerTask;
 import butterknife.BindView;
 import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+import cn.abtion.neuqercc.message.activities.FriendInfoActivity;
+import cn.abtion.neuqercc.message.adapters.FriendItemListener;
 import cn.abtion.neuqercc.message.adapters.FriendsRecAdapter;
 import cn.abtion.neuqercc.message.models.FriendModel;
 import cn.abtion.neuqercc.message.models.MessageModel;
+import cn.abtion.neuqercc.network.APIResponse;
+import cn.abtion.neuqercc.network.DataCallback;
+import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.SwipeItemLayout;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static cn.abtion.neuqercc.utils.Utility.runOnUiThread;
 
@@ -26,7 +36,7 @@ import static cn.abtion.neuqercc.utils.Utility.runOnUiThread;
  * @since 2018/1/7 on 上午12:52
  * fhyPayaso@qq.com
  */
-public class FriendListFragment extends BaseFragment {
+public class FriendListFragment extends BaseFragment implements FriendItemListener,SwipeRefreshLayout.OnRefreshListener{
     @BindView(R.id.rec_friends)
     RecyclerView mRecFriends;
     Unbinder unbinder;
@@ -54,24 +64,6 @@ public class FriendListFragment extends BaseFragment {
 
         initRec();
         initSwipe();
-
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (int i = 0; i < 3; i++) {
-                            friendModelList.add(new FriendModel("sss", "username" + i));
-                        }
-                        mAdapter.notifyDataSetChanged();
-                        lyRefreshFriends.setRefreshing(false);
-                    }
-                });
-            }
-        }, 2000);
-
     }
 
     @Override
@@ -83,6 +75,120 @@ public class FriendListFragment extends BaseFragment {
     private void initSwipe() {
 
         lyRefreshFriends.setRefreshing(true);
+        lyRefreshFriends.setOnRefreshListener(this);
+        lyRefreshFriends.setColorSchemeColors(Color.RED,Color.BLUE,Color.GREEN);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        loadFriendList();
+                        mAdapter.notifyDataSetChanged();
+                        lyRefreshFriends.setRefreshing(false);
+                    }
+                });
+            }
+        }, 2000);
+
+    }
+
+    /**
+     * 初始化好友列表
+     */
+    private void initRec() {
+
+        mAdapter = new FriendsRecAdapter(getContext(), friendModelList);
+        mAdapter.setFriendItemListener(this);
+
+        mRecFriends.setAdapter(mAdapter);
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mRecFriends.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(getContext()));
+        mRecFriends.setLayoutManager(mLayoutManager);
+
+    }
+
+
+    /**
+     * 加载好友列表
+     */
+    private void loadFriendList() {
+
+
+        RestClient.getService().loadFriendList(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<String>>>() {
+
+
+            @Override
+            public void onDataResponse(Call<APIResponse<List<String>>> call, Response<APIResponse<List<String>>> response) {
+
+                List<String> responseList  = new ArrayList<>();
+                friendModelList.clear();
+
+
+
+                responseList = response.body().getData();
+                for (int i = 0;i<responseList.size();i++) {
+                    friendModelList.add(new FriendModel("",responseList.get(i)));
+                }
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<List<String>>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void onAvaterClick(int pos) {
+        FriendInfoActivity.startActivity(getContext(),friendModelList.get(pos).getFriendName());
+    }
+
+    @Override
+    public void onSendMessageClick(int pos) {
+
+
+
+
+
+    }
+
+    @Override
+    public void onDeleteClick(final int pos) {
+
+        RestClient
+                .getService()
+                .deleteFriend(LoginActivity.phoneNumber,friendModelList.get(pos).getFriendName())
+                .enqueue(new DataCallback<APIResponse>() {
+                    @Override
+                    public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+                        ToastUtil.showToast("删除好友成功");
+                        mAdapter.removeItem(pos);
+                    }
+
+                    @Override
+                    public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+                    }
+
+                    @Override
+                    public void dismissDialog() {
+
+                    }
+                });
+
+    }
+
+    @Override
+    public void onRefresh() {
+
         lyRefreshFriends.setColorSchemeColors(Color.RED,Color.BLUE,Color.GREEN);
         lyRefreshFriends.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -95,9 +201,7 @@ public class FriendListFragment extends BaseFragment {
                             @Override
                             public void run() {
 
-                                for (int i = 0; i < 3; i++) {
-                                    friendModelList.add(new FriendModel("sss", "username" + i));
-                                }
+                                loadFriendList();
                                 mAdapter.notifyDataSetChanged();
                                 lyRefreshFriends.setRefreshing(false);
                             }
@@ -107,18 +211,4 @@ public class FriendListFragment extends BaseFragment {
             }
         });
     }
-
-    /**
-     * 初始化好友列表
-     */
-    private void initRec() {
-
-        mAdapter = new FriendsRecAdapter(getContext(), friendModelList);
-        mRecFriends.setAdapter(mAdapter);
-        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mRecFriends.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(getContext()));
-        mRecFriends.setLayoutManager(mLayoutManager);
-
-    }
-
 }

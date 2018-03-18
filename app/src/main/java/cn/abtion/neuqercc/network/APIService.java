@@ -16,6 +16,7 @@ import cn.abtion.neuqercc.home.models.InitContestRecylerViewItemRequest;
 import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
 import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
 import cn.abtion.neuqercc.home.models.SearchContestNameRequest;
+import cn.abtion.neuqercc.message.models.AddFriendRequest;
 import cn.abtion.neuqercc.team.models.EstablishTeamRequest;
 import cn.abtion.neuqercc.team.models.InitAllTeamDataResponse;
 import cn.abtion.neuqercc.team.models.InitAllTeamResponse;
@@ -88,32 +89,34 @@ public interface APIService {
      * 比赛详情列表GET请求
      */
     @GET("saiyou/public/index.php/descs/show")
-    Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> initContestRecylerView(@Query("page")int page,@Query("size")int size);
+    Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>
+    initContestRecylerView(@Query("page") int page, @Query("size") int size);
 
 
     /**
      * 大神攻略和比赛详情内容GET
      */
-    @GET("saiyou/public/index.php/raider/show" )
-    Call<APIResponse<RaidersAndDetailsRequest>> getRaidersAndDetails(@Query("id")int contestItemId);
+    @GET("saiyou/public/index.php/raider/show")
+    Call<APIResponse<RaidersAndDetailsRequest>> getRaidersAndDetails(@Query("id") int contestItemId);
 
     /**
      * 搜索队伍POST请求
      */
-    @POST("saiyou/public/index.php/team/search" )
-    Call<APIResponse<List<InitAllTeamResponse>>> searchTeam(@Query("content")String seachTeamName);
+    @POST("saiyou/public/index.php/team/search")
+    Call<APIResponse<List<InitAllTeamResponse>>> searchTeam(@Query("content") String seachTeamName);
 
     /**
      * 查询多支队伍GET请求
      */
-    @GET("saiyou/public/index.php/teams/show" )
-    Call<APIResponse<InitAllTeamDataResponse<List<InitAllTeamResponse>>>> initAllTeam(@Query("page")int page, @Query("size") int teamSize);
+    @GET("saiyou/public/index.php/teams/show")
+    Call<APIResponse<InitAllTeamDataResponse<List<InitAllTeamResponse>>>> initAllTeam(@Query("page") int page, @Query
+            ("size") int teamSize);
 
     /**
      * 查询推荐队伍队伍GET请求
      */
-    @GET("saiyou/public/index.php/team/recommend" )
-    Call<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>> initRecommendTeam(@Query("phone")String contestName,@Query("page")int page, @Query("size") int teamSize);
+    @GET("saiyou/public/index.php/team/recommend")
+    Call<APIResponse<InitRecommendTeamDataResponse<List<InitRecommendTeamResponse>>>> initRecommendTeam(@Query("phone") String contestName, @Query("page") int page, @Query("size") int teamSize);
 
 
     /**
@@ -123,12 +126,12 @@ public interface APIService {
     Call<APIResponse> establishTeam(@Body EstablishTeamRequest establishTeamRequest);
 
 
-
     /**
      * 搜索比赛POST请求
      */
-    @POST("saiyou/public/index.php/desc/search" )
-    Call<APIResponse<List<InitContestRecylerViewItemRequest>>> searchContest(@Body SearchContestNameRequest searchContestNameRequest);
+    @POST("saiyou/public/index.php/desc/search")
+    Call<APIResponse<List<InitContestRecylerViewItemRequest>>> searchContest(@Body SearchContestNameRequest
+                                                                                     searchContestNameRequest);
 
 
     /**
@@ -139,13 +142,21 @@ public interface APIService {
 
 
     /**
-     * 提交修改资料
+     * 提交修改资料(需要上传头像)
      *
      * @return
      */
     @Multipart
     @POST("saiyou/public/index.php/user/edit")
     Call<APIResponse> uploadPersonInformation(@QueryMap Map<String, Object> map, @Part MultipartBody.Part pic);
+
+    /**
+     * 提交修改资料(不需要上传头像)
+     *
+     * @return
+     */
+    @POST("saiyou/public/index.php/user/edit")
+    Call<APIResponse> uploadPersonInformation(@QueryMap Map<String, Object> map);
 
 
     /**
@@ -166,7 +177,8 @@ public interface APIService {
      */
     @Multipart
     @POST("saiyou/public/index.php/user/glory_add")
-    Call<APIResponse> addHonor(@Query("phone") String phone, @QueryMap Map<String, Object> map, @Part MultipartBody.Part glory_pic);
+    Call<APIResponse> addHonor(@Query("phone") String phone, @QueryMap Map<String, Object> map, @Part MultipartBody
+            .Part glory_pic);
 
 
     /**
@@ -176,7 +188,8 @@ public interface APIService {
      */
     @Multipart
     @POST("saiyou/public/index.php/user/glory_edit")
-    Call<APIResponse> uploadHonor(@Query("phone") String phone, @QueryMap Map<String, Object> map, @Part MultipartBody.Part glory_pic);
+    Call<APIResponse> uploadHonor(@Query("phone") String phone, @QueryMap Map<String, Object> map, @Part
+            MultipartBody.Part glory_pic);
 
     /**
      * 删除荣誉墙
@@ -246,6 +259,47 @@ public interface APIService {
      */
     @GET("saiyou/public/index.php/other/field_show")
     Call<APIResponse<List<GoodAtRequest>>> goodAtRequest();
+
+
+    /**
+     * 加载用户好友列表
+     *
+     * @param phone
+     * @return
+     */
+    @GET("saiyou/public/index.php/friend/show")
+    Call<APIResponse<List<String>>> loadFriendList(@Query("phone") String phone);
+
+
+    /**
+     * 添加好友接口
+     *
+     * @param request
+     * @return
+     */
+    @POST("saiyou/public/index.php/friend/add")
+    Call<APIResponse> addFriend(@Body AddFriendRequest request);
+
+
+    /**
+     * 删除好友接口
+     *
+     * @param phone
+     * @param friendPhone
+     * @return
+     */
+    @DELETE("saiyou/public/index.php/friend/del")
+    Call<APIResponse> deleteFriend(@Query("phone") String phone, @Query("friend_phone") String friendPhone);
+
+
+    /**
+     * 搜索用户
+     *
+     * @param content
+     * @return
+     */
+    @GET("saiyou/public/index.php/chat/search")
+    Call<APIResponse<List<String>>> searchUser(@Query("content") String content);
 
 
 }

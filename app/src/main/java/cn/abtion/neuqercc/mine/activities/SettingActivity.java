@@ -2,9 +2,13 @@ package cn.abtion.neuqercc.mine.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -89,6 +93,9 @@ public class SettingActivity extends ToolBarActivity {
     }
 
 
+    /**
+     * 退出账号
+     */
     @OnClick(R.id.btn_mine_sign_out)
     public void onBtnSignOutClicked() {
 
@@ -118,12 +125,7 @@ public class SettingActivity extends ToolBarActivity {
 
                 if (dialog.isShowing()) {
                     dialog.dismiss();
-
-                    Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    NEUQerCCApplication neuQerCCApplication = new NEUQerCCApplication();
-                    neuQerCCApplication.exitAccount();
-
+                    logoutEM();
                 }
             }
         });
@@ -138,9 +140,30 @@ public class SettingActivity extends ToolBarActivity {
                 }
             }
         });
-
-
     }
 
 
+    private void logoutEM() {
+
+
+        EMClient.getInstance().logout(true, new EMCallBack() {
+            @Override
+            public void onSuccess() {
+
+                NEUQerCCApplication.getInstance().exitAccount();
+                Log.i("EM", "onSuccess: " + "退出成功");
+            }
+
+            @Override
+            public void onError(int code, String error) {
+
+                Log.i("EM", "onError: " + "退出失败 " + error);
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+    }
 }

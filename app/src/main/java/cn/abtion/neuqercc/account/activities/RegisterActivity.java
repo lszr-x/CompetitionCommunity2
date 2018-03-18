@@ -37,7 +37,6 @@ public class RegisterActivity extends NoBarActivity {
     TextInputEditText editPassword;
     @BindView(R.id.edit_repeat_password)
     TextInputEditText editRepeatPassword;
-
     @BindView(R.id.btn_get_verify_code)
     Button btnGetVerifyCode;
 
@@ -81,7 +80,6 @@ public class RegisterActivity extends NoBarActivity {
         smsRequest.setPhone(editPhone.getText().toString().trim());
 
 
-
         if (isPhoneTrue()) {
 
             getVerifyCode();
@@ -97,7 +95,7 @@ public class RegisterActivity extends NoBarActivity {
             showError(editPhone, getString(R.string.error_phone_number_empty_illegal));
             flag = false;
         } else if (!RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
-            showError(editPhone,getString(R.string.error_phone_number_illegal));
+            showError(editPhone, getString(R.string.error_phone_number_illegal));
             flag = false;
         }
         return flag;
@@ -109,10 +107,10 @@ public class RegisterActivity extends NoBarActivity {
     @OnClick(R.id.btn_register)
     public void onBtnRegisterClicked() {
 
-        registerRequest.setPhone(editPhone.getText().toString().trim());
-        registerRequest.setPassword(editPassword.getText().toString().trim());
-
         if (isDataTrue()) {
+
+            registerRequest.setPhone(editPhone.getText().toString().trim());
+            registerRequest.setPassword(editPassword.getText().toString().trim());
             processRegister();
         }
 
@@ -135,7 +133,8 @@ public class RegisterActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 ToastUtil.showToast(getString(R.string.toast_register_successful));
-
+                LoginActivity.phoneNumber = registerRequest.getPhone();
+                LoginActivity.password = registerRequest.getPassword();
                 //跳转至MainActivity
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -203,14 +202,13 @@ public class RegisterActivity extends NoBarActivity {
     private boolean isDataTrue() {
         boolean flag = true;
 
-//        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-//            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
-//            flag = false;
-//        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
-//            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
-//            flag = false;
-//        } else
-         if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
+            flag = false;
+        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
+            flag = false;
+        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, getString(R.string.error_password_min_limit));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {
@@ -242,10 +240,11 @@ public class RegisterActivity extends NoBarActivity {
 
     public void initCountDownTimer() {
 
-        if(!CaptchaCountDownTimer.FLAG_FIRST_IN&&
-                CaptchaCountDownTimer.curMillis+Config.COUNT_DOWN_TIME_TOTAL>System.currentTimeMillis()) {
+        if (!CaptchaCountDownTimer.FLAG_FIRST_IN &&
+                CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL > System.currentTimeMillis()) {
 
-            setCountDownTimer(CaptchaCountDownTimer.curMillis+Config.COUNT_DOWN_TIME_TOTAL-System.currentTimeMillis());
+            setCountDownTimer(CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL - System
+                    .currentTimeMillis());
             captchaTimer.timerStart(false);
 
         } else {
@@ -256,29 +255,25 @@ public class RegisterActivity extends NoBarActivity {
 
     public void setCountDownTimer(final long countDownTime) {
 
-        captchaTimer = new CaptchaCountDownTimer( countDownTime , Config.COUNT_DOWN_TIME_PER) {
+        captchaTimer = new CaptchaCountDownTimer(countDownTime, Config.COUNT_DOWN_TIME_PER) {
             @Override
             public void onTick(long millisUntilFinished) {
                 btnGetVerifyCode.setEnabled(false);
                 btnGetVerifyCode.setText((millisUntilFinished / Config.COUNT_DOWN_TIME_PER) + " s");
             }
+
             @Override
             public void onFinish() {
 
                 btnGetVerifyCode.setEnabled(true);
                 btnGetVerifyCode.setText(getString(R.string.btn_get_captcha));
 
-                if(countDownTime!=Config.COUNT_DOWN_TIME_TOTAL) {
+                if (countDownTime != Config.COUNT_DOWN_TIME_TOTAL) {
                     setCountDownTimer(Config.COUNT_DOWN_TIME_TOTAL);
                 }
             }
         };
     }
-
-
-
-
-
 
 
     /**
@@ -287,8 +282,6 @@ public class RegisterActivity extends NoBarActivity {
     @OnClick(R.id.btn_return)
     public void onBtnReturnClicked() {
 
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intent);
         captchaTimer.cancel();
         finish();
     }

@@ -7,6 +7,8 @@ import android.util.Log;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
@@ -32,7 +34,8 @@ public class LoginActivity extends NoBarActivity {
 
 
     public static String password;
-    public static String phoneNumber = "15076035390";
+    public static String phoneNumber ;
+    public final static String TAG = "LoginActivity";
 
     @BindView(R.id.edit_identifier)
     TextInputEditText editIdentifier;
@@ -67,49 +70,13 @@ public class LoginActivity extends NoBarActivity {
      */
     @OnClick(R.id.btn_login)
     public void onBtnLoginClicked() {
-        loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
-        loginRequest.setPassword(editPassword.getText().toString().trim());
-
-        //phoneNumber=editIdentifier.getText().toString().trim();
-        password = editPassword.getText().toString().trim();
-
-
-        EMClient.getInstance().login("222222", "222222", new EMCallBack() {
-            @Override
-            public void onSuccess() {
-
-                //保证进入主页面后本地会话和群组都 load 完毕
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-
-
-                Log.i("login", "onSuccess: 登录成功");
-            }
-
-            @Override
-            public void onError(int code, String error) {
-
-                Log.i("login", "onError: 登录失败，" + error);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-        });
-
-
-
 
 
         if (isDataTrue()) {
+            loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
+            loginRequest.setPassword(editPassword.getText().toString().trim());
             processLogin();
         }
-
     }
 
     /**
@@ -119,7 +86,6 @@ public class LoginActivity extends NoBarActivity {
     public void onBtnRegisterClicked() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
-        finish();
     }
 
     /**
@@ -129,8 +95,6 @@ public class LoginActivity extends NoBarActivity {
     public void onTxtForgetPasswordClicked() {
         Intent intent = new Intent(LoginActivity.this, UpdatePasswordActivity.class);
         startActivity(intent);
-        finish();
-
     }
 
 
@@ -153,13 +117,13 @@ public class LoginActivity extends NoBarActivity {
                 //登录成功记录账号和密码
                 phoneNumber = editIdentifier.getText().toString().trim();
                 password = editPassword.getText().toString().trim();
-                ToastUtil.showToast(getString(R.string.toast_login_successful));
-
-
-                //跳转至MainActivity
+                Log.i(TAG, "onDataResponse: " + "常规登录成功");
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+                ToastUtil.showToast(getString(R.string.toast_login_successful));
+
+                //loginEM();
             }
 
             //请求失败时回调
@@ -177,6 +141,37 @@ public class LoginActivity extends NoBarActivity {
             }
         });
 
+    }
+
+
+    /**
+     * 登录环信接口
+     */
+    private void loginEM() {
+
+
+        EMClient.getInstance().login("111111", "111111", new EMCallBack() {
+            @Override
+            public void onSuccess() {
+
+                //保证进入主页面后本地会话和群组都 load 完毕
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+                //跳转至MainActivity
+                Log.i("login", "onSuccess: EM登录成功");
+            }
+
+            @Override
+            public void onError(int code, String error) {
+
+                Log.i("login", "onError: EM登录失败，" + error);
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
     }
 
     /**
@@ -214,5 +209,8 @@ public class LoginActivity extends NoBarActivity {
         }
         return flag;
     }
+
+
+
 
 }
