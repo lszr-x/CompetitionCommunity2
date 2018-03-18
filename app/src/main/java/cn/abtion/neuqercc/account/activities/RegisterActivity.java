@@ -133,7 +133,6 @@ public class RegisterActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
                 ToastUtil.showToast(getString(R.string.toast_register_successful));
-
                 LoginActivity.phoneNumber = registerRequest.getPhone();
                 LoginActivity.password = registerRequest.getPassword();
                 //跳转至MainActivity
@@ -283,8 +282,6 @@ public class RegisterActivity extends NoBarActivity {
     @OnClick(R.id.btn_return)
     public void onBtnReturnClicked() {
 
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intent);
         captchaTimer.cancel();
         finish();
     }

@@ -84,7 +84,6 @@ public class LoginActivity extends NoBarActivity {
     public void onBtnRegisterClicked() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
-        finish();
     }
 
     /**
@@ -94,7 +93,6 @@ public class LoginActivity extends NoBarActivity {
     public void onTxtForgetPasswordClicked() {
         Intent intent = new Intent(LoginActivity.this, UpdatePasswordActivity.class);
         startActivity(intent);
-        finish();
     }
 
 
@@ -118,7 +116,12 @@ public class LoginActivity extends NoBarActivity {
                 phoneNumber = editIdentifier.getText().toString().trim();
                 password = editPassword.getText().toString().trim();
                 Log.i(TAG, "onDataResponse: " + "常规登录成功");
-                loginEM();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                ToastUtil.showToast(getString(R.string.toast_login_successful));
+
+                //loginEM();
             }
 
             //请求失败时回调
@@ -145,7 +148,7 @@ public class LoginActivity extends NoBarActivity {
     private void loginEM() {
 
 
-        EMClient.getInstance().login("13011978602","13011978602", new EMCallBack() {
+        EMClient.getInstance().login("111111", "111111", new EMCallBack() {
             @Override
             public void onSuccess() {
 
@@ -153,11 +156,6 @@ public class LoginActivity extends NoBarActivity {
                 EMClient.getInstance().groupManager().loadAllGroups();
                 EMClient.getInstance().chatManager().loadAllConversations();
                 //跳转至MainActivity
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-
-                ToastUtil.showToast(getString(R.string.toast_login_successful));
                 Log.i("login", "onSuccess: EM登录成功");
             }
 
@@ -209,6 +207,4 @@ public class LoginActivity extends NoBarActivity {
         }
         return flag;
     }
-
-
 }

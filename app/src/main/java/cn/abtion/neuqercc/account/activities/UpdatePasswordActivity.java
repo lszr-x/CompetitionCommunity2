@@ -78,10 +78,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
     @OnClick(R.id.btn_get_verify_code)
     public void onBtnGetVerifyCodeClicked() {
 
-        smsRequest.setPhone(editPhone.getText().toString().trim());
-
         if (isPhoneTrue()) {
-
+            smsRequest.setPhone(editPhone.getText().toString().trim());
             captchaTimer.timerStart(true);
             getVerifyCode();
         }
@@ -101,9 +99,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-                verifyCode = response.body().getData().toString().trim();
-                ToastUtil.showToast(verifyCode);
-                //ToastUtil.showToast(getString(R.string.toast_send_successful));
+                verifyCode = response.body().getData().toString();
+                ToastUtil.showToast(getString(R.string.toast_send_successful));
 
             }
 
@@ -133,7 +130,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
         if (!CaptchaCountDownTimer.FLAG_FIRST_IN &&
                 CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL > System.currentTimeMillis()) {
 
-            setCountDownTimer(CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL - System.currentTimeMillis());
+            setCountDownTimer(CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL - System
+                    .currentTimeMillis());
             captchaTimer.timerStart(false);
 
         } else {
@@ -189,11 +187,10 @@ public class UpdatePasswordActivity extends NoBarActivity {
     @OnClick(R.id.btn_over)
     public void onBtnOverClicked() {
 
-        //updatePasswordRequest.setPhone(getIntent().getStringExtra("phoneNumber"));
-        updatePasswordRequest.setPhone(editPhone.getText().toString().trim());
-        updatePasswordRequest.setPassword(editPassword.getText().toString().trim());
-
         if (isDataTrue()) {
+
+            updatePasswordRequest.setPhone(editPhone.getText().toString());
+            updatePasswordRequest.setPassword(editPassword.getText().toString());
             updatePassword();
         }
     }
@@ -217,7 +214,6 @@ public class UpdatePasswordActivity extends NoBarActivity {
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
                 ToastUtil.showToast(getString(R.string.toast_update_successful));
-
                 Intent intent = new Intent(UpdatePasswordActivity.this, MainActivity.class);
                 startActivity(intent);
                 captchaTimer.cancel();
@@ -246,8 +242,6 @@ public class UpdatePasswordActivity extends NoBarActivity {
      */
     @OnClick(R.id.btn_return)
     public void onBtnReturnClicked() {
-        Intent intent = new Intent(UpdatePasswordActivity.this, LoginActivity.class);
-        startActivity(intent);
         captchaTimer.cancel();
         finish();
     }
@@ -273,14 +267,13 @@ public class UpdatePasswordActivity extends NoBarActivity {
      */
     private boolean isDataTrue() {
         boolean flag = true;
-//        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-//            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
-//            flag = false;
-//        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
-//            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
-//            flag = false;
-//        } else
-        if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
+            flag = false;
+        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
+            flag = false;
+        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, getString(R.string.error_password_min_limit));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {
