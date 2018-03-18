@@ -145,7 +145,7 @@ public class LoginActivity extends NoBarActivity {
     private void loginEM() {
 
 
-        EMClient.getInstance().login(phoneNumber, password, new EMCallBack() {
+        EMClient.getInstance().login("13011978602","13011978602", new EMCallBack() {
             @Override
             public void onSuccess() {
 
@@ -163,12 +163,6 @@ public class LoginActivity extends NoBarActivity {
 
             @Override
             public void onError(int code, String error) {
-
-                //跳转至MainActivity
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-
 
                 Log.i("login", "onError: EM登录失败，" + error);
             }
