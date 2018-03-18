@@ -12,10 +12,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.abtion.neuqercc.R;
 
 /**
  * super activity for toolbar activity.
+ *
  * @author abtion.
  * @since 17/9/22 17:47.
  * email caiheng@hrsoft.net
@@ -23,16 +25,21 @@ import cn.abtion.neuqercc.R;
 
 public abstract class ToolBarActivity extends BaseActivity {
 
-    /** activity 页面Toolbar */
+
+    /**
+     * activity 页面Toolbar
+     */
     private Toolbar toolbar;
     @BindView(R.id.txt_toolbar_title)
     protected TextView toolBarTitle;
-
+    @BindView(R.id.txt_toolbar_over)
+    protected TextView toolBarOver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getToolbarView());
+        ButterKnife.bind(this);
         init();
     }
 
@@ -59,6 +66,7 @@ public abstract class ToolBarActivity extends BaseActivity {
         toolbar = (Toolbar) root.findViewById(R.id.toolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        toolBarOver = (TextView) toolbar.findViewById(R.id.txt_toolbar_over);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -91,19 +99,32 @@ public abstract class ToolBarActivity extends BaseActivity {
      *
      * @param charSequence 页面标题
      */
-    protected void setActivityTitle(CharSequence charSequence) {
+    protected void setActivityTitle(@Nullable CharSequence charSequence) {
         if (toolbar != null) {
-            //toolbar.setTitle(charSequence);
-            //toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
             toolBarTitle.setText(charSequence);
             toolBarTitle.setTextColor(getResources().getColor(R.color.white));
         }
     }
+
+
+    protected void setTextOver(@Nullable CharSequence charSequence) {
+        if (toolbar != null) {
+            toolBarOver.setText(charSequence);
+            toolBarOver.setTextColor(getResources().getColor(R.color.white));
+        }
+    }
+
+
 
     /**
      * Toolbar返回按钮的监听事件
      */
     protected void onBackBtnOnclick() {
         this.finish();
+    }
+
+    protected void setOnOverTextListener(View.OnClickListener listener)  {
+        toolBarOver.setOnClickListener(listener);
     }
 }

@@ -39,6 +39,4 @@ public class APIResponse<T> extends BaseModel {
     }
 
 
-
-
 }

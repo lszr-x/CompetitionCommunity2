@@ -5,8 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import cn.abtion.neuqercc.common.Config;
-import cn.abtion.neuqercc.home.fragments.DetailsFragment;
-import cn.abtion.neuqercc.home.fragments.RaidersFragment;
 import cn.abtion.neuqercc.team.fragments.AllTeamFragment;
 import cn.abtion.neuqercc.team.fragments.RecommendTeamFragment;
 
@@ -57,6 +55,5 @@ public class TeamViewPagerAdapter extends FragmentPagerAdapter {
     public  CharSequence getPageTitle(int position){
         return titles[position];
     }
-
 
 }

@@ -1,4 +1,4 @@
-package cn.abtion.neuqercc.account.models;
+package cn.abtion.neuqercc.widget;
 
 import android.os.CountDownTimer;
 

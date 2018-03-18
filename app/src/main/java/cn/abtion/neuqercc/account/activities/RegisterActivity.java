@@ -7,7 +7,6 @@ import android.widget.Button;
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
-import cn.abtion.neuqercc.account.models.CaptchaCountDownTimer;
 import cn.abtion.neuqercc.account.models.RegisterRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
@@ -18,6 +17,7 @@ import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
+import cn.abtion.neuqercc.widget.CaptchaCountDownTimer;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -80,10 +80,12 @@ public class RegisterActivity extends NoBarActivity {
 
         smsRequest.setPhone(editPhone.getText().toString().trim());
 
-        captchaTimer.timerStart(true);
+
 
         if (isPhoneTrue()) {
+
             getVerifyCode();
+            captchaTimer.timerStart(true);
         }
     }
 
@@ -94,7 +96,7 @@ public class RegisterActivity extends NoBarActivity {
         if (editPhone.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editPhone, getString(R.string.error_phone_number_empty_illegal));
             flag = false;
-        } else if (RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
+        } else if (!RegexUtil.checkMobile(editPhone.getText().toString().trim())) {
             showError(editPhone,getString(R.string.error_phone_number_illegal));
             flag = false;
         }
@@ -201,13 +203,14 @@ public class RegisterActivity extends NoBarActivity {
     private boolean isDataTrue() {
         boolean flag = true;
 
-        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
-            flag = false;
-        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
-            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
-            flag = false;
-        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+//        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
+//            flag = false;
+//        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
+//            flag = false;
+//        } else
+         if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, getString(R.string.error_password_min_limit));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {

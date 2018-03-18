@@ -3,18 +3,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyler_recommend_team"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="test"
-        android:textSize="30sp"/>
+        android:layout_height="wrap_content">
 
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recyler_recommend_team"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-        <!---->
-        <!---->
-    <!--</android.support.v7.widget.RecyclerView>-->
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

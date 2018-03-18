@@ -1,18 +1,28 @@
 package cn.abtion.neuqercc.team.fragments;
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.lang.reflect.Field;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.team.activities.EstablishTeamActivity;
+import cn.abtion.neuqercc.team.activities.SearchTeamActivity;
 import cn.abtion.neuqercc.team.adapters.TeamViewPagerAdapter;
 
 /**
@@ -26,7 +36,8 @@ public class TeamFragment extends BaseFragment {
     TabLayout tableHeaderNavigation;
     @BindView(R.id.viewPager_team)
     ViewPager viewPagerTeam;
-
+    @BindView(R.id.btn_establish_team)
+    Button btnEstablishTeam;
 
     private TeamViewPagerAdapter teamViewPagerAdapter;
 
@@ -92,4 +103,20 @@ public class TeamFragment extends BaseFragment {
     }
 
 
+    @OnClick(R.id.btn_establish_team)
+    public void OnBtnEstablishTeamClicked() {
+        Intent intent = new Intent(getContext(), EstablishTeamActivity.class);
+        startActivity(intent);
+    }
+
+
+    /**
+     * 搜索队伍点击事件
+     */
+    @OnClick(R.id.img_search_team)
+    public void onImgSearchTeamViewClicked() {
+        Intent intent = new Intent(getContext(), SearchTeamActivity.class);
+        startActivity(intent);
+
+    }
 }

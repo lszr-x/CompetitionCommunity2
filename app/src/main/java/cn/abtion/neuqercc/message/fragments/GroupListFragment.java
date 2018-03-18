@@ -1,18 +1,19 @@
-package cn.abtion.neuqercc.message;
+package cn.abtion.neuqercc.message.fragments;
+
+import android.support.v4.app.Fragment;
 
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 
 /**
- * @author abtion.
- * @since 17/9/24 上午2:15.
- * email caiheng@hrsoft.net.
+ * @author fhyPayaso
+ * @since 2018/1/7 on 上午12:52
+ * fhyPayaso@qq.com
  */
-
-public class MessageFragment extends BaseFragment {
+public class GroupListFragment extends BaseFragment {
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_message;
+        return R.layout.fragment_group;
     }
 
     @Override

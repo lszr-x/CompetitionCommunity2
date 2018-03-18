@@ -1,15 +1,26 @@
 package cn.abtion.neuqercc;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMOptions;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.utils.CacheUtil;
+
+import static cn.abtion.neuqercc.BuildConfig.DEBUG;
 
 /**
  * @author abtion.
@@ -21,12 +32,24 @@ public class NEUQerCCApplication extends Application {
     private static NEUQerCCApplication instance;//实例对象
     private static List<Activity> activityList = new ArrayList<>();
     private static CacheUtil cacheUtil;
+    public static Context appContext;
+
+
+    private RefWatcher refWatcher;
+    public static RefWatcher getRefWatcher(Context context) {
+        NEUQerCCApplication application = (NEUQerCCApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+        appContext = this;
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
+        LeakCanary.install(this);
+        initEM();
     }
 
     /**
@@ -102,8 +125,9 @@ public class NEUQerCCApplication extends Application {
      */
     public void removeAllActivity() {
         for (Activity activity : activityList) {
-            if (activity != null && !activity.isFinishing())
+            if (activity != null && !activity.isFinishing()) {
                 activity.finish();
+            }
         }
     }
 
@@ -124,5 +148,48 @@ public class NEUQerCCApplication extends Application {
         Intent intent = new Intent(this,LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+
+
+    /**
+     * 初始化环信
+     */
+    private void initEM() {
+        int pid = android.os.Process.myPid();
+        String processName = getProcessAppName(pid);
+        if (processName == null || !processName.equalsIgnoreCase(appContext.getPackageName())) {
+            // 则此application::onCreate 是被service 调用的，直接返回
+            return;
+        }
+        EMOptions options = new EMOptions();
+        options.setAutoLogin(false);
+        EMClient.getInstance().init(appContext, options);
+        EMClient.getInstance().setDebugMode(DEBUG);
+    }
+
+    /**
+     * 获取processAppName
+     *
+     * @param pID pid
+     * @return name
+     */
+    private String getProcessAppName(int pID) {
+        String processName = null;
+        ActivityManager activityManager = (ActivityManager) appContext.getSystemService(ACTIVITY_SERVICE);
+        List list = activityManager.getRunningAppProcesses();
+        Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) iterator.next();
+            try {
+                if (info.pid == pID) {
+                    processName = info.processName;
+                    return processName;
+                }
+            } catch (Exception e) {
+                Log.d("Process", "Error>> :"+ e.toString());
+            }
+        }
+        return processName;
     }
 }

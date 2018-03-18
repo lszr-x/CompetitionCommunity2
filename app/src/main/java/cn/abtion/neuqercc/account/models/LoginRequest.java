@@ -10,6 +10,7 @@ import cn.abtion.neuqercc.base.models.BaseModel;
 
 
 public class LoginRequest extends BaseModel {
+
     private String phone;
     private String password;
 

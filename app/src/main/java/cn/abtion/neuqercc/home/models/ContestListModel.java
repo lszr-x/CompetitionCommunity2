@@ -7,12 +7,23 @@ package cn.abtion.neuqercc.home.models;
  */
 
 public class ContestListModel {
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String title;
     private String summary;
     private String contestTime;
     private String signTime;
 
-    public ContestListModel(String title, String summary, String contestTime, String signTime) {
+    public ContestListModel(int id, String title, String summary, String contestTime, String signTime) {
+        this.id = id;
         this.title = title;
         this.summary = summary;
         this.contestTime = contestTime;

@@ -1,12 +1,11 @@
 package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
-import android.icu.util.Calendar;
-import android.os.Build;
-import android.provider.Settings;
 import android.support.design.widget.TextInputEditText;
-import android.transition.Explode;
-import android.transition.Slide;
+import android.util.Log;
+
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -31,6 +30,9 @@ import retrofit2.Response;
 
 public class LoginActivity extends NoBarActivity {
 
+
+    public static String password;
+    public static String phoneNumber = "15076035390";
 
     @BindView(R.id.edit_identifier)
     TextInputEditText editIdentifier;
@@ -68,13 +70,46 @@ public class LoginActivity extends NoBarActivity {
         loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
         loginRequest.setPassword(editPassword.getText().toString().trim());
 
+        //phoneNumber=editIdentifier.getText().toString().trim();
+        password = editPassword.getText().toString().trim();
+
+
+        EMClient.getInstance().login("222222", "222222", new EMCallBack() {
+            @Override
+            public void onSuccess() {
+
+                //保证进入主页面后本地会话和群组都 load 完毕
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+
+
+                Log.i("login", "onSuccess: 登录成功");
+            }
+
+            @Override
+            public void onError(int code, String error) {
+
+                Log.i("login", "onError: 登录失败，" + error);
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+
+
+
+
+
         if (isDataTrue()) {
             processLogin();
         }
 
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     /**
@@ -113,7 +148,13 @@ public class LoginActivity extends NoBarActivity {
             //请求成功时回调
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+
+                //登录成功记录账号和密码
+                phoneNumber = editIdentifier.getText().toString().trim();
+                password = editPassword.getText().toString().trim();
                 ToastUtil.showToast(getString(R.string.toast_login_successful));
+
 
                 //跳转至MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -161,11 +202,11 @@ public class LoginActivity extends NoBarActivity {
         if (editIdentifier.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             showError(editIdentifier, getString(R.string.error_account_empty_illegal));
             flag = false;
-        } else if (RegexUtil.checkMobile(editIdentifier.getText().toString().trim())) {
+        } else if (!RegexUtil.checkMobile(editIdentifier.getText().toString().trim())) {
             showError(editIdentifier, getString(R.string.error_phone_number_illegal));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
-            showError(editPassword,getString(R.string.error_password_min_limit) );
+            showError(editPassword, getString(R.string.error_password_min_limit));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {
             showError(editPassword, getString(R.string.error_password_max_limit));

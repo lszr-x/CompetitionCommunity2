@@ -14,10 +14,10 @@
     <!--背景颜色-->
     <color name="bg_gray">#f0f0f3</color>
     <color name="bg_black">#000000</color>
+    <color name="frame_gray">#aaaaaa</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="bg_frame_gray">#f2f2f2</color>
     <color name="bg_btn_red">#df5748</color>
-
 
 
 
@@ -36,5 +36,6 @@
     <color name="trans_black">#32000000</color>
     <color name="search_background">#eeeeee</color>
     <color name="search_stroke">#707070</color>
+    <color name="text_gray">#b2b2b2</color>
 
 </resources>

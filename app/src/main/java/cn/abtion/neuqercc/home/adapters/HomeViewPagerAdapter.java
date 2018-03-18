@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.fragments.HomeFragment;
-import cn.abtion.neuqercc.message.MessageFragment;
+import cn.abtion.neuqercc.message.fragments.MessageFragment;
 import cn.abtion.neuqercc.mine.MineFragment;
 import cn.abtion.neuqercc.team.fragments.TeamFragment;
 
