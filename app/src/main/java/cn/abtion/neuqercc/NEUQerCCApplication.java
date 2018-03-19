@@ -5,7 +5,9 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
@@ -51,6 +53,13 @@ public class NEUQerCCApplication extends Application {
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
         LeakCanary.install(this);
         ChatHelper.initEM(appContext);
+
+
+        //解决安卓7.0相机调用崩溃问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
     }
 
     /**

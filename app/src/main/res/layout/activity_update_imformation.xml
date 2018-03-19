@@ -204,14 +204,11 @@
                 android:layout_alignTop="@id/mine_update_profession"
                 android:layout_marginRight="16dp"
                 android:background="@null"
+                android:fitsSystemWindows="true"
                 android:gravity="right"
                 android:hint="@string/hint_input_profession"
                 android:singleLine="true"
-                android:textSize="16sp"
-                android:fitsSystemWindows="true"
-
-
-                />
+                android:textSize="16sp"/>
 
 
             <TextView

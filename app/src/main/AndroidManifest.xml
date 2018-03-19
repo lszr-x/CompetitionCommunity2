@@ -43,6 +43,7 @@
             android:name="com.hyphenate.chat.EMJobService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
+
         <!-- 声明SDK所需的receiver -->
         <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
             <intent-filter>
@@ -59,11 +60,7 @@
 
 
         <activity android:name=".account.activities.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".account.activities.RegisterActivity"/>
         <activity android:name=".account.activities.UpdatePasswordActivity"/>
@@ -87,20 +84,27 @@
         <activity android:name=".team.activities.EstablishTeamActivity"/>
         <activity android:name=".team.activities.EstablishTeamFinishActivity"/>
         <activity android:name=".mine.activities.MineTeamIfromationActivity"/>
-        <activity android:name=".mine.activities.UpdateTeamInformationActivity"
-            android:windowSoftInputMode="adjustPan"
+        <activity
+            android:name=".mine.activities.UpdateTeamInformationActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
-            />
         <activity android:name=".mine.activities.HonorInformationActivity"/>
         <activity android:name=".team.activities.SearchTeamActivity"/>
         <activity
             android:name=".team.activities.SearchTeamResultActivity"
             android:launchMode="singleTask"/>
+
         <activity android:name=".message.activities.FriendInfoActivity"/>
         <activity android:name=".message.activities.ChatWindowActivity"/>
         <activity android:name=".message.activities.SearchUserActivity"/>
         <activity android:name=".message.activities.SearchUseResActivity"/>
 
-    </application>
+        <activity android:name=".main.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
 </manifest>

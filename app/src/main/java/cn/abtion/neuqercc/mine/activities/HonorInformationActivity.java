@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.mine.models.ShowHonorResponse;
 import cn.abtion.neuqercc.utils.ToastUtil;
 
@@ -64,7 +65,8 @@ public class HonorInformationActivity extends ToolBarActivity {
     public void loadIntent() {
 
         Intent intent = getIntent();
-        ShowHonorResponse honorResponse = new Gson().fromJson(intent.getStringExtra(Config.INTENT_EXTRA_HONOR), ShowHonorResponse.class);
+        ShowHonorResponse honorResponse = new Gson().fromJson(intent.getStringExtra(Config.INTENT_EXTRA_HONOR),
+                ShowHonorResponse.class);
         txtEventName.setText(honorResponse.getGloryName());
         txtEventTime.setText(honorResponse.getGloryTime());
         picUrl = honorResponse.getGloryPicUrl();
@@ -75,21 +77,6 @@ public class HonorInformationActivity extends ToolBarActivity {
     @OnClick(R.id.img_honor)
     public void onImgHonorClicked() {
 
-        showFullImg();
+        MainActivity.showFullImgView(this, picUrl);
     }
-
-
-    public void showFullImg() {
-
-        View view = View.inflate(this, R.layout.item_dialog_full_img, null);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        ImageView imageView = (ImageView) view.findViewById(R.id.img_full_dialog);
-        Glide.with(this).load(picUrl).into(imageView);
-
-        builder.show();
-
-    }
-
-
 }

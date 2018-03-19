@@ -54,6 +54,7 @@ import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.DialogUtil;
+import cn.abtion.neuqercc.utils.FileUtil;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.HonorGridView;
@@ -114,16 +115,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
     private boolean flagUpLoad = false;
-
-
-    /**
-     * 动态申请权限
-     */
-    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission
-            .WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-    private static final int REQUEST_EXTERNAL_STORAGE = 100;
-    public final int TAKE_PHOTO_FLAG = 1;
-    public final int SET_IMG_FLAG = 100;
+    private String photoPath;
 
 
     @BindView(R.id.img_mine_name_eye)
@@ -161,7 +153,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
     private List<ShowHonorResponse> showHonorResponseList = new ArrayList<ShowHonorResponse>();
     private String[] studentGradeList;
     private String[] goodAtList;
-    private String filePath;
 
 
     @Override
@@ -172,7 +163,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
     @Override
     protected void initVariable() {
 
-        verifyStoragePermissions(UpdateInformationActivity.this);
+
+        //动态申请权限
+        FileUtil.verifyStoragePermissions(UpdateInformationActivity.this);
     }
 
     @Override
@@ -257,7 +250,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
         if (flagUpLoad) {
-            File file = new File(filePath);
+
+            File file = new File(photoPath);
             RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("pic", file.getName(), requestBody);
 
@@ -401,7 +395,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
             checkBoxBoy.setChecked(false);
             checkBoxGirl.setChecked(true);
         }
-
     }
 
 
@@ -592,12 +585,13 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
+
+                //打开照相机，得到存取照片之后的路径
+                String filePath = FileUtil.createNewFile(UpdateInformationActivity.this, "NEUQerCC");
+                photoPath = FileUtil.openCamera(UpdateInformationActivity.this, filePath);
                 if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
-
-                Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takeIntent, TAKE_PHOTO_FLAG);
             }
         });
 
@@ -606,15 +600,10 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
+                FileUtil.openAlbum(UpdateInformationActivity.this);
                 if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
-
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                startActivityForResult(intent, SET_IMG_FLAG);
-
             }
         });
 
@@ -810,21 +799,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
     /**
-     * 动态申请权限
-     *
-     * @param activity
-     */
-    private void verifyStoragePermissions(Activity activity) {
-        int permissionWrite = ActivityCompat.checkSelfPermission(activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permissionWrite != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, PERMISSION_EXTERNAL_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE);
-        }
-    }
-
-
-    /**
      * 返回选择的图片
      *
      * @param requestCode
@@ -837,49 +811,25 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SET_IMG_FLAG && resultCode == RESULT_OK && null != data) {
 
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            filePath = picturePath;
-            cursor.close();
-
-            imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            flagUpLoad = true;
-
-        } else if (requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
+        if (resultCode == RESULT_OK) {
 
 
-            Bundle bundle = data.getExtras();
-            Bitmap bitmap = (Bitmap) bundle.get("data");
-            imgUpdateAvatar.setImageBitmap(bitmap);
-
-            flagUpLoad = true;
-
-
-            String path = Environment.getExternalStorageDirectory().toString() + "/NUEQerCC";
-            File path1 = new File(path);
-            if (!path1.exists()) {
-                path1.mkdirs();
+            switch (requestCode) {
+                //相机回调
+                case FileUtil.CAMERA_REQUEST:
+                    imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(photoPath));
+                    flagUpLoad = true;
+                    break;
+                //相册回调
+                case FileUtil.ALBUM_REQUEST:
+                    photoPath = FileUtil.getSelectedPicturePath(data, UpdateInformationActivity.this);
+                    imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(photoPath));
+                    flagUpLoad = true;
+                    break;
+                default:
+                    break;
             }
-
-            File file = new File(path1, System.currentTimeMillis() + ".jpg");
-
-            try {
-                BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                bos.flush();
-                bos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         }
     }
 }
