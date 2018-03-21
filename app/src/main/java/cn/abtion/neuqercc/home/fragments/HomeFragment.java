@@ -79,8 +79,7 @@ public class HomeFragment extends BaseFragment {
     private LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
 
-    @BindView(R.id.spinner_home)
-    Spinner spinnerHome;
+
     @BindView(R.id.search_home)
     SearchView searchHome;
     @BindView(R.id.rec_home)
@@ -269,16 +268,22 @@ public class HomeFragment extends BaseFragment {
         vfContest.setOutAnimation(outToLeftAnimation());
         vfContest.setFlipInterval(Config.FLIPPER_TIME_INTERVAL);
         vfContest.startFlipping();
+
         vfContest.setOnTouchListener(new View.OnTouchListener() {
+
+
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
+
+
                 //解决viewFlipper和view的冲突
                 vfContest.getParent().requestDisallowInterceptTouchEvent(true);
                 //手势滑动
                 int x;
                 long downTime = 0;
                 switch (event.getAction()) {
-
                     case MotionEvent.ACTION_DOWN:
                         //记录点击时的坐标
                         downX = (int) event.getRawX();
@@ -306,14 +311,17 @@ public class HomeFragment extends BaseFragment {
 
                         } else {
 
-                            Intent intent = new Intent(getContext(), CompetitionActivity.class);
-                            startActivity(intent);
-
-                            vfContest.showNext();
-                            vfContest.startFlipping();
+//                            Intent intent = new Intent(getContext(), CompetitionActivity.class);
+//                            startActivity(intent);
+//
+//                            vfContest.showNext();
+//                            vfContest.startFlipping();
                         }
                         break;
+
+
                     default:
+
                         break;
                 }
 

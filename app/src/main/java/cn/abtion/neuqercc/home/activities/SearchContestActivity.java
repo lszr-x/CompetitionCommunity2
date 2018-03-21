@@ -81,15 +81,25 @@ public class SearchContestActivity extends NoBarActivity {
     }
 
 
+    @OnClick({R.id.img_return, R.id.img_search_contest})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.img_return:
+                finish();
+                break;
+            case R.id.img_search_contest:
 
-    @OnClick(R.id.img_search_contest)
-    public void onViewClicked() {
-        if (editSearchContest.getText().toString().equals(Config.EMPTY_FIELD)) {
-            ToastUtil.showToast(getString(R.string.search_contest_null));
-        } else {
-            Intent intent = new Intent(SearchContestActivity.this, SearchContestResultActivity.class);
-            intent.putExtra("searchContestName", editSearchContest.getText().toString());
-            startActivity(intent);
+                if (editSearchContest.getText().toString().equals(Config.EMPTY_FIELD)) {
+                    ToastUtil.showToast(getString(R.string.search_contest_null));
+                } else {
+                    Intent intent = new Intent(SearchContestActivity.this, SearchContestResultActivity.class);
+                    intent.putExtra("searchContestName", editSearchContest.getText().toString());
+                    startActivity(intent);
+                }
+                break;
+
+            default:
+                break;
         }
     }
 }
