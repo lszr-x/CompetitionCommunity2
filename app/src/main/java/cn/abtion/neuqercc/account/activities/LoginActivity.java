@@ -11,14 +11,18 @@ import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.models.LoginRequest;
+import cn.abtion.neuqercc.account.models.TokenResponse;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.CacheUtil;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
@@ -34,7 +38,7 @@ public class LoginActivity extends NoBarActivity {
 
 
     public static String password;
-    public static String phoneNumber ;
+    public static String phoneNumber;
     public final static String TAG = "LoginActivity";
 
     @BindView(R.id.edit_identifier)
@@ -107,28 +111,42 @@ public class LoginActivity extends NoBarActivity {
         progressDialog.show();
 
         //网络请求
-        RestClient.getService().login(loginRequest).enqueue(new DataCallback<APIResponse>() {
+        RestClient.getService().login(loginRequest).enqueue(new DataCallback<APIResponse<TokenResponse>>() {
 
             //请求成功时回调
             @Override
-            public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+            public void onDataResponse(Call<APIResponse<TokenResponse>> call, Response<APIResponse<TokenResponse>>
+                    response) {
 
 
-                //登录成功记录账号和密码
+                //登录成功信息保存
                 phoneNumber = editIdentifier.getText().toString().trim();
                 password = editPassword.getText().toString().trim();
-                Log.i(TAG, "onDataResponse: " + "常规登录成功");
+                String token = response.body().getData().getToken();
+
+                CacheUtil cacheUtil = NEUQerCCApplication.getInstance().getCacheUtil();
+                if (cacheUtil != null) {
+                    cacheUtil.putString(CacheKey.TOKEN, token);
+                    cacheUtil.putString(CacheKey.PHONE_NUMBER, phoneNumber);
+                    cacheUtil.putString(CacheKey.PASSWORD, password);
+                }
+
+
+                //成功提示
+                Log.i(TAG, "onDataResponse: " + "常规登录成功" + token);
+                ToastUtil.showToast(getString(R.string.toast_login_successful));
+
+                //页面跳转
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-                ToastUtil.showToast(getString(R.string.toast_login_successful));
 
-                //loginEM();
+                loginEM();
             }
 
             //请求失败时回调
             @Override
-            public void onDataFailure(Call<APIResponse> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<TokenResponse>> call, Throwable t) {
 
             }
 
@@ -150,7 +168,7 @@ public class LoginActivity extends NoBarActivity {
     private void loginEM() {
 
 
-        EMClient.getInstance().login("111111", "111111", new EMCallBack() {
+        EMClient.getInstance().login(phoneNumber, password, new EMCallBack() {
             @Override
             public void onSuccess() {
 
@@ -209,8 +227,6 @@ public class LoginActivity extends NoBarActivity {
         }
         return flag;
     }
-
-
 
 
 }

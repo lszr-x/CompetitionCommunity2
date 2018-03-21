@@ -4,15 +4,15 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
-import cn.abtion.neuqercc.message.activities.FriendInfoActivity;
 import cn.abtion.neuqercc.message.models.SearchUserModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -25,8 +25,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SearchUseRecAdapter extends BaseRecyclerViewAdapter<SearchUserModel> {
 
 
+    private Context mContext;
+
+
     public SearchUseRecAdapter(Context context, List<SearchUserModel> searchUserModels) {
         super(context, searchUserModels);
+        mContext = context;
     }
 
     @Override
@@ -51,7 +55,11 @@ public class SearchUseRecAdapter extends BaseRecyclerViewAdapter<SearchUserModel
         @Override
         protected void onBind(SearchUserModel searchUserModel) {
 
-            txtUserName.setText(searchUserModel.getUserName() == null ? "N/A" : searchUserModel.getUserName());
+
+            if (searchUserModel.getPic() != null) {
+                Glide.with(mContext).load(searchUserModel.getPic()).into(imgUserAvatar);
+            }
+            txtUserName.setText(searchUserModel.getUsername() == null ? "N/A" : searchUserModel.getUsername());
         }
 
     }

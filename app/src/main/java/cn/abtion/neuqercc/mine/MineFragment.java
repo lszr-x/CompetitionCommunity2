@@ -238,7 +238,9 @@ public class MineFragment extends BaseFragment {
         }
 
         imgAvatarUrl = informationResponse.getPicture();
-        Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
+        if (imgAvatarUrl != null) {
+            Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
+        }
     }
 
 

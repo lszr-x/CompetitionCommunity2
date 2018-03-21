@@ -68,7 +68,7 @@ public class SearchUseResActivity extends ToolBarActivity {
         mAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<SearchUserModel>() {
             @Override
             public void onItemClicked(SearchUserModel searchUserModel, BaseRecyclerViewAdapter.ViewHolder holder) {
-                FriendInfoActivity.startActivity(SearchUseResActivity.this, searchUserModel.getUserName());
+                FriendInfoActivity.startActivity(SearchUseResActivity.this, searchUserModel.getPhone());
             }
         });
     }
@@ -80,23 +80,19 @@ public class SearchUseResActivity extends ToolBarActivity {
     private void loadUserList() {
 
         String content = getIntent().getStringExtra("searchUserName");
-        RestClient.getService().searchUser(content).enqueue(new DataCallback<APIResponse<List<String>>>() {
+        RestClient.getService().searchUser(content).enqueue(new DataCallback<APIResponse<List<SearchUserModel>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<List<String>>> call, Response<APIResponse<List<String>>>
+            public void onDataResponse(Call<APIResponse<List<SearchUserModel>>> call, Response<APIResponse<List<SearchUserModel>>>
                     response) {
 
-                List<String> responseList = response.body().getData();
-
+                List<SearchUserModel> responseList = response.body().getData();
                 mUserModelList.clear();
-                for (int i = 0; i < responseList.size(); i++) {
-                    mUserModelList.add(new SearchUserModel("", responseList.get(i)));
-                }
-
+                mUserModelList.addAll(responseList);
                 initRec();
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<List<String>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<List<SearchUserModel>>> call, Throwable t) {
 
             }
 

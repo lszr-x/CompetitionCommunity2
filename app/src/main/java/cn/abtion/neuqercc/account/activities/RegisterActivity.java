@@ -2,19 +2,25 @@ package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
+import android.util.Log;
 import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.models.LoginRequest;
 import cn.abtion.neuqercc.account.models.RegisterRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
+import cn.abtion.neuqercc.account.models.TokenResponse;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.CacheUtil;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.CaptchaCountDownTimer;
@@ -29,6 +35,7 @@ import retrofit2.Response;
 
 public class RegisterActivity extends NoBarActivity {
 
+    private static final String TAG = "RegisterActivity";
     @BindView(R.id.edit_phone)
     TextInputEditText editPhone;
     @BindView(R.id.edit_captcha)
@@ -132,14 +139,11 @@ public class RegisterActivity extends NoBarActivity {
             //请求成功时回调
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
-                ToastUtil.showToast(getString(R.string.toast_register_successful));
+
                 LoginActivity.phoneNumber = registerRequest.getPhone();
                 LoginActivity.password = registerRequest.getPassword();
-                //跳转至MainActivity
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent);
-                captchaTimer.cancel();
-                finish();
+                //注册成功直接调用登录接口
+                login();
             }
 
             //请求失败时回调
@@ -151,11 +155,56 @@ public class RegisterActivity extends NoBarActivity {
             //无论成功或者失败时都回调，用于dismissDialog或隐藏其他控件
             @Override
             public void dismissDialog() {
-                if (progressDialog.isShowing()) {
-                    disMissProgressDialog();
-                }
+
             }
         });
+    }
+
+
+    /**
+     * 注册成功后直接调用登录接口
+     */
+    private void login() {
+
+
+        RestClient
+                .getService()
+                .login(new LoginRequest(registerRequest.getPhone(), registerRequest.getPassword()))
+                .enqueue(new DataCallback<APIResponse<TokenResponse>>() {
+                    @Override
+                    public void onDataResponse(Call<APIResponse<TokenResponse>> call, Response<APIResponse
+                            <TokenResponse>> response) {
+
+
+
+                        //缓存token和其他用户信息
+                        CacheUtil cacheUtil = NEUQerCCApplication.getInstance().getCacheUtil();
+                        if (cacheUtil != null) {
+                            cacheUtil.putString(CacheKey.TOKEN, response.body().getData().getToken());
+                            cacheUtil.putString(CacheKey.PHONE_NUMBER, registerRequest.getPhone());
+                            cacheUtil.putString(CacheKey.PASSWORD, registerRequest.getPassword());
+                        }
+
+
+                        ToastUtil.showToast(getString(R.string.toast_register_successful));
+                        Log.i(TAG, "onDataResponse: 注册+登录成功");
+                        captchaTimer.cancel();
+                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void onDataFailure(Call<APIResponse<TokenResponse>> call, Throwable t) {
+
+                    }
+
+                    @Override
+                    public void dismissDialog() {
+                        if (progressDialog.isShowing()) {
+                            disMissProgressDialog();
+                        }
+                    }
+                });
     }
 
 
@@ -202,22 +251,22 @@ public class RegisterActivity extends NoBarActivity {
     private boolean isDataTrue() {
         boolean flag = true;
 
-        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
-            flag = false;
-        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
-            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
-            flag = false;
-        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
-            showError(editPassword, getString(R.string.error_password_min_limit));
-            flag = false;
-        } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {
-            showError(editPassword, getString(R.string.error_password_max_limit));
-            flag = false;
-        } else if (!editRepeatPassword.getText().toString().trim().equals(editPassword.getText().toString().trim())) {
-            showError(editRepeatPassword, getString(R.string.error_passwords_inconsistent));
-            flag = false;
-        }
+//        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
+//            flag = false;
+//        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+//            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
+//            flag = false;
+//        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+//            showError(editPassword, getString(R.string.error_password_min_limit));
+//            flag = false;
+//        } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {
+//            showError(editPassword, getString(R.string.error_password_max_limit));
+//            flag = false;
+//        } else if (!editRepeatPassword.getText().toString().trim().equals(editPassword.getText().toString().trim())) {
+//            showError(editRepeatPassword, getString(R.string.error_passwords_inconsistent));
+//            flag = false;
+//        }
         return flag;
     }
 

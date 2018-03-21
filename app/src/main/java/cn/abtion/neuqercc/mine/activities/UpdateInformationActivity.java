@@ -1,19 +1,12 @@
 package cn.abtion.neuqercc.mine.activities;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -30,20 +23,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
-import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.mine.adapters.GridHonorAdapter;
 import cn.abtion.neuqercc.mine.models.GoodAtRequest;
 import cn.abtion.neuqercc.mine.models.PersonInformationResponse;
@@ -73,6 +63,8 @@ import retrofit2.Response;
 
 public class UpdateInformationActivity extends ToolBarActivity {
 
+
+    private static final String TAG = "UpdateInformation";
 
     /**
      * 数据信息错误类型标志
@@ -256,7 +248,8 @@ public class UpdateInformationActivity extends ToolBarActivity {
             MultipartBody.Part part = MultipartBody.Part.createFormData("pic", file.getName(), requestBody);
 
 
-            RestClient.getService().uploadPersonInformation(updatePersonInformationRequest.createCommitParams(), part)
+            RestClient.getService().uploadPersonInformation(updatePersonInformationRequest.createCommitParams(),
+                    part)
                     .enqueue(new DataCallback<APIResponse>() {
 
                         @Override
@@ -276,6 +269,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
                         }
                     });
+
 
         } else {
 
@@ -300,8 +294,6 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
                         }
                     });
-
-
         }
     }
 
@@ -386,7 +378,11 @@ public class UpdateInformationActivity extends ToolBarActivity {
         currentGrade = String.valueOf(informationResponse.getGrade());
         txtUpdateGrade.setText(currentGrade);
 
-        Glide.with(this).load(informationResponse.getPicture()).into(imgUpdateAvatar);
+        if (informationResponse.getPicture() != null) {
+            Glide.with(this).load(informationResponse.getPicture()).into(imgUpdateAvatar);
+        }
+
+
 
         if (informationResponse.getGender() == 0) {
             checkBoxBoy.setChecked(true);
@@ -601,6 +597,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
             public void onClick(View v) {
 
                 FileUtil.openAlbum(UpdateInformationActivity.this);
+
                 if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
@@ -818,18 +815,34 @@ public class UpdateInformationActivity extends ToolBarActivity {
             switch (requestCode) {
                 //相机回调
                 case FileUtil.CAMERA_REQUEST:
+
+                    Log.i("", "onActivityResult: " + photoPath);
+
                     imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(photoPath));
+
+
                     flagUpLoad = true;
                     break;
                 //相册回调
                 case FileUtil.ALBUM_REQUEST:
+
                     photoPath = FileUtil.getSelectedPicturePath(data, UpdateInformationActivity.this);
+                    Log.i("", "onActivityResult: " + photoPath);
+
                     imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(photoPath));
                     flagUpLoad = true;
+
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

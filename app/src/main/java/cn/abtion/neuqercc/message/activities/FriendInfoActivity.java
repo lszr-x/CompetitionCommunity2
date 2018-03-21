@@ -182,7 +182,9 @@ public class FriendInfoActivity extends NoBarActivity {
         }
 
         imgAvatarUrl = informationResponse.getPicture();
-        Glide.with(this).load(imgAvatarUrl).into(friendAvatar);
+        if (imgAvatarUrl != null) {
+            Glide.with(this).load(imgAvatarUrl).into(friendAvatar);
+        }
     }
 
 
@@ -191,7 +193,7 @@ public class FriendInfoActivity extends NoBarActivity {
      */
     public void initHonorWall() {
 
-        RestClient.getService().showHonorRequest(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<ShowHonorResponse>>>() {
+        RestClient.getService().showHonorRequest(mFriendPhoneNumber).enqueue(new DataCallback<APIResponse<List<ShowHonorResponse>>>() {
 
             //请求成功时回调
             @Override

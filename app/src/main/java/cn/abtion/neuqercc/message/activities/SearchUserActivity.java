@@ -72,6 +72,7 @@ public class SearchUserActivity extends NoBarActivity {
                         Intent intent = new Intent(SearchUserActivity.this, SearchUseResActivity.class);
                         intent.putExtra("searchUserName", searchContent);
                         startActivity(intent);
+                        finish();
                     }
                 }
                 return false;
@@ -100,6 +101,7 @@ public class SearchUserActivity extends NoBarActivity {
             Intent intent = new Intent(SearchUserActivity.this, SearchUseResActivity.class);
             intent.putExtra("searchUserName", searchContent);
             startActivity(intent);
+            finish();
         }
     }
 }

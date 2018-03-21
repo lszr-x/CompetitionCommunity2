@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.List;
 import java.util.Map;
 
+import cn.abtion.neuqercc.account.models.CheckTokenResponse;
 import cn.abtion.neuqercc.account.models.LoginRequest;
+import cn.abtion.neuqercc.account.models.TokenResponse;
 import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.account.models.RegisterRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
@@ -17,6 +19,8 @@ import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
 import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
 import cn.abtion.neuqercc.home.models.SearchContestNameRequest;
 import cn.abtion.neuqercc.message.models.AddFriendRequest;
+import cn.abtion.neuqercc.message.models.FriendModel;
+import cn.abtion.neuqercc.message.models.SearchUserModel;
 import cn.abtion.neuqercc.team.models.EstablishTeamRequest;
 import cn.abtion.neuqercc.team.models.InitAllTeamDataResponse;
 import cn.abtion.neuqercc.team.models.InitAllTeamResponse;
@@ -53,11 +57,21 @@ import retrofit2.http.QueryMap;
  */
 
 public interface APIService {
+
+
+    /**
+     * 检查token
+     * @param token
+     * @return
+     */
+    @POST("saiyou/public/index.php/check")
+    Call<APIResponse<CheckTokenResponse>> check(@Query("token") String token);
+
     /**
      * 登录
      */
     @POST("saiyou/public/index.php/login")
-    Call<APIResponse> login(@Body LoginRequest loginRequest);
+    Call<APIResponse<TokenResponse>> login(@Body LoginRequest loginRequest);
 
     /**
      * 验证码
@@ -268,7 +282,7 @@ public interface APIService {
      * @return
      */
     @GET("saiyou/public/index.php/friend/show")
-    Call<APIResponse<List<String>>> loadFriendList(@Query("phone") String phone);
+    Call<APIResponse<List<FriendModel>>> loadFriendList(@Query("phone") String phone);
 
 
     /**
@@ -299,7 +313,7 @@ public interface APIService {
      * @return
      */
     @GET("saiyou/public/index.php/chat/search")
-    Call<APIResponse<List<String>>> searchUser(@Query("content") String content);
+    Call<APIResponse<List<SearchUserModel>>> searchUser(@Query("content") String content);
 
 
 }

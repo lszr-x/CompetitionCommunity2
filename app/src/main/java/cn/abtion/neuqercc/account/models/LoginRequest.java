@@ -19,6 +19,11 @@ public class LoginRequest extends BaseModel {
 
     }
 
+    public LoginRequest(String phone, String password) {
+        this.phone = phone;
+        this.password = password;
+    }
+
     public String getIdentifier() {
 
         return phone;
