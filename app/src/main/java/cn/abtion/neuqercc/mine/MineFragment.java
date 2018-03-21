@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -26,6 +27,7 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.mine.activities.HonorInformationActivity;
 import cn.abtion.neuqercc.mine.activities.MineTeamListActivity;
 import cn.abtion.neuqercc.mine.activities.SettingActivity;
@@ -42,6 +44,8 @@ import cn.abtion.neuqercc.widget.HonorGridView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * @author abtion.
@@ -155,23 +159,30 @@ public class MineFragment extends BaseFragment {
             @Override
             public void onScrollChanged(GradientScrollView scrollView, int x, int y, int oldx, int oldy) {
 
-                txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MIN, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
+                txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MIN, Config.COLOR_MAX, Config.COLOR_MAX,
+                        Config.COLOR_MAX));
 
                 if (y <= 0) {
 
-                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) Config.COLOR_MIN, Config.TITLE_BG_R, Config.TITLE_BG_G, Config.TITLE_BG_B));
-                    txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MIN, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
+                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) Config.COLOR_MIN, Config.TITLE_BG_R, Config
+                            .TITLE_BG_G, Config.TITLE_BG_B));
+                    txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MIN, Config.COLOR_MAX, Config.COLOR_MAX,
+                            Config.COLOR_MAX));
 
                 } else if (y > 0 && y < (mineHeaderBg.getHeight() - rlayoutMineTitle.getHeight())) {
 
                     float scale = (float) y / (mineHeaderBg.getHeight() - rlayoutMineTitle.getHeight());
                     float alpha = (Config.COLOR_MAX * scale);
-                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) alpha, Config.TITLE_BG_R, Config.TITLE_BG_G, Config.TITLE_BG_B));
-                    txtTeamTitle.setTextColor(Color.argb((int) alpha, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
+                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) alpha, Config.TITLE_BG_R, Config.TITLE_BG_G,
+                            Config.TITLE_BG_B));
+                    txtTeamTitle.setTextColor(Color.argb((int) alpha, Config.COLOR_MAX, Config.COLOR_MAX, Config
+                            .COLOR_MAX));
 
                 } else {
-                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) Config.COLOR_MAX, Config.TITLE_BG_R, Config.TITLE_BG_G, Config.TITLE_BG_B));
-                    txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX));
+                    rlayoutMineTitle.setBackgroundColor(Color.argb((int) Config.COLOR_MAX, Config.TITLE_BG_R, Config
+                            .TITLE_BG_G, Config.TITLE_BG_B));
+                    txtTeamTitle.setTextColor(Color.argb((int) Config.COLOR_MAX, Config.COLOR_MAX, Config.COLOR_MAX,
+                            Config.COLOR_MAX));
                 }
             }
         });
@@ -186,7 +197,8 @@ public class MineFragment extends BaseFragment {
         RestClient.getService().personalInformation(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<PersonInformationResponse>>() {
 
             @Override
-            public void onDataResponse(Call<APIResponse<PersonInformationResponse>> call, Response<APIResponse<PersonInformationResponse>> response) {
+            public void onDataResponse(Call<APIResponse<PersonInformationResponse>> call,
+                                       Response<APIResponse<PersonInformationResponse>> response) {
 
                 informationResponse = response.body().getData();
                 setPersonalInformation();
@@ -211,7 +223,7 @@ public class MineFragment extends BaseFragment {
     public void setPersonalInformation() {
 
         txtPhoneNumber.setText(informationResponse.getPhone());
-        txtUserName.setText(informationResponse.getUsername() == null?"":informationResponse.getUsername().trim());
+        txtUserName.setText(informationResponse.getUsername() == null ? "" : informationResponse.getUsername().trim());
         txtName.setText(informationResponse.getName());
         txtGoodAt.setText(informationResponse.getGoodAt());
         txtMajor.setText(informationResponse.getMajor());
@@ -226,7 +238,9 @@ public class MineFragment extends BaseFragment {
         }
 
         imgAvatarUrl = informationResponse.getPicture();
-        Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
+        if (imgAvatarUrl != null) {
+            Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
+        }
     }
 
 
@@ -239,7 +253,8 @@ public class MineFragment extends BaseFragment {
 
             //请求成功时回调
             @Override
-            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call, Response<APIResponse<List<ShowHonorResponse>>> response) {
+            public void onDataResponse(Call<APIResponse<List<ShowHonorResponse>>> call,
+                                       Response<APIResponse<List<ShowHonorResponse>>> response) {
 
                 showHonorResponseList = response.body().getData();
                 initGrid();
@@ -359,19 +374,7 @@ public class MineFragment extends BaseFragment {
      */
     @OnClick(R.id.mine_avatar)
     public void onImgAvaterClicked() {
-
-        showFullImg();
-    }
-
-    public void showFullImg() {
-
-        View view = View.inflate(getContext(), R.layout.item_dialog_full_img, null);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(view);
-        ImageView imageView = (ImageView) view.findViewById(R.id.img_full_dialog);
-        Glide.with(this).load(imgAvatarUrl).into(imageView);
-        builder.show();
-
+        MainActivity.showFullImgView(getContext(), imgAvatarUrl);
     }
 
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -12,8 +11,6 @@ import java.util.List;
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
-import cn.abtion.neuqercc.message.activities.ChatWindowActivity;
-import cn.abtion.neuqercc.message.activities.FriendInfoActivity;
 import cn.abtion.neuqercc.message.models.FriendModel;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -70,7 +67,7 @@ public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> {
         @Override
         protected void onBind(FriendModel friendModel) {
 
-            mTxtFriendName.setText(friendModel.getFriendName() == null ? "N/A" : friendModel.getFriendName());
+            mTxtFriendName.setText(friendModel.getUsername() == null ? "N/A" : friendModel.getUsername());
         }
 
 

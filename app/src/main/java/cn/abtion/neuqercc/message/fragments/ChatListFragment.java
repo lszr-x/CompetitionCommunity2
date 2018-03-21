@@ -33,6 +33,7 @@ import cn.abtion.neuqercc.message.models.MessageModel;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.DateUtils;
 import cn.abtion.neuqercc.utils.Utility;
 import cn.abtion.neuqercc.widget.SwipeItemLayout;
 import retrofit2.Call;
@@ -60,7 +61,7 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
 
     private MessageRecAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<String> userList;
+    private List<FriendModel> userList;
 
 
     @Override
@@ -163,15 +164,16 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
     private void loadChatUser() {
 
 
-        RestClient.getService().loadFriendList(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<String>>>() {
+        RestClient.getService().loadFriendList(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<FriendModel>>>() {
 
             @Override
-            public void onDataResponse(Call<APIResponse<List<String>>> call, Response<APIResponse<List<String>>> response) {
+            public void onDataResponse(Call<APIResponse<List<FriendModel>>> call,
+                                       Response<APIResponse<List<FriendModel>>> response) {
                 userList = response.body().getData();
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<List<String>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<List<FriendModel>>> call, Throwable t) {
 
             }
 
@@ -194,15 +196,15 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
     private void loadMessageInfo(int pos) {
 
 
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userList.get(pos));
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userList.get(pos).getPhone());
         EMMessage lastMessage = conversation.getLastMessage();
         EMTextMessageBody textMessageBody = (EMTextMessageBody) lastMessage.getBody();
         long messageTime = lastMessage.getMsgTime();
 
-        messageModelList.add(new MessageModel(""
-                , userList.get(pos)
+        messageModelList.add(new MessageModel(userList.get(pos).getPic()
+                , userList.get(pos).getUsername()
                 , textMessageBody.getMessage()
-                , messageTime + ""));
+                , DateUtils.stampToDate(String.valueOf(messageTime))));
     }
 
 

@@ -1,5 +1,7 @@
 package cn.abtion.neuqercc.main;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
@@ -7,8 +9,12 @@ import android.support.transition.TransitionManager;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -248,5 +254,23 @@ public class MainActivity extends NoBarActivity {
         } else {
             NEUQerCCApplication.getInstance().exitApp();
         }
+    }
+
+
+    public static void showFullImgView(Context context, String imgUrl) {
+
+        // 构建查看大图的dialog
+        final AlertDialog dialogAddHonor = new AlertDialog.Builder(context, R.style.dialog_full_img).create();
+        dialogAddHonor.show();
+        dialogAddHonor.getWindow().setContentView(R.layout.item_dialog_full_img);
+        ImageView imageView = (ImageView) dialogAddHonor.findViewById(R.id.img_full_dialog);
+        Glide.with(context).load(imgUrl).into(imageView);
+        //设置全屏显示
+        Window window = dialogAddHonor.getWindow();
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(lp);
     }
 }
