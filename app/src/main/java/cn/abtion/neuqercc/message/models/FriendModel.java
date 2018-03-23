@@ -8,28 +8,38 @@ package cn.abtion.neuqercc.message.models;
 public class FriendModel {
 
 
-    private String imgRes;
-    private String friendName;
+    private String pic;
+    private String username;
+    private String phone;
 
-    public FriendModel(String imgRes, String friendName) {
-        this.imgRes = imgRes;
-        this.friendName = friendName;
+
+    public FriendModel(String pic, String username, String phone) {
+        this.pic = pic;
+        this.username = username;
+        this.phone = phone;
     }
 
-
-    public String getImgRes() {
-        return imgRes;
+    public String getPic() {
+        return pic;
     }
 
-    public void setImgRes(String imgRes) {
-        this.imgRes = imgRes;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
-    public String getFriendName() {
-        return friendName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFriendName(String friendName) {
-        this.friendName = friendName;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

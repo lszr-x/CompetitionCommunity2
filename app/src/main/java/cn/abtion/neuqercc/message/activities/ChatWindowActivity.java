@@ -31,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
  * @since 2018/1/23 on 下午1:22
  * fhyPayaso@qq.com
  */
-public class ChatWindowActivity extends ToolBarActivity implements EMMessageListener{
+public class ChatWindowActivity extends ToolBarActivity implements EMMessageListener {
 
 
     @BindView(R.id.rec_chat)
@@ -44,7 +44,7 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
     private EMMessage emMessage;
     private EMConversation conversation;
     private ChatWindowRecAdapter mRecAdapter;
-    private String chatId = "111111";
+    public static String chatId = "";
 
     @Override
     protected int getLayoutId() {
@@ -69,7 +69,7 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
 
     }
 
-    private void initChatRec(){
+    private void initChatRec() {
 
 
         //添加信息监听
@@ -77,15 +77,16 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
         conversation = EMClient.getInstance().chatManager().getConversation(chatId,
                 EMConversation.EMConversationType.Chat, true);
 
-        mRecAdapter = new ChatWindowRecAdapter(ChatWindowActivity.this,conversation);
+        mRecAdapter = new ChatWindowRecAdapter(ChatWindowActivity.this, conversation);
         recChat.setAdapter(mRecAdapter);
-        recChat.setLayoutManager(new LinearLayoutManager(ChatWindowActivity.this,LinearLayoutManager.VERTICAL,false));
+        recChat.setLayoutManager(new LinearLayoutManager(ChatWindowActivity.this, LinearLayoutManager.VERTICAL, false));
         refresh();
     }
 
 
-    public static void startActivity(Context context) {
+    public static void startActivity(Context context,String chatId) {
         context.startActivity(new Intent(context, ChatWindowActivity.class));
+        ChatWindowActivity.chatId = chatId;
     }
 
 
@@ -107,16 +108,16 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
         }, 200);
     }
 
+
+
+    //发送信息按钮点击事件
     @OnClick(R.id.btn_send)
     public void onViewClicked() {
-
-
         emMessage = EMMessage.createTxtSendMessage(editChatContent.getText().toString(), chatId);
         EMClient.getInstance().chatManager().sendMessage(emMessage);
         editChatContent.setText("");
         refresh();
     }
-
 
 
     @Override

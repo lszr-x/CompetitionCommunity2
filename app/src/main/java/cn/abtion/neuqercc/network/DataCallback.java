@@ -1,10 +1,14 @@
 package cn.abtion.neuqercc.network;
 
+import android.util.Log;
+
 import cn.abtion.neuqercc.common.exceptions.ResultException;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * packaged callback for network response
@@ -37,6 +41,9 @@ public abstract class DataCallback<T> implements Callback<T> {
         dismissDialog();
 
         ToastUtil.showToast(t.toString());
+        Log.i(TAG, "onFailure: "+t.toString());
+
+
         if (t instanceof ResultException) {
             GlobalAPIErrorHandler.handler((ResultException) t);
         } else {

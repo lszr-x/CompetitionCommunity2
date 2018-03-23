@@ -9,27 +9,38 @@ package cn.abtion.neuqercc.message.models;
 public class SearchUserModel {
 
 
-    private String imgRes;
-    private String userName;
+    private String pic;
+    private String username;
+    private String phone;
 
-    public SearchUserModel(String imgRes, String userName) {
-        this.imgRes = imgRes;
-        this.userName = userName;
+
+    public SearchUserModel(String pic, String username, String phone) {
+        this.pic = pic;
+        this.username = username;
+        this.phone = phone;
     }
 
-    public String getImgRes() {
-        return imgRes;
+    public String getPic() {
+        return pic;
     }
 
-    public void setImgRes(String imgRes) {
-        this.imgRes = imgRes;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
