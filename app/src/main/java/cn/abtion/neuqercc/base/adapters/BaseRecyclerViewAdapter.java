@@ -278,5 +278,21 @@ public abstract class BaseRecyclerViewAdapter<Data> extends RecyclerView.Adapter
 //        void onItemClicked(View view, int position);
 //    }
 
+
+    /**
+     * 移除数据（带动画）
+     *
+     * @param position pos
+     */
+    public void removeItem(int position) {
+        this.dataList.remove(position);
+        //该方法不会使position及其之后位置的itemView重新onBindViewHolder
+        notifyItemRemoved(position);
+        //所以需要从position到列表末尾进行数据刷新
+        if (position != dataList.size()) {
+            notifyItemRangeChanged(position, dataList.size() - position);
+        }
+    }
+
 }
 

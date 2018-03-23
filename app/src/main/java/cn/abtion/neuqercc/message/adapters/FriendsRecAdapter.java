@@ -11,10 +11,7 @@ import java.util.List;
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
-import cn.abtion.neuqercc.message.activities.ChatWindowActivity;
-import cn.abtion.neuqercc.message.activities.FriendInfoActivity;
 import cn.abtion.neuqercc.message.models.FriendModel;
-import cn.abtion.neuqercc.utils.ToastUtil;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -24,66 +21,75 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> {
 
+
+    private FriendItemListener mFriendItemListener;
+
+
     public FriendsRecAdapter(Context context, List<FriendModel> friendModels) {
         super(context, friendModels);
     }
+
+
+    public void setFriendItemListener(FriendItemListener itemListener) {
+        mFriendItemListener = itemListener;
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         final View view = inflater.inflate(R.layout.item_friends, parent, false);
-
-
-        final ItemHolder itemHolder = new ItemHolder(view);
-
-
-        View main = itemHolder.itemView.findViewById(R.id.ly_friend_info);
-        View send = itemHolder.itemView.findViewById(R.id.txt_send_message);
-        View delete = itemHolder.itemView.findViewById(R.id.txt_delete_friend);
-
-        //进入好友信息
-        main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FriendInfoActivity.startActivity(view.getContext());
-            }
-        });
-        //进入聊天窗口
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChatWindowActivity.startActivity(view.getContext());
-            }
-        });
-        //删除好友
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                remove(getItem(itemHolder.getLayoutPosition()));
-            }
-        });
-
-
-        return itemHolder;
+        return new ItemHolder(view);
     }
 
-    public static class ItemHolder extends ViewHolder<FriendModel> {
+    class ItemHolder extends ViewHolder<FriendModel> implements View.OnClickListener {
 
         @BindView(R.id.img_friends_avatar)
         CircleImageView mImgFriendsAvatar;
         @BindView(R.id.txt_friend_name)
         TextView mTxtFriendName;
+        @BindView(R.id.txt_send_message)
+        TextView txtSendMessage;
+        @BindView(R.id.txt_delete_friend)
+        TextView txtDeleteFriend;
 
 
         public ItemHolder(View itemView) {
             super(itemView);
+
+            itemView.setOnClickListener(this);
+            mImgFriendsAvatar.setOnClickListener(this);
+            txtDeleteFriend.setOnClickListener(this);
+            txtSendMessage.setOnClickListener(this);
 
         }
 
         @Override
         protected void onBind(FriendModel friendModel) {
 
-            mTxtFriendName.setText(friendModel.getFriendName() == null ? "N/A":friendModel.getFriendName());
+            mTxtFriendName.setText(friendModel.getUsername() == null ? "N/A" : friendModel.getUsername());
+        }
+
+
+        @Override
+        public void onClick(View v) {
+
+            int pos = getAdapterPosition();
+            switch (v.getId()) {
+                //好友信息跳转回调
+                case R.id.img_friends_avatar:
+                    mFriendItemListener.onAvaterClick(pos);
+                    break;
+                //发送信息回调
+                case R.id.txt_send_message:
+                    mFriendItemListener.onSendMessageClick(pos);
+                    break;
+                //删除好友回调
+                case R.id.txt_delete_friend:
+                    mFriendItemListener.onDeleteClick(pos);
+                default:
+                    break;
+            }
         }
     }
 }

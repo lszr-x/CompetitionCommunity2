@@ -1,5 +1,7 @@
 package cn.abtion.neuqercc.main;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.transition.Fade;
 import android.support.transition.TransitionManager;
@@ -7,11 +9,16 @@ import android.support.transition.TransitionManager;
 import android.support.v4.view.ViewPager;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.BaseActivity;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
@@ -49,6 +56,7 @@ public class MainActivity extends NoBarActivity {
     @BindView(R.id.vp_main_container)
     MainViewPager mainViewPager;
 
+    private long startTime = 0;
 
     public static void start(BaseActivity context, int flag) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -199,7 +207,7 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuHomeClicked() {
 
         changeHomeMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_HOME,false);
+        mainViewPager.setCurrentItem(Config.FLAG_HOME, false);
 
     }
 
@@ -209,7 +217,7 @@ public class MainActivity extends NoBarActivity {
     @OnClick(R.id.ly_tab_menu_order)
     public void onLyTabMenuOrderClicked() {
         changeTeamMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_TEAM,false);
+        mainViewPager.setCurrentItem(Config.FLAG_TEAM, false);
 
     }
 
@@ -220,7 +228,7 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuMessageClicked() {
 
         changeMessageMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_MESSAGE,false);
+        mainViewPager.setCurrentItem(Config.FLAG_MESSAGE, false);
 
     }
 
@@ -231,9 +239,38 @@ public class MainActivity extends NoBarActivity {
     public void onLyTabMenuMineClicked() {
 
         changeMineMenuStatus();
-        mainViewPager.setCurrentItem(Config.FLAG_MINE,false);
+        mainViewPager.setCurrentItem(Config.FLAG_MINE, false);
 
     }
 
 
+    @Override
+    public void onBackPressed() {
+
+        long currentTime = System.currentTimeMillis();
+        if ((currentTime - startTime) > 2000) {
+            ToastUtil.showToast("再按一次退出聚点");
+            startTime = currentTime;
+        } else {
+            NEUQerCCApplication.getInstance().exitApp();
+        }
+    }
+
+
+    public static void showFullImgView(Context context, String imgUrl) {
+
+        // 构建查看大图的dialog
+        final AlertDialog dialogAddHonor = new AlertDialog.Builder(context, R.style.dialog_full_img).create();
+        dialogAddHonor.show();
+        dialogAddHonor.getWindow().setContentView(R.layout.item_dialog_full_img);
+        ImageView imageView = (ImageView) dialogAddHonor.findViewById(R.id.img_full_dialog);
+        Glide.with(context).load(imgUrl).into(imageView);
+        //设置全屏显示
+        Window window = dialogAddHonor.getWindow();
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(lp);
+    }
 }
