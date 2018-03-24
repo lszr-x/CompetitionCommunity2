@@ -10,12 +10,11 @@ import cn.abtion.neuqercc.utils.ToastUtil;
  */
 
 public class GlobalAPIErrorHandler {
+
     public static void handler(int code){
         switch (code){
 
-
             default:
-
                 ToastUtil.showToast("请求不被允许，请确定是否有权进行该操作");
                 break;
         }
@@ -29,5 +28,4 @@ public class GlobalAPIErrorHandler {
                 break;
         }
     }
-
 }

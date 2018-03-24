@@ -138,10 +138,7 @@ public class HomeFragment extends BaseFragment {
                             list.get(i).getRegistration_time(),
                             list.get(i).getCompetition_time()));
                 }
-
                 initAdapter(contestListModels);
-
-
             }
 
             @Override
@@ -241,7 +238,6 @@ public class HomeFragment extends BaseFragment {
                     Glide.with(HomeFragment.this).load(list.get(i).getUrl()).into(imageView);
                     vfContest.addView(imageView);
                 }
-
             }
 
             @Override

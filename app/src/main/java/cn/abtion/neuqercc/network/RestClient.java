@@ -21,6 +21,7 @@ import retrofit2.Retrofit;
  */
 
 public final class RestClient {
+
     private static Retrofit retrofit;
     private static APIService service;
     private static OkHttpClient okHttpClient;

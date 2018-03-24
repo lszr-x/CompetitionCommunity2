@@ -22,10 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @since 2018/1/23 on 上午12:04
  * fhyPayaso@qq.com
  */
-public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> implements View.OnClickListener{
-
-
-    private ItemHolder itemHolder;
+public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> {
 
     public FriendsRecAdapter(Context context, List<FriendModel> friendModels) {
         super(context, friendModels);
@@ -34,44 +31,41 @@ public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> impl
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = inflater.inflate(R.layout.item_friends, parent, false);
+        final View view = inflater.inflate(R.layout.item_friends, parent, false);
 
 
-        itemHolder = new ItemHolder(view);
+        final ItemHolder itemHolder = new ItemHolder(view);
 
 
         View main = itemHolder.itemView.findViewById(R.id.ly_friend_info);
         View send = itemHolder.itemView.findViewById(R.id.txt_send_message);
         View delete = itemHolder.itemView.findViewById(R.id.txt_delete_friend);
 
-        main.setOnClickListener(this);
-        send.setOnClickListener(this);
-        delete.setOnClickListener(this);
+        //进入好友信息
+        main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FriendInfoActivity.startActivity(view.getContext());
+            }
+        });
+        //进入聊天窗口
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatWindowActivity.startActivity(view.getContext());
+            }
+        });
+        //删除好友
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remove(getItem(itemHolder.getLayoutPosition()));
+            }
+        });
+
 
         return itemHolder;
     }
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-
-            case R.id.ly_friend_info:
-                FriendInfoActivity.startActivity(v.getContext());
-                break;
-            case R.id.txt_send_message:
-                ChatWindowActivity.startActivity(v.getContext());
-                break;
-            case R.id.txt_delete_friend:
-                
-                remove(getItem(itemHolder.getLayoutPosition()));
-                break;
-            default:
-                break;
-        }
-
-    }
-
 
     public static class ItemHolder extends ViewHolder<FriendModel> {
 
@@ -90,7 +84,6 @@ public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> impl
         protected void onBind(FriendModel friendModel) {
 
             mTxtFriendName.setText(friendModel.getFriendName() == null ? "N/A":friendModel.getFriendName());
-
         }
     }
 }

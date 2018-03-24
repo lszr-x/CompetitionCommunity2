@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
+import cn.abtion.neuqercc.message.activities.SearchUserActivity;
 import cn.abtion.neuqercc.message.adapters.MessageViewPagerAdapter;
 
 /**
@@ -28,6 +30,7 @@ public class MessageFragment extends BaseFragment {
     @BindView(R.id.viewpager_message)
     ViewPager viewpagerMessage;
     Unbinder unbinder;
+    Unbinder unbinder1;
 
     private TabLayout.Tab mTabChat;
     private TabLayout.Tab mTabFriends;
@@ -61,9 +64,6 @@ public class MessageFragment extends BaseFragment {
         mTabGroup.setIcon(R.drawable.img_group_selector);
 
 
-
-
-
     }
 
     @Override
@@ -72,19 +72,11 @@ public class MessageFragment extends BaseFragment {
     }
 
 
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    /**
+     * 跳转到搜索用户界面
+     */
+    @OnClick(R.id.img_add_friends)
+    public void onViewClicked() {
+        SearchUserActivity.startActivity(getContext());
     }
 }
