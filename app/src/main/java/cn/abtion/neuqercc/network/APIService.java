@@ -206,6 +206,14 @@ public interface APIService {
             MultipartBody.Part glory_pic);
 
     /**
+     * 编辑证书（不用照片）
+     *
+     * @return
+     */
+    @POST("saiyou/public/index.php/user/glory_edit")
+    Call<APIResponse> uploadHonor(@Query("phone") String phone, @QueryMap Map<String, Object> map);
+
+    /**
      * 删除荣誉墙
      *
      * @param phone

@@ -57,12 +57,20 @@ public class MineTeamListActivity extends ToolBarActivity {
 
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initMineTeamList();
+    }
+
     public void initMineTeamList() {
 
         RestClient.getService().mineTeamList(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<MineTeamListResponse>>>() {
 
             @Override
-            public void onDataResponse(Call<APIResponse<List<MineTeamListResponse>>> call, Response<APIResponse<List<MineTeamListResponse>>> response) {
+            public void onDataResponse(Call<APIResponse<List<MineTeamListResponse>>> call,
+                                       Response<APIResponse<List<MineTeamListResponse>>> response) {
 
                 mineTeamListResponseList = response.body().getData();
                 initContestRecyclerView();
@@ -89,15 +97,18 @@ public class MineTeamListActivity extends ToolBarActivity {
 
 
         recMineTeam.setNestedScrollingEnabled(false);
-        MineTeamListAdapter mineTeamListAdapter = new MineTeamListAdapter(MineTeamListActivity.this, mineTeamListResponseList);
+        MineTeamListAdapter mineTeamListAdapter = new MineTeamListAdapter(MineTeamListActivity.this,
+                mineTeamListResponseList);
         recMineTeam.setAdapter(mineTeamListAdapter);
-        recMineTeam.setLayoutManager(new LinearLayoutManager(MineTeamListActivity.this, LinearLayoutManager.VERTICAL, false));
+        recMineTeam.setLayoutManager(new LinearLayoutManager(MineTeamListActivity.this, LinearLayoutManager.VERTICAL,
+                false));
 
         //点击事件
         mineTeamListAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<MineTeamListResponse>() {
 
             @Override
-            public void onItemClicked(MineTeamListResponse mineTeamListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
+            public void onItemClicked(MineTeamListResponse mineTeamListModel, BaseRecyclerViewAdapter.ViewHolder
+                    viewHolder) {
 
                 Intent intent = new Intent(MineTeamListActivity.this, MineTeamIfromationActivity.class);
                 intent.putExtra("teamId", mineTeamListResponseList.get(viewHolder.getAdapterPosition()).getTeamId());

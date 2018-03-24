@@ -1,18 +1,14 @@
 package cn.abtion.neuqercc.mine.activities;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -38,6 +34,7 @@ import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.DialogUtil;
+import cn.abtion.neuqercc.utils.FileUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -52,15 +49,6 @@ import retrofit2.Response;
  */
 
 public class HonorUpdateActivity extends ToolBarActivity {
-
-
-    /**
-     * 动态申请权限
-     */
-    private static final String[] PERMISSION_EXTERNAL_STORAGE = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-    private static final int REQUEST_EXTERNAL_STORAGE = 100;
-    public final int TAKE_PHOTO_FLAG = 1;
-    public final int SET_IMG_FLAG = 100;
 
 
     /**
@@ -87,13 +75,12 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
 
     /**
-     * 判断证书图片是否为空
+     * 判断是否从本地上传了照片
      */
-    private boolean flagUpLoad = true;
+    private boolean flagUpLoad;
     private int currentOrder;
 
-    private String filePath;
-    private Intent intent;
+    private String photoPath;
     private ShowHonorResponse honorResponse;
 
     Button btnTakePhoto;
@@ -118,9 +105,9 @@ public class HonorUpdateActivity extends ToolBarActivity {
     @Override
     protected void initVariable() {
 
-
+        flagUpLoad = false;
         setActivityTitle(getString(R.string.title_certificate_editing));
-        verifyStoragePermissions(HonorUpdateActivity.this);
+        FileUtil.verifyStoragePermissions(HonorUpdateActivity.this);
     }
 
     @Override
@@ -142,12 +129,12 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
     public void loadIntent() {
 
-        intent = getIntent();
+        Intent intent = getIntent();
         honorTimeList = intent.getStringArrayExtra("timeList");
         honorResponse = new Gson().fromJson(intent.getStringExtra("honorInformation"), ShowHonorResponse.class);
 
         //0代表编辑证书，1代表添加证书
-        if (intent.getStringExtra("honorWall").equals("0")) {
+        if ("0".equals(intent.getStringExtra("honorWall"))) {
 
             uploadType = 0;
             editEventName.setText(honorResponse.getGloryName());
@@ -160,7 +147,7 @@ public class HonorUpdateActivity extends ToolBarActivity {
         } else {
 
             uploadType = 1;
-            flagUpLoad = false;
+
             imgAddHonor.setImageResource(R.drawable.bg_add_honor);
             txtUpdateTime.setText(honorTimeList[0]);
         }
@@ -192,12 +179,13 @@ public class HonorUpdateActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
+                //打开相机并制定存储路径
+                String filePath = FileUtil.createNewFile(HonorUpdateActivity.this, "NEUQerCC");
+                photoPath = FileUtil.openCamera(HonorUpdateActivity.this, filePath);
+
                 if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
-
-                Intent takeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takeIntent, TAKE_PHOTO_FLAG);
             }
         });
 
@@ -205,14 +193,12 @@ public class HonorUpdateActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
+                //打开相册
+                FileUtil.openAlbum(HonorUpdateActivity.this);
+
                 if (dialogAddHonor.isShowing()) {
                     dialogAddHonor.dismiss();
                 }
-
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                startActivityForResult(intent, SET_IMG_FLAG);
 
             }
         });
@@ -243,33 +229,21 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SET_IMG_FLAG && resultCode == RESULT_OK && null != data) {
-
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            filePath = picturePath;
-            cursor.close();
-
-            imgAddHonor.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-            flagUpLoad = true;
-
-        } else if (requestCode == TAKE_PHOTO_FLAG && resultCode == RESULT_OK && null != data) {
-
-            Bundle bundle = data.getExtras();
-            Bitmap bitmap = (Bitmap) bundle.get("data");
-            imgAddHonor.setImageBitmap(bitmap);
-
-            flagUpLoad = true;
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case FileUtil.ALBUM_REQUEST:
+                    photoPath = FileUtil.getSelectedPicturePath(data, HonorUpdateActivity.this);
+                    imgAddHonor.setImageBitmap(BitmapFactory.decodeFile(photoPath));
+                    flagUpLoad = true;
+                    break;
+                case FileUtil.CAMERA_REQUEST:
+                    imgAddHonor.setImageBitmap(BitmapFactory.decodeFile(photoPath));
+                    flagUpLoad = true;
+                    break;
+                default:
+                    break;
+            }
         }
-
     }
 
 
@@ -291,45 +265,84 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
     public void uploadHonorInformation() {
 
-
-        File file = new File(filePath);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("glory_pic", file.getName(), requestBody);
-
-
         //修改证书网络请求
         if (uploadType == 0) {
 
-            RestClient.getService().uploadHonor(LoginActivity.phoneNumber,
-                    honorResponse.setHonorMap(), part).enqueue(new DataCallback<APIResponse>() {
 
-                @Override
-                public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+            //接口里的顺序差了1
 
-                    ToastUtil.showToast(getString(R.string.toast_edit_successful));
-                    finish();
-                }
 
-                @Override
-                public void onDataFailure(Call<APIResponse> call, Throwable t) {
 
-                }
+            if (flagUpLoad) {
 
-                @Override
-                public void dismissDialog() {
+                File file = new File(photoPath);
+                RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+                MultipartBody.Part part = MultipartBody.Part.createFormData("glory_pic", file.getName(), requestBody);
 
-                }
-            });
 
+                honorResponse = new ShowHonorResponse(currentOrder + 1, editEventName.getText().toString(),
+                        txtUpdateTime.getText().toString(), photoPath);
+
+                RestClient.getService().uploadHonor(LoginActivity.phoneNumber,
+                        honorResponse.setHonorMap(), part).enqueue(new DataCallback<APIResponse>() {
+
+                    @Override
+                    public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                        ToastUtil.showToast(getString(R.string.toast_edit_successful));
+                        finish();
+                    }
+
+                    @Override
+                    public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+                    }
+
+                    @Override
+                    public void dismissDialog() {
+
+                    }
+                });
+
+            } else {
+
+                honorResponse = new ShowHonorResponse(currentOrder + 1, editEventName.getText().toString(),
+                        txtUpdateTime.getText().toString(), "no_pic");
+
+                RestClient.getService().uploadHonor(LoginActivity.phoneNumber,
+                        honorResponse.setHonorMap()).enqueue(new DataCallback<APIResponse>() {
+
+                    @Override
+                    public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                        ToastUtil.showToast(getString(R.string.toast_edit_successful));
+                        finish();
+                    }
+
+                    @Override
+                    public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+                    }
+
+                    @Override
+                    public void dismissDialog() {
+
+                    }
+                });
+
+            }
 
         } else {
 
+            File file = new File(photoPath);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("glory_pic", file.getName(), requestBody);
 
             /**
              * 添加证书网络请求
              */
             honorResponse = new ShowHonorResponse(editEventName.getText().toString(),
-                    txtUpdateTime.getText().toString(), filePath);
+                    txtUpdateTime.getText().toString(), photoPath);
 
             RestClient.getService().addHonor(LoginActivity.phoneNumber,
                     honorResponse.setHonorMap(), part).enqueue(new DataCallback<APIResponse>() {
@@ -356,21 +369,6 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
 
     /**
-     * 动态申请权限
-     *
-     * @param activity
-     */
-    private void verifyStoragePermissions(Activity activity) {
-        int permissionWrite = ActivityCompat.checkSelfPermission(activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permissionWrite != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, PERMISSION_EXTERNAL_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE);
-        }
-    }
-
-
-    /**
      * 判断信息是否完整
      *
      * @return
@@ -380,7 +378,9 @@ public class HonorUpdateActivity extends ToolBarActivity {
 
         if (editEventName.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
             flag = false;
-        } else if (!flagUpLoad) {
+        } else if (!flagUpLoad && uploadType == 1) {
+
+            //添加证书必须上传照片
             flag = false;
         }
 

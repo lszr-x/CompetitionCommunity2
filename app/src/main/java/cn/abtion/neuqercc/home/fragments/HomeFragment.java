@@ -76,7 +76,8 @@ public class HomeFragment extends BaseFragment {
 
     private static int page = 1;
     private HomeAdapter homeAdapter;
-    private LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+    private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager
+            .VERTICAL, false);
 
 
     @BindView(R.id.spinner_home)
@@ -125,24 +126,32 @@ public class HomeFragment extends BaseFragment {
         progressDialog.show();
 
         //网络请求
-        RestClient.getService().initContestRecylerView(page,Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
+        RestClient.getService().initContestRecylerView(page, Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Response<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> response) {
+            public void onDataResponse
+                    (Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>
+                             call, Response<APIResponse<InitContestRecylerViewDataRequest<List
+                            <InitContestRecylerViewItemRequest>>>> response) {
                 List<InitContestRecylerViewItemRequest> list = response.body().getData().getItem();
 
-                for (int i = 0; i < list.size(); i++) {
-                    contestListModels.add(new ContestListModel(
-                            list.get(i).getId(),
-                            list.get(i).getName(),
-                            list.get(i).getShort_desc(),
-                            list.get(i).getRegistration_time(),
-                            list.get(i).getCompetition_time()));
+
+                if (list != null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        contestListModels.add(new ContestListModel(
+                                list.get(i).getId(),
+                                list.get(i).getName(),
+                                list.get(i).getShort_desc(),
+                                list.get(i).getRegistration_time(),
+                                list.get(i).getCompetition_time()));
+                    }
+                    initAdapter(contestListModels);
+
                 }
-                initAdapter(contestListModels);
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List
+                    <InitContestRecylerViewItemRequest>>>> call, Throwable t) {
 
             }
 
@@ -178,7 +187,8 @@ public class HomeFragment extends BaseFragment {
         homeAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<ContestListModel>() {
 
             @Override
-            public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
+            public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder
+                    viewHolder) {
                 Intent intent = new Intent(getContext(), CompetitionActivity.class);
                 intent.putExtra("contestId", contestListModel.getId());
                 startActivity(intent);
@@ -187,11 +197,14 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void loadMoreData() {
-        RestClient.getService().initContestRecylerView(++page,Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
+        RestClient.getService().initContestRecylerView(++page, Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Response<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> response) {
+            public void onDataResponse
+                    (Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>
+                             call, Response<APIResponse<InitContestRecylerViewDataRequest<List
+                            <InitContestRecylerViewItemRequest>>>> response) {
                 List<InitContestRecylerViewItemRequest> list = response.body().getData().getItem();
-                if (list!=null){
+                if (list != null) {
 
                     for (int i = 0; i < list.size(); i++) {
                         contestListModels.add(new ContestListModel(
@@ -208,7 +221,8 @@ public class HomeFragment extends BaseFragment {
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List
+                    <InitContestRecylerViewItemRequest>>>> call, Throwable t) {
 
             }
 
@@ -231,7 +245,8 @@ public class HomeFragment extends BaseFragment {
         //网络请求
         RestClient.getService().initCrouselFigure().enqueue(new DataCallback<APIResponse<List<InitCrouselFigureRequest>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<List<InitCrouselFigureRequest>>> call, Response<APIResponse<List<InitCrouselFigureRequest>>> response) {
+            public void onDataResponse(Call<APIResponse<List<InitCrouselFigureRequest>>> call,
+                                       Response<APIResponse<List<InitCrouselFigureRequest>>> response) {
                 List<InitCrouselFigureRequest> list = response.body().getData();
                 for (int i = 0; i < list.size(); i++) {
                     ImageView imageView = new ImageView(getContext());
@@ -380,11 +395,6 @@ public class HomeFragment extends BaseFragment {
         outtoRight.setInterpolator(new AccelerateInterpolator());
         return outtoRight;
     }
-
-
-
-
-
 
 
     @OnClick(R.id.search_home)

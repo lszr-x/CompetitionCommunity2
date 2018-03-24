@@ -71,7 +71,10 @@
         <activity android:name=".home.activities.SearchContestActivity"/>
         <!--<activity android:name=".home.activities.TestActivity" />-->
         <activity android:name=".home.activities.SearchContestResultActivity"/>
-        <activity android:name=".mine.activities.UpdateInformationActivity"/>
+        <activity android:name=".mine.activities.UpdateInformationActivity"
+            android:windowSoftInputMode="adjustPan"
+
+            />
         <activity
             android:name=".mine.activities.SettingActivity"
             android:launchMode="singleTask"/>

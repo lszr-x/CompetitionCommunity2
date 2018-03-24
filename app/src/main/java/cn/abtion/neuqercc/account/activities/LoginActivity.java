@@ -19,6 +19,7 @@ import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.message.data.ChatHelper;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
@@ -136,12 +137,8 @@ public class LoginActivity extends NoBarActivity {
                 Log.i(TAG, "onDataResponse: " + "常规登录成功" + token);
                 ToastUtil.showToast(getString(R.string.toast_login_successful));
 
-                //页面跳转
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
 
-                loginEM();
+                ChatHelper.loginEM(LoginActivity.this);
             }
 
             //请求失败时回调
@@ -159,37 +156,6 @@ public class LoginActivity extends NoBarActivity {
             }
         });
 
-    }
-
-
-    /**
-     * 登录环信接口
-     */
-    private void loginEM() {
-
-
-        EMClient.getInstance().login(phoneNumber, password, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-
-                //保证进入主页面后本地会话和群组都 load 完毕
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-                //跳转至MainActivity
-                Log.i("login", "onSuccess: EM登录成功");
-            }
-
-            @Override
-            public void onError(int code, String error) {
-
-                Log.i("login", "onError: EM登录失败，" + error);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-        });
     }
 
     /**

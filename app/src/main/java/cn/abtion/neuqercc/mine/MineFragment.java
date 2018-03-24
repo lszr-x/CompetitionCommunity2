@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
@@ -239,6 +240,7 @@ public class MineFragment extends BaseFragment {
 
         imgAvatarUrl = informationResponse.getPicture();
         if (imgAvatarUrl != null) {
+            NEUQerCCApplication.getInstance().getCacheUtil().putString("person_avatar_url", imgAvatarUrl);
             Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
         }
     }
@@ -308,10 +310,11 @@ public class MineFragment extends BaseFragment {
      */
     public void showDialog() {
 
-        final AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.dialog_bottom).create();
+        final AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.dialog_top).create();
         dialog.show();
         dialog.getWindow().setContentView(R.layout.pop_window_edit);
         dialog.setCancelable(true);
+
 
         Window window = dialog.getWindow();
         window.setGravity(Gravity.END | Gravity.TOP);

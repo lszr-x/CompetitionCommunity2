@@ -151,6 +151,7 @@ public class SettingActivity extends ToolBarActivity {
             public void onSuccess() {
 
                 NEUQerCCApplication.getInstance().exitAccount();
+
                 Log.i("EM", "onSuccess: " + "退出成功");
             }
 

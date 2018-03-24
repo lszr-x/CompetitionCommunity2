@@ -34,6 +34,7 @@ import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.DateUtils;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.utils.Utility;
 import cn.abtion.neuqercc.widget.SwipeItemLayout;
 import retrofit2.Call;
@@ -103,8 +104,6 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
                     public void run() {
 
                         loadChatUser();
-                        mAdapter.notifyDataSetChanged();
-                        lyRefreshMessage.setRefreshing(false);
                     }
                 });
             }
@@ -116,19 +115,19 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
 
 
         mAdapter = new MessageRecAdapter(getContext(), messageModelList);
+        mAdapter.setFriendItemListener(this);
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mMessageRec.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(getContext()));
         mMessageRec.setLayoutManager(mLayoutManager);
         mMessageRec.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onAvaterClick(int pos) {
-        ChatWindowActivity.startActivity(getContext(), messageModelList.get(pos).getUserName());
-    }
 
     @Override
     public void onSendMessageClick(int pos) {
+        ChatWindowActivity.startActivity(getContext()
+                , userList.get(pos).getPhone()
+                , messageModelList.get(pos).getUserName());
 
     }
 
@@ -149,8 +148,7 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
                     public void run() {
 
                         loadChatUser();
-                        mAdapter.notifyDataSetChanged();
-                        lyRefreshMessage.setRefreshing(false);
+
                     }
                 });
             }
@@ -175,17 +173,22 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
             @Override
             public void onDataFailure(Call<APIResponse<List<FriendModel>>> call, Throwable t) {
 
+
             }
 
             @Override
             public void dismissDialog() {
 
+                lyRefreshMessage.setRefreshing(false);
             }
         });
 
         messageModelList.clear();
-        for (int i = 0; i < userList.size(); i++) {
-            loadMessageInfo(i);
+
+        if (userList != null) {
+            for (int i = 0; i < userList.size(); i++) {
+                loadMessageInfo(i);
+            }
         }
     }
 
@@ -196,16 +199,26 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
     private void loadMessageInfo(int pos) {
 
 
-        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userList.get(pos).getPhone());
-        EMMessage lastMessage = conversation.getLastMessage();
-        EMTextMessageBody textMessageBody = (EMTextMessageBody) lastMessage.getBody();
-        long messageTime = lastMessage.getMsgTime();
+        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(userList.get(pos).getPhone
+                ());
 
-        messageModelList.add(new MessageModel(userList.get(pos).getPic()
-                , userList.get(pos).getUsername()
-                , textMessageBody.getMessage()
-                , DateUtils.stampToDate(String.valueOf(messageTime))));
+        if (conversation != null) {
+
+            EMMessage lastMessage = conversation.getLastMessage();
+            EMTextMessageBody textMessageBody = (EMTextMessageBody) lastMessage.getBody();
+            long messageTime = lastMessage.getMsgTime();
+
+            messageModelList.add(new MessageModel(userList.get(pos).getPic()
+                    , userList.get(pos).getUsername()
+                    , textMessageBody.getMessage()
+                    , DateUtils.stampToDate(String.valueOf(messageTime))));
+
+        }
     }
 
+    @Override
+    public void onAvaterClick(int pos) {
+
+    }
 
 }
