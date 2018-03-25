@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -59,17 +60,21 @@
     </android.support.v4.view.ViewPager>
 
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_establish_team"
-        android:layout_width="328dp"
-        android:layout_height="36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_team_button"
+        app:borderWidth="0dp"
+        app:backgroundTint="#FF4011"
+        app:rippleColor="#33728dff"
+        app:elevation="8dp"
+        app:pressedTranslationZ="16dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
         android:layout_marginBottom="17.5dp"
-        android:background="@drawable/bg_account_btn"
-        android:text="@string/txt_establish_team"
-        android:textColor="@color/text_white"
-        android:textSize="18sp" />
+        />
 
 
 </RelativeLayout>
