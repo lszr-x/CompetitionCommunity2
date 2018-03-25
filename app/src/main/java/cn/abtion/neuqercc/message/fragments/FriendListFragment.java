@@ -5,6 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.hyphenate.chat.EMMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -89,7 +91,7 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
                     }
                 });
             }
-        }, 2000);
+        }, 200);
 
     }
 
@@ -225,7 +227,7 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
                     }
                 });
             }
-        }, 2000);
+        }, 200);
     }
 }
 

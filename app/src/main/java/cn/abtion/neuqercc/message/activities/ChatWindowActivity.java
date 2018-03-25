@@ -21,6 +21,7 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.message.adapters.ChatWindowRecAdapter;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.utils.Utility;
 
 /**
@@ -121,10 +122,19 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
     //发送信息按钮点击事件
     @OnClick(R.id.btn_send)
     public void onViewClicked() {
-        emMessage = EMMessage.createTxtSendMessage(editChatContent.getText().toString(), friendPhone);
-        EMClient.getInstance().chatManager().sendMessage(emMessage);
-        editChatContent.setText("");
-        refresh();
+
+
+        if(!"".equals(editChatContent.getText().toString())) {
+            emMessage = EMMessage.createTxtSendMessage(editChatContent.getText().toString(), friendPhone);
+            EMClient.getInstance().chatManager().sendMessage(emMessage);
+            editChatContent.setText("");
+            refresh();
+        } else {
+
+            ToastUtil.showToast("发送信息不能为空");
+        }
+
+
     }
 
 
@@ -157,7 +167,6 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         EMClient.getInstance().chatManager().removeMessageListener(this);
     }
 }

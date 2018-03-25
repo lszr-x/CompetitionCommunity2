@@ -45,6 +45,7 @@ public class ChatHelper {
         }
         EMOptions options = new EMOptions();
         options.setAutoLogin(false);
+
         EMClient.getInstance().init(appContext, options);
         EMClient.getInstance().setDebugMode(DEBUG);
     }

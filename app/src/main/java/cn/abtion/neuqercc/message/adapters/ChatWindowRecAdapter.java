@@ -99,6 +99,7 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
         return -1;
     }
 
+
     public EMMessage getItem(int position) {
         return messages.get(position);
     }
@@ -150,7 +151,19 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
     };
 
     private void refreshList() {
-        messages = conversation.getAllMessages();
+
+
+        //获取最新消息
+        List<EMMessage> newMessage = conversation.getAllMessages();
+        String msgId = newMessage.get(newMessage.size() - 1).getMsgId();
+        int pageSize = 20;
+
+        //从数据库里获取更多消息记录
+        List<EMMessage> dbMessage = conversation.loadMoreMsgFromDB(msgId, pageSize);
+        messages.clear();
+        messages.addAll(dbMessage);
+        messages.addAll(newMessage);
+
         conversation.markAllMessagesAsRead();
         notifyDataSetChanged();
     }
