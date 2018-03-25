@@ -62,9 +62,7 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         loadTeamInformation();
-
         loadTeamMemberInformation();
     }
 
@@ -72,7 +70,6 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     protected void loadData() {
 
         loadTeamInformation();
-
         loadTeamMemberInformation();
     }
 

@@ -81,8 +81,7 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
 
         //添加信息监听
         EMClient.getInstance().chatManager().addMessageListener(this);
-        conversation = EMClient.getInstance().chatManager().getConversation(friendPhone,
-                EMConversation.EMConversationType.Chat, true);
+        conversation = EMClient.getInstance().chatManager().getConversation(friendPhone, EMConversation.EMConversationType.Chat, true);
 
         mRecAdapter = new ChatWindowRecAdapter(ChatWindowActivity.this, conversation,mRecvAvatarUrl,mSendAvatarUrl);
         recChat.setAdapter(mRecAdapter);
@@ -162,7 +161,6 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
     public void onMessageChanged(EMMessage message, Object change) {
 
     }
-
 
     @Override
     protected void onDestroy() {

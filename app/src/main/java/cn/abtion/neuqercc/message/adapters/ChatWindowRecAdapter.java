@@ -162,7 +162,8 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
         List<EMMessage> dbMessage = conversation.loadMoreMsgFromDB(msgId, pageSize);
         messages.clear();
         messages.addAll(dbMessage);
-        messages.addAll(newMessage);
+        messages.add(newMessage.get(newMessage.size() - 1));
+        //messages.addAll(newMessage);
 
         conversation.markAllMessagesAsRead();
         notifyDataSetChanged();

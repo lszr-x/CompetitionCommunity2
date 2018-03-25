@@ -459,6 +459,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //如果点击添加图片部分
+
                 if (position == parent.getChildCount() - 1) {
 
                     showHonorDialog();

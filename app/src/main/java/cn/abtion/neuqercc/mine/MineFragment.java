@@ -28,6 +28,7 @@ import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.mine.activities.HonorInformationActivity;
 import cn.abtion.neuqercc.mine.activities.MineTeamListActivity;
@@ -224,7 +225,7 @@ public class MineFragment extends BaseFragment {
     public void setPersonalInformation() {
 
         txtPhoneNumber.setText(informationResponse.getPhone());
-        txtUserName.setText(informationResponse.getUsername() == null ? "" : informationResponse.getUsername().trim());
+        txtUserName.setText(informationResponse.getUsername() == null ? "" : informationResponse.getUsername());
         txtName.setText(informationResponse.getName());
         txtGoodAt.setText(informationResponse.getGoodAt());
         txtMajor.setText(informationResponse.getMajor());
@@ -243,6 +244,9 @@ public class MineFragment extends BaseFragment {
             NEUQerCCApplication.getInstance().getCacheUtil().putString("person_avatar_url", imgAvatarUrl);
             Glide.with(this).load(imgAvatarUrl).into(imgAvatar);
         }
+
+        //缓存用户名
+        NEUQerCCApplication.getInstance().getCacheUtil().putString(CacheKey.USER_NAME, informationResponse.getUsername());
     }
 
 

@@ -25,6 +25,8 @@ import static android.content.Context.ACTIVITY_SERVICE;
 import static cn.abtion.neuqercc.BuildConfig.DEBUG;
 
 /**
+ * 聊天相关
+ *
  * @author FanHongyu.
  * @since 18/3/17 15:46.
  * email fanhongyu@hrsoft.net.

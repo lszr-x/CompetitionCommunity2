@@ -31,7 +31,7 @@ public class MineTeamListActivity extends ToolBarActivity {
     @BindView(R.id.rec_mine_team)
     RecyclerView recMineTeam;
 
-    private List<MineTeamListResponse> mineTeamListResponseList = new ArrayList<MineTeamListResponse>();
+    private List<MineTeamListResponse> mineTeamListResponseList;
 
     @Override
     protected int getLayoutId() {
@@ -41,6 +41,7 @@ public class MineTeamListActivity extends ToolBarActivity {
     @Override
     protected void initVariable() {
 
+        mineTeamListResponseList = new ArrayList<>();
         setActivityTitle(getString(R.string.title_mine_team));
         initMineTeamList();
 
@@ -63,6 +64,8 @@ public class MineTeamListActivity extends ToolBarActivity {
         super.onResume();
         initMineTeamList();
     }
+
+
 
     public void initMineTeamList() {
 

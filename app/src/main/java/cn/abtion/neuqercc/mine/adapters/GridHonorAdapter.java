@@ -50,7 +50,6 @@ public class GridHonorAdapter extends BaseAdapter {
         } else {
             return honorCertificateList.size();
         }
-
     }
 
     @Override

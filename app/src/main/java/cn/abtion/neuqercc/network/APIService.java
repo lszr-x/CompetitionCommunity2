@@ -20,6 +20,7 @@ import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
 import cn.abtion.neuqercc.home.models.SearchContestNameRequest;
 import cn.abtion.neuqercc.message.models.AddFriendRequest;
 import cn.abtion.neuqercc.message.models.FriendModel;
+import cn.abtion.neuqercc.message.models.NoticeModel;
 import cn.abtion.neuqercc.message.models.SearchUserModel;
 import cn.abtion.neuqercc.team.models.EstablishTeamRequest;
 import cn.abtion.neuqercc.team.models.InitAllTeamDataResponse;
@@ -61,6 +62,7 @@ public interface APIService {
 
     /**
      * 检查token
+     *
      * @param token
      * @return
      */
@@ -323,5 +325,34 @@ public interface APIService {
     @GET("saiyou/public/index.php/chat/search")
     Call<APIResponse<List<SearchUserModel>>> searchUser(@Query("content") String content);
 
+
+
+
+    /**
+     * 加载通知列表
+     *
+     * @param phoneNumber
+     * @return
+     */
+    @GET("saiyou/public/index.php/")
+    Call<APIResponse<List<NoticeModel>>> loadNotice(@Query("phoneNumber") String phoneNumber);
+
+    /**
+     * 添加通知
+     *
+     * @param noticeModel
+     * @return
+     */
+    @POST("saiyou/public/index.php/")
+    Call<APIResponse> addNotice(@Body NoticeModel noticeModel);
+
+
+    /**
+     * 删除通知
+     * @param teamId
+     * @return
+     */
+    @GET("saiyou/public/index.php/")
+    Call<APIResponse> deleteNotice(@Query("teamId") int teamId);
 
 }
