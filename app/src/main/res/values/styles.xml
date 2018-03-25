@@ -152,6 +152,15 @@
     </style>
 
 
+    <!--RaiseButton样式-->
+    <style name="CustomButton" parent="Theme.AppCompat.Light">
+        <!-- 点击高亮时背景颜色 -->
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <!-- 按钮正常背景颜色 -->
+        <item name="colorButtonNormal">@color/colorAccent</item>
+    </style>
+
+
 
 
 
