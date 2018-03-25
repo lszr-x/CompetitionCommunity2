@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ import cn.abtion.neuqercc.widget.SwipeItemLayout;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
 import static cn.abtion.neuqercc.utils.Utility.runOnUiThread;
 
 /**
@@ -50,7 +52,7 @@ import static cn.abtion.neuqercc.utils.Utility.runOnUiThread;
  * fhyPayaso@qq.com
  */
 public class ChatListFragment extends BaseFragment implements FriendItemListener, SwipeRefreshLayout
-        .OnRefreshListener {
+        .OnRefreshListener, EMMessageListener {
 
 
     List<MessageModel> messageModelList = new ArrayList<>();
@@ -83,6 +85,8 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
     protected void initView() {
 
 
+        EMClient.getInstance().chatManager().addMessageListener(this);
+
         initRec();
         initSwipe();
     }
@@ -105,6 +109,10 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
     @Override
     public void onResume() {
         super.onResume();
+
+        Log.i(TAG, "onResume: 重新进入了这个页面");
+
+
         onRefresh();
     }
 
@@ -174,6 +182,7 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
                         loadMessageInfo(i);
                     }
                 }
+                mAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -222,4 +231,40 @@ public class ChatListFragment extends BaseFragment implements FriendItemListener
 
     }
 
+
+    @Override
+    public void onMessageReceived(List<EMMessage> messages) {
+
+        Log.i(TAG, "onMessageReceived: 接收到了消息");
+
+        onRefresh();
+    }
+
+    @Override
+    public void onCmdMessageReceived(List<EMMessage> messages) {
+
+    }
+
+    @Override
+    public void onMessageRead(List<EMMessage> messages) {
+
+    }
+
+    @Override
+    public void onMessageDelivered(List<EMMessage> messages) {
+
+    }
+
+    @Override
+    public void onMessageChanged(EMMessage message, Object change) {
+
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        EMClient.getInstance().chatManager().removeMessageListener(this);
+    }
 }
