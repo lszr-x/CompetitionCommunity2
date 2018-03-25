@@ -38,5 +38,4 @@ public class APIResponse<T> extends BaseModel {
         this.data = data;
     }
 
-
 }

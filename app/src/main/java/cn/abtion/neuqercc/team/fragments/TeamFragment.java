@@ -3,6 +3,7 @@ package cn.abtion.neuqercc.team.fragments;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
@@ -37,7 +38,7 @@ public class TeamFragment extends BaseFragment {
     @BindView(R.id.viewPager_team)
     ViewPager viewPagerTeam;
     @BindView(R.id.btn_establish_team)
-    Button btnEstablishTeam;
+    FloatingActionButton btnEstablishTeam;
 
     private TeamViewPagerAdapter teamViewPagerAdapter;
 

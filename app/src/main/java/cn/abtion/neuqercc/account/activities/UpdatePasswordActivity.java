@@ -2,20 +2,27 @@ package cn.abtion.neuqercc.account.activities;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
+import android.util.Log;
 import android.widget.Button;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.models.LoginRequest;
+import cn.abtion.neuqercc.account.models.TokenResponse;
 import cn.abtion.neuqercc.account.models.UpdatePasswordRequest;
 import cn.abtion.neuqercc.account.models.SmsRequest;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.message.data.ChatHelper;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.CacheUtil;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.CaptchaCountDownTimer;
@@ -30,6 +37,9 @@ import retrofit2.Response;
  */
 
 public class UpdatePasswordActivity extends NoBarActivity {
+
+
+    private static final String TAG = "UpdatePasswordActivity";
 
     @BindView(R.id.edit_password)
     TextInputEditText editPassword;
@@ -78,10 +88,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
     @OnClick(R.id.btn_get_verify_code)
     public void onBtnGetVerifyCodeClicked() {
 
-        smsRequest.setPhone(editPhone.getText().toString().trim());
-
         if (isPhoneTrue()) {
-
+            smsRequest.setPhone(editPhone.getText().toString().trim());
             captchaTimer.timerStart(true);
             getVerifyCode();
         }
@@ -101,9 +109,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-                verifyCode = response.body().getData().toString().trim();
-                ToastUtil.showToast(verifyCode);
-                //ToastUtil.showToast(getString(R.string.toast_send_successful));
+                verifyCode = response.body().getData().toString();
+                ToastUtil.showToast(getString(R.string.toast_send_successful));
 
             }
 
@@ -133,7 +140,8 @@ public class UpdatePasswordActivity extends NoBarActivity {
         if (!CaptchaCountDownTimer.FLAG_FIRST_IN &&
                 CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL > System.currentTimeMillis()) {
 
-            setCountDownTimer(CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL - System.currentTimeMillis());
+            setCountDownTimer(CaptchaCountDownTimer.curMillis + Config.COUNT_DOWN_TIME_TOTAL - System
+                    .currentTimeMillis());
             captchaTimer.timerStart(false);
 
         } else {
@@ -189,11 +197,10 @@ public class UpdatePasswordActivity extends NoBarActivity {
     @OnClick(R.id.btn_over)
     public void onBtnOverClicked() {
 
-        //updatePasswordRequest.setPhone(getIntent().getStringExtra("phoneNumber"));
-        updatePasswordRequest.setPhone(editPhone.getText().toString().trim());
-        updatePasswordRequest.setPassword(editPassword.getText().toString().trim());
-
         if (isDataTrue()) {
+
+            updatePasswordRequest.setPhone(editPhone.getText().toString());
+            updatePasswordRequest.setPassword(editPassword.getText().toString());
             updatePassword();
         }
     }
@@ -216,13 +223,9 @@ public class UpdatePasswordActivity extends NoBarActivity {
             @Override
             public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
 
-                ToastUtil.showToast(getString(R.string.toast_update_successful));
-
-                Intent intent = new Intent(UpdatePasswordActivity.this, MainActivity.class);
-                startActivity(intent);
-                captchaTimer.cancel();
-                finish();
-
+                LoginActivity.phoneNumber = updatePasswordRequest.getPhone();
+                LoginActivity.password = updatePasswordRequest.getPassword();
+                login();
             }
 
             //请求失败时回调
@@ -234,20 +237,65 @@ public class UpdatePasswordActivity extends NoBarActivity {
             //无论成功或者失败时都回调，用于dismissDialog或隐藏其他控件
             @Override
             public void dismissDialog() {
-                if (progressDialog.isShowing()) {
-                    disMissProgressDialog();
-                }
+
             }
         });
     }
+
+
+    /**
+     * 注册成功后直接调用登录接口
+     */
+    private void login() {
+
+
+        RestClient
+                .getService()
+                .login(new LoginRequest(updatePasswordRequest.getPhone(), updatePasswordRequest.getPassword()))
+                .enqueue(new DataCallback<APIResponse<TokenResponse>>() {
+                    @Override
+                    public void onDataResponse(Call<APIResponse<TokenResponse>> call, Response<APIResponse
+                            <TokenResponse>> response) {
+
+
+                        //缓存token和其他信息
+                        CacheUtil cacheUtil = NEUQerCCApplication.getInstance().getCacheUtil();
+                        if (cacheUtil != null) {
+                            cacheUtil.putString(CacheKey.TOKEN, response.body().getData().getToken());
+                            cacheUtil.putString(CacheKey.PHONE_NUMBER, updatePasswordRequest.getPhone());
+                            cacheUtil.putString(CacheKey.PASSWORD, updatePasswordRequest.getPassword());
+                        }
+
+                        ToastUtil.showToast(getString(R.string.toast_update_successful));
+                        Log.i(TAG, "onDataResponse: 更新密码+登录成功");
+                        captchaTimer.cancel();
+
+                        ChatHelper.loginEM(UpdatePasswordActivity.this);
+
+//                        startActivity(new Intent(UpdatePasswordActivity.this, MainActivity.class));
+//                        finish();
+                    }
+
+                    @Override
+                    public void onDataFailure(Call<APIResponse<TokenResponse>> call, Throwable t) {
+
+                    }
+
+                    @Override
+                    public void dismissDialog() {
+                        if (progressDialog.isShowing()) {
+                            disMissProgressDialog();
+                        }
+                    }
+                });
+    }
+
 
     /**
      * 返回按钮点击事件
      */
     @OnClick(R.id.btn_return)
     public void onBtnReturnClicked() {
-        Intent intent = new Intent(UpdatePasswordActivity.this, LoginActivity.class);
-        startActivity(intent);
         captchaTimer.cancel();
         finish();
     }
@@ -273,14 +321,13 @@ public class UpdatePasswordActivity extends NoBarActivity {
      */
     private boolean isDataTrue() {
         boolean flag = true;
-//        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
-//            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
-//            flag = false;
-//        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
-//            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
-//            flag = false;
-//        } else
-        if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
+        if (editCaptcha.getText().toString().trim().equals(Config.EMPTY_FIELD)) {
+            showError(editCaptcha, getString(R.string.error_captcha_empty_illegal));
+            flag = false;
+        } else if (!editCaptcha.getText().toString().trim().equals(verifyCode)) {
+            showError(editCaptcha, getString(R.string.error_captcha_number_illegal));
+            flag = false;
+        } else if (editPassword.getText().toString().trim().length() < Config.PASSWORD_MIN_LIMIT) {
             showError(editPassword, getString(R.string.error_password_min_limit));
             flag = false;
         } else if (editPassword.getText().toString().trim().length() > Config.PASSWORD_MAX_LIMIT) {

@@ -41,6 +41,12 @@ public class Config {
      */
     public static final int SPLASH_GO_MAIN_DELAY = 1500;
 
+
+    /**
+     * SwipeRefresh延迟时间
+     */
+    public static final int SWIPE_REFRESH_DELAY_TIME = 200;
+
     /**
      * MainActivity的page标记
      */

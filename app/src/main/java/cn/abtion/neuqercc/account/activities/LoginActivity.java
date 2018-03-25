@@ -7,16 +7,23 @@ import android.util.Log;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.models.LoginRequest;
+import cn.abtion.neuqercc.account.models.TokenResponse;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
+import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.message.data.ChatHelper;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.CacheUtil;
 import cn.abtion.neuqercc.utils.RegexUtil;
 import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
@@ -32,7 +39,8 @@ public class LoginActivity extends NoBarActivity {
 
 
     public static String password;
-    public static String phoneNumber = "15076035390";
+    public static String phoneNumber;
+    public final static String TAG = "LoginActivity";
 
     @BindView(R.id.edit_identifier)
     TextInputEditText editIdentifier;
@@ -67,49 +75,13 @@ public class LoginActivity extends NoBarActivity {
      */
     @OnClick(R.id.btn_login)
     public void onBtnLoginClicked() {
-        loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
-        loginRequest.setPassword(editPassword.getText().toString().trim());
-
-        //phoneNumber=editIdentifier.getText().toString().trim();
-        password = editPassword.getText().toString().trim();
-
-
-        EMClient.getInstance().login("222222", "222222", new EMCallBack() {
-            @Override
-            public void onSuccess() {
-
-                //保证进入主页面后本地会话和群组都 load 完毕
-                EMClient.getInstance().groupManager().loadAllGroups();
-                EMClient.getInstance().chatManager().loadAllConversations();
-
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-
-
-                Log.i("login", "onSuccess: 登录成功");
-            }
-
-            @Override
-            public void onError(int code, String error) {
-
-                Log.i("login", "onError: 登录失败，" + error);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-
-            }
-        });
-
-
-
 
 
         if (isDataTrue()) {
+            loginRequest.setIdentifier(editIdentifier.getText().toString().trim());
+            loginRequest.setPassword(editPassword.getText().toString().trim());
             processLogin();
         }
-
     }
 
     /**
@@ -119,7 +91,6 @@ public class LoginActivity extends NoBarActivity {
     public void onBtnRegisterClicked() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
-        finish();
     }
 
     /**
@@ -129,8 +100,6 @@ public class LoginActivity extends NoBarActivity {
     public void onTxtForgetPasswordClicked() {
         Intent intent = new Intent(LoginActivity.this, UpdatePasswordActivity.class);
         startActivity(intent);
-        finish();
-
     }
 
 
@@ -143,28 +112,38 @@ public class LoginActivity extends NoBarActivity {
         progressDialog.show();
 
         //网络请求
-        RestClient.getService().login(loginRequest).enqueue(new DataCallback<APIResponse>() {
+        RestClient.getService().login(loginRequest).enqueue(new DataCallback<APIResponse<TokenResponse>>() {
 
             //请求成功时回调
             @Override
-            public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+            public void onDataResponse(Call<APIResponse<TokenResponse>> call, Response<APIResponse<TokenResponse>>
+                    response) {
 
 
-                //登录成功记录账号和密码
+                //登录成功信息保存
                 phoneNumber = editIdentifier.getText().toString().trim();
                 password = editPassword.getText().toString().trim();
+                String token = response.body().getData().getToken();
+
+                CacheUtil cacheUtil = NEUQerCCApplication.getInstance().getCacheUtil();
+                if (cacheUtil != null) {
+                    cacheUtil.putString(CacheKey.TOKEN, token);
+                    cacheUtil.putString(CacheKey.PHONE_NUMBER, phoneNumber);
+                    cacheUtil.putString(CacheKey.PASSWORD, password);
+                }
+
+
+                //成功提示
+                Log.i(TAG, "onDataResponse: " + "常规登录成功" + token);
                 ToastUtil.showToast(getString(R.string.toast_login_successful));
 
 
-                //跳转至MainActivity
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                ChatHelper.loginEM(LoginActivity.this);
             }
 
             //请求失败时回调
             @Override
-            public void onDataFailure(Call<APIResponse> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<TokenResponse>> call, Throwable t) {
 
             }
 
@@ -214,5 +193,6 @@ public class LoginActivity extends NoBarActivity {
         }
         return flag;
     }
+
 
 }

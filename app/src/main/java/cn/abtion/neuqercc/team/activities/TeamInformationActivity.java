@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,17 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
+import cn.abtion.neuqercc.common.constants.CacheKey;
+import cn.abtion.neuqercc.message.models.NoticeModel;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.mine.models.TeamMemberResponse;
 import cn.abtion.neuqercc.team.adapters.TeamMemberListAdapter;
 import cn.abtion.neuqercc.team.models.AllTeamListModel;
-import cn.abtion.neuqercc.team.models.TeamMemberListModel;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -47,9 +49,12 @@ public class TeamInformationActivity extends ToolBarActivity {
     TextView txtContestName;
     @BindView(R.id.txt_team_declaration)
     TextView txtTeamDeclaration;
-
     @BindView(R.id.recylerview_team_member)
     RecyclerView recylerviewTeamMember;
+
+    private String teamName;
+    private int teamId;
+
 
     @Override
     protected int getLayoutId() {
@@ -87,10 +92,13 @@ public class TeamInformationActivity extends ToolBarActivity {
         txtContestName.setText(allTeamListModel.getContestName());
         txtTeamDeclaration.setText(allTeamListModel.getDeclaration());
 
+        teamId = allTeamListModel.getId();
+        teamName = allTeamListModel.getTeamName();
 
         RestClient.getService().mineTeamMember(allTeamListModel.getId()).enqueue(new DataCallback<APIResponse<List<TeamMemberResponse>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<List<TeamMemberResponse>>> call, Response<APIResponse<List<TeamMemberResponse>>> response) {
+            public void onDataResponse(Call<APIResponse<List<TeamMemberResponse>>> call,
+                                       Response<APIResponse<List<TeamMemberResponse>>> response) {
 
                 teamMemberListModels = response.body().getData();
                 initRecyclerView();
@@ -112,7 +120,8 @@ public class TeamInformationActivity extends ToolBarActivity {
 
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberListModels);
-        recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager.VERTICAL, false));
+        recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager
+                .VERTICAL, false));
         recylerviewTeamMember.setAdapter(teamMemberListAdapter);
 
     }
@@ -140,13 +149,18 @@ public class TeamInformationActivity extends ToolBarActivity {
         txtRightButton.setText(getString(R.string.txt_dialog_confirm));
 
 
-        //设置点击事件
+        builder.setView(view);
+        final AlertDialog dialog = builder.show();
 
+        //设置点击事件
         txtLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+                addNotice();
             }
         });
 
@@ -154,14 +168,47 @@ public class TeamInformationActivity extends ToolBarActivity {
             @Override
             public void onClick(View v) {
 
+                if (dialog != null && dialog.isShowing()) {
+                    dialog.dismiss();
+                }
             }
-
-
         });
-
-        builder.setView(view);
-        builder.show();
     }
 
 
+    /**
+     * 向队长发送请求的通知
+     */
+    private void addNotice() {
+
+
+        String username = NEUQerCCApplication.getInstance().getCacheUtil().getString(CacheKey.USER_NAME);
+
+        NoticeModel noticeRequest = new NoticeModel(-1
+                , LoginActivity.phoneNumber
+                , null
+                , teamId
+                , teamName
+                , 0
+                , username);
+
+
+        RestClient.getService().addNotice(noticeRequest).enqueue(new DataCallback<APIResponse>() {
+            @Override
+            public void onDataResponse(Call<APIResponse> call, Response<APIResponse> response) {
+
+                ToastUtil.showToast("发送通知成功");
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+        });
+    }
 }

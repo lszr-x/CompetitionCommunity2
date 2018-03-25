@@ -15,7 +15,6 @@ import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
-import cn.abtion.neuqercc.team.activities.SearchTeamResultActivity;
 import cn.abtion.neuqercc.utils.ToastUtil;
 
 /**
@@ -41,6 +40,7 @@ public class SearchUserActivity extends NoBarActivity {
     @Override
     protected void initView() {
 
+        searchUser();
     }
 
     @Override
@@ -64,12 +64,15 @@ public class SearchUserActivity extends NoBarActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    if (editSearchUser.getText().toString().equals(Config.EMPTY_FIELD)) {
+
+                    String searchContent = editSearchUser.getText().toString();
+                    if (searchContent.equals(Config.EMPTY_FIELD)) {
                         ToastUtil.showToast("请输入用户关键字");
                     } else {
                         Intent intent = new Intent(SearchUserActivity.this, SearchUseResActivity.class);
-                        intent.putExtra("searchUsername", editSearchUser.getText().toString());
+                        intent.putExtra("searchUserName", searchContent);
                         startActivity(intent);
+                        finish();
                     }
                 }
                 return false;
@@ -91,13 +94,14 @@ public class SearchUserActivity extends NoBarActivity {
     @OnClick(R.id.img_search_team)
     public void onImgSearchTeamClicked() {
 
-        if (editSearchUser.getText().toString().equals(Config.EMPTY_FIELD)) {
+        String searchContent = editSearchUser.getText().toString();
+        if (searchContent.equals(Config.EMPTY_FIELD)) {
             ToastUtil.showToast("请输入用户关键字");
         } else {
             Intent intent = new Intent(SearchUserActivity.this, SearchUseResActivity.class);
-            intent.putExtra("searchUserName", editSearchUser.getText().toString());
+            intent.putExtra("searchUserName", searchContent);
             startActivity(intent);
+            finish();
         }
     }
-
 }

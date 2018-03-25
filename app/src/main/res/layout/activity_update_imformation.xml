@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:background="@color/bg_gray">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_gray">
 
 
     <RelativeLayout
@@ -28,7 +26,7 @@
                 android:layout_alignBottom="@+id/mine_information"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
-                android:src="@color/bg_gray" />
+                android:src="@drawable/defult"/>
 
 
             <LinearLayout
@@ -44,18 +42,19 @@
                     android:id="@+id/edit_nick_name"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:hint="@string/hint_student_name"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"
-                    android:gravity="right"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:hint="@string/hint_student_name"
+                    android:singleLine="true"
+                    android:textSize="20sp"
                     />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_mine_input" />
+                    android:src="@drawable/ic_mine_input"/>
             </LinearLayout>
 
             <View
@@ -63,7 +62,9 @@
                 android:layout_height="1dp"
                 android:layout_alignBottom="@id/liner_nick_name"
                 android:layout_alignLeft="@id/liner_nick_name"
-                android:background="@color/bg_black" />
+                android:background="@color/bg_black"
+
+                />
 
 
         </RelativeLayout>
@@ -84,7 +85,7 @@
                 android:id="@+id/student_name"
                 style="@style/mine_txt_update_information"
                 android:layout_marginTop="9dp"
-                android:text="@string/txt_student_name" />
+                android:text="@string/txt_student_name"/>
 
             <ImageView
                 android:id="@+id/img_mine_name_eye"
@@ -93,19 +94,21 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@id/student_name"
-                android:src="@drawable/img_mine_eye_selector" />
+                android:src="@drawable/img_mine_eye_selector"/>
 
             <EditText
                 android:id="@+id/edit_real_name"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/student_sex"
                 android:layout_alignEnd="@+id/cb_edit_girl"
                 android:layout_alignRight="@+id/cb_edit_girl"
                 android:background="@null"
-                android:hint="@string/hint_input_name"
-                android:textSize="16sp"
                 android:gravity="right"
+                android:hint="@string/hint_input_name"
+                android:singleLine="true"
+                android:textSize="16sp"
+
                 />
 
 
@@ -114,7 +117,7 @@
                 style="@style/mine_txt_update_information"
                 android:layout_below="@id/student_name"
                 android:layout_marginTop="15dp"
-                android:text="@string/txt_sex" />
+                android:text="@string/txt_sex"/>
 
 
             <CheckBox
@@ -125,7 +128,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
                 android:text="女"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
 
             <CheckBox
@@ -136,7 +139,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="76dp"
                 android:text="男"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
 
             <TextView
@@ -145,7 +148,7 @@
                 android:layout_below="@id/student_sex"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
-                android:text="@string/txt_phone_number" />
+                android:text="@string/txt_phone_number"/>
 
 
             <ImageView
@@ -156,19 +159,21 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="5dp"
                 android:layout_toRightOf="@id/student_phone"
-                android:src="@drawable/img_mine_eye_selector" />
+                android:src="@drawable/img_mine_eye_selector"/>
 
             <EditText
                 android:id="@+id/edit_phone_number"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/student_phone"
                 android:layout_marginRight="16dp"
                 android:background="@null"
-                android:hint="@string/hint_input_phone_number"
-                android:textSize="16sp"
                 android:gravity="right"
+                android:hint="@string/hint_input_phone_number"
+                android:singleLine="true"
+                android:textSize="16sp"
+
                 />
 
 
@@ -181,27 +186,33 @@
             android:layout_height="150dp"
             android:layout_below="@id/rl_true_name"
             android:layout_marginTop="10dp"
-            android:background="@color/bg_white">
+            android:background="@color/bg_white"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <TextView
                 android:id="@+id/mine_update_profession"
                 style="@style/mine_txt_update_information"
                 android:layout_marginTop="9dp"
-                android:text="@string/txt_profession" />
+                android:text="@string/txt_profession"
+
+                />
 
 
             <EditText
                 android:id="@+id/edit_update_profession"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/mine_update_profession"
-                android:layout_marginRight="16dp"
+                android:layout_alignBaseline="@+id/mine_update_profession"
+                android:layout_alignBottom="@+id/mine_update_profession"
+                android:layout_alignEnd="@+id/spinner_student_grade"
+                android:layout_alignRight="@+id/spinner_student_grade"
                 android:background="@null"
-                android:hint="@string/hint_input_profession"
-                android:textSize="16sp"
+                android:fitsSystemWindows="true"
                 android:gravity="right"
-                />
+                android:hint="@string/hint_input_profession"
+                android:singleLine="true"
+                android:textSize="16sp"/>
 
 
             <TextView
@@ -209,10 +220,10 @@
                 style="@style/mine_txt_update_information"
                 android:layout_below="@id/mine_update_profession"
                 android:layout_marginTop="15dp"
-                android:text="@string/txt_grade" />
+                android:text="@string/txt_grade"/>
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/spinner_student_grade"
                 android:layout_width="80dp"
                 android:layout_height="20dp"
@@ -220,50 +231,56 @@
                 android:layout_alignTop="@id/mine_update_grade"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/contest_spinner"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 >
 
 
-                    <TextView
-                        android:id="@+id/txt_update_grade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:textSize="16sp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="2dp"
+                <TextView
+                    android:id="@+id/txt_update_grade"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="16sp"
+                    android:text="2016"
+                    android:layout_toLeftOf="@id/img_choice_1"
+                    android:layout_centerVertical="true"
 
-                        />
+                    />
 
                 <ImageView
+                    android:id="@+id/img_choice_1"
                     android:layout_width="15dp"
                     android:layout_height="10dp"
-                    android:src="@drawable/ic_spinner"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_spinner"/>
 
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/mine_update_stu_id"
                 style="@style/mine_txt_update_information"
                 android:layout_below="@id/mine_update_grade"
                 android:layout_marginTop="15dp"
-                android:text="@string/txt_student_id" />
+                android:text="@string/txt_student_id"/>
 
             <EditText
                 android:id="@+id/edit_update_stu_id"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@id/mine_update_stu_id"
                 android:layout_marginRight="16dp"
                 android:background="@null"
-                android:hint="@string/hint_input_id"
-                android:textSize="16sp"
                 android:gravity="right"
-                />
+                android:hint="@string/hint_input_id"
+                android:singleLine="true"
+                android:textSize="16sp"/>
 
 
             <TextView
@@ -271,9 +288,9 @@
                 style="@style/mine_txt_update_information"
                 android:layout_below="@id/mine_update_stu_id"
                 android:layout_marginTop="15dp"
-                android:text="@string/txt_good_at_field" />
+                android:text="@string/txt_good_at_field"/>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/spinner_good_at"
                 android:layout_width="80dp"
                 android:layout_height="20dp"
@@ -281,25 +298,33 @@
                 android:layout_alignTop="@id/mine_update_field"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/contest_spinner"
-                android:textSize="16sp"
-                android:gravity="center_vertical">
+                android:gravity="center"
+                android:textSize="16sp">
 
                 <TextView
                     android:id="@+id/txt_update_good_at"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginBottom="2dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:textSize="16sp" />
+                    android:layout_toLeftOf="@id/img_choice_2"
+                    android:gravity="center"
+                    android:text="请选择"
+                    android:textSize="16sp"
+                    />
 
                 <ImageView
+                    android:id="@+id/img_choice_2"
                     android:layout_width="15dp"
                     android:layout_height="10dp"
-                    android:src="@drawable/ic_spinner"
-                    android:layout_gravity="center"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_spinner"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
         </RelativeLayout>
@@ -320,8 +345,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/txt_honor_wall"
-                android:textSize="20sp" />
-
+                android:textSize="20sp"/>
 
 
             <View
@@ -329,21 +353,21 @@
                 android:layout_height="1dp"
                 android:layout_alignLeft="@id/mine_txt_honor"
                 android:layout_below="@id/mine_txt_honor"
-                android:background="@color/bg_black" />
+                android:background="@color/bg_black"/>
 
             <cn.abtion.neuqercc.widget.HonorGridView
                 android:id="@+id/mine_grid_honor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/mine_txt_honor"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginTop="10dp"
                 android:horizontalSpacing="5dp"
                 android:numColumns="3"
                 android:stretchMode="columnWidth"
-                android:verticalSpacing="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:verticalSpacing="5dp">
 
             </cn.abtion.neuqercc.widget.HonorGridView>
 

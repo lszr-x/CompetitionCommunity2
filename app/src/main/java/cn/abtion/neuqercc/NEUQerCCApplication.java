@@ -5,7 +5,9 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.hyphenate.chat.EMClient;
@@ -18,8 +20,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import cn.abtion.neuqercc.account.activities.LoginActivity;
+import cn.abtion.neuqercc.message.data.ChatHelper;
 import cn.abtion.neuqercc.utils.CacheUtil;
 
+import static android.content.ContentValues.TAG;
 import static cn.abtion.neuqercc.BuildConfig.DEBUG;
 
 /**
@@ -49,7 +53,14 @@ public class NEUQerCCApplication extends Application {
         appContext = this;
         registerActivityLifecycleCallbacks(activityLifecycleCallbacks);
         LeakCanary.install(this);
-        initEM();
+        ChatHelper.initEM(appContext);
+
+
+        //解决安卓7.0相机调用崩溃问题
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
     }
 
     /**
@@ -145,51 +156,12 @@ public class NEUQerCCApplication extends Application {
     public void exitAccount() {
         getCacheUtil().clear();
         removeAllActivity();
+
+        Log.i(TAG, "exitAccount: 退出账户成功，缓存已经清除");
         Intent intent = new Intent(this,LoginActivity.class);
+        Log.i(TAG, "exitAccount: 重新进入登录界面");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
-
-
-
-    /**
-     * 初始化环信
-     */
-    private void initEM() {
-        int pid = android.os.Process.myPid();
-        String processName = getProcessAppName(pid);
-        if (processName == null || !processName.equalsIgnoreCase(appContext.getPackageName())) {
-            // 则此application::onCreate 是被service 调用的，直接返回
-            return;
-        }
-        EMOptions options = new EMOptions();
-        options.setAutoLogin(false);
-        EMClient.getInstance().init(appContext, options);
-        EMClient.getInstance().setDebugMode(DEBUG);
-    }
-
-    /**
-     * 获取processAppName
-     *
-     * @param pID pid
-     * @return name
-     */
-    private String getProcessAppName(int pID) {
-        String processName = null;
-        ActivityManager activityManager = (ActivityManager) appContext.getSystemService(ACTIVITY_SERVICE);
-        List list = activityManager.getRunningAppProcesses();
-        Iterator iterator = list.iterator();
-        while (iterator.hasNext()) {
-            ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo) iterator.next();
-            try {
-                if (info.pid == pID) {
-                    processName = info.processName;
-                    return processName;
-                }
-            } catch (Exception e) {
-                Log.d("Process", "Error>> :"+ e.toString());
-            }
-        }
-        return processName;
+        Log.i(TAG, "exitAccount: 重新进入登录界面");
     }
 }

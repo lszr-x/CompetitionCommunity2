@@ -42,12 +42,13 @@
 
         <EditText
             android:id="@+id/edit_event_name"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@null"
             android:hint="请输入赛事名称"
             android:textSize="16sp"
+            android:singleLine="true"
             android:gravity="right"/>
 
     </RelativeLayout>

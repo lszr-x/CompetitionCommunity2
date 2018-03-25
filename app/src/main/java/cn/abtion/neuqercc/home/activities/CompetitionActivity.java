@@ -55,9 +55,8 @@ public class CompetitionActivity<T> extends ToolBarActivity {
         Intent intent = getIntent();
         if (intent != null) {
             contestItemId = intent.getExtras().getInt("contestId");
+            processGetRaidersAndDetails();
         }
-
-        processGetRaidersAndDetails();
 
 
     }
@@ -66,8 +65,6 @@ public class CompetitionActivity<T> extends ToolBarActivity {
     protected void initView() {
 
         this.setActivityTitle(getString(R.string.title_competition));
-
-
 
 
         //修改tab指示器长度
@@ -132,7 +129,7 @@ public class CompetitionActivity<T> extends ToolBarActivity {
             public void onDataResponse(Call<APIResponse<RaidersAndDetailsRequest>> call, Response<APIResponse<RaidersAndDetailsRequest>> response) {
 
 
-                CompetitionViewPagerAdapter competitionPagerAdapter = new CompetitionViewPagerAdapter(getSupportFragmentManager(),response.body().getData());
+                CompetitionViewPagerAdapter competitionPagerAdapter = new CompetitionViewPagerAdapter(getSupportFragmentManager(), response.body().getData());
                 competitionViewPager.setAdapter(competitionPagerAdapter);
                 //tabLayout和ViewPager联动
                 headerTitleTable.setupWithViewPager(competitionViewPager);
@@ -150,13 +147,5 @@ public class CompetitionActivity<T> extends ToolBarActivity {
                 }
             }
         });
-
-
     }
-
-
-
-
-
-
 }

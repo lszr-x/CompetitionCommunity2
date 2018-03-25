@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import cn.abtion.neuqercc.message.fragments.ChatListFragment;
 import cn.abtion.neuqercc.message.fragments.FriendListFragment;
-import cn.abtion.neuqercc.message.fragments.GroupListFragment;
+import cn.abtion.neuqercc.message.fragments.NoticeListFragment;
 
 /**
  * @author fhyPayaso
@@ -16,11 +16,11 @@ import cn.abtion.neuqercc.message.fragments.GroupListFragment;
 public class MessageViewPagerAdapter extends FragmentPagerAdapter {
 
 
-    private String[] titles = new String[]{"消息", "好友", "群组"};
+    private String[] titles = new String[]{"消息", "好友", "通知"};
 
     private ChatListFragment mChatListFragment;
     private FriendListFragment mFriendListFragment;
-    private GroupListFragment mGroupListFragment;
+    private NoticeListFragment mNoticeListFragment;
     private Fragment currentFrgment;
 
 
@@ -46,10 +46,10 @@ public class MessageViewPagerAdapter extends FragmentPagerAdapter {
                 currentFrgment = mFriendListFragment;
                 break;
             case 2:
-                if (mGroupListFragment == null) {
-                    mGroupListFragment = new GroupListFragment();
+                if (mNoticeListFragment == null) {
+                    mNoticeListFragment = new NoticeListFragment();
                 }
-                currentFrgment = mGroupListFragment;
+                currentFrgment = mNoticeListFragment;
                 break;
             default:
                 break;

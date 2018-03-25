@@ -27,6 +27,8 @@ public class EstablishTeamActivity extends ToolBarActivity {
     EditText editWantJoin;
     @BindView(R.id.edit_declaration)
     EditText editDeclaration;
+    @BindView(R.id.edit_want_good_at)
+    EditText editWantGoodAt;
 
     @Override
     protected int getLayoutId() {
@@ -64,11 +66,11 @@ public class EstablishTeamActivity extends ToolBarActivity {
                         editTeamName.getText().toString(),
                         editWantJoin.getText().toString(),
                         editDeclaration.getText().toString(),
-                        "前端开发"
+                        editWantGoodAt.getText().toString().trim()
                 );
-                String gson=new Gson().toJson(establishTeamRequest);
+                String gson = new Gson().toJson(establishTeamRequest);
 
-                intent.putExtra("establishTeamRequest",gson);
+                intent.putExtra("establishTeamRequest", gson);
 
 
                 startActivity(intent);
@@ -78,4 +80,10 @@ public class EstablishTeamActivity extends ToolBarActivity {
     }
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

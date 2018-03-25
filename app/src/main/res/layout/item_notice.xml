@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/txt_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text="fhyPayaso"
+        />
+
+    <TextView
+        android:id="@+id/txt_notice_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txt_user_name"
+        android:layout_below="@+id/txt_user_name"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:text="申请加入"
+        android:textColor="@color/bg_black"
+        />
+
+
+    <TextView
+        android:id="@+id/txt_team_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/txt_notice_action"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/txt_notice_action"
+        android:text="提交什么都不队"/>
+
+
+    <TextView
+        android:id="@+id/btn_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/btn_right"
+        android:background="@drawable/bg_account_btn"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:text="拒绝"
+        android:textColor="@color/white"
+        />
+
+
+    <TextView
+        android:id="@+id/btn_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_notice_btn"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:text="同意"
+        android:textColor="@color/colorAccent"
+        />
+
+
+</RelativeLayout>

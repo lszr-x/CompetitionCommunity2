@@ -15,13 +15,24 @@ public class MessageModel extends BaseModel{
     private String userName;
     private String lastMessage;
     private String lastTime;
+    private String phoneNumber;
 
-    public MessageModel(String imgRes, String userName, String lastMessage, String lastTime) {
+    public MessageModel(String imgRes, String userName, String lastMessage, String lastTime, String phoneNumber) {
         this.imgRes = imgRes;
         this.userName = userName;
         this.lastMessage = lastMessage;
         this.lastTime = lastTime;
+        this.phoneNumber = phoneNumber;
     }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
 
     public String getImgRes() {
         return imgRes;

@@ -60,10 +60,16 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadTeamInformation();
+        loadTeamMemberInformation();
+    }
+
+    @Override
     protected void loadData() {
 
         loadTeamInformation();
-
         loadTeamMemberInformation();
     }
 
@@ -96,7 +102,8 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
         RestClient.getService().mineTeamInformation(teamId).enqueue(new DataCallback<APIResponse<MineTeamInformationRequest>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<MineTeamInformationRequest>> call, Response<APIResponse<MineTeamInformationRequest>> response) {
+            public void onDataResponse(Call<APIResponse<MineTeamInformationRequest>> call,
+                                       Response<APIResponse<MineTeamInformationRequest>> response) {
 
                 teamInformationRequest = response.body().getData();
                 txtTeamName.setText(teamInformationRequest.getTeamName());
@@ -128,7 +135,8 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
         RestClient.getService().mineTeamMember(teamId).enqueue(new DataCallback<APIResponse<List<TeamMemberResponse>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<List<TeamMemberResponse>>> call, Response<APIResponse<List<TeamMemberResponse>>> response) {
+            public void onDataResponse(Call<APIResponse<List<TeamMemberResponse>>> call,
+                                       Response<APIResponse<List<TeamMemberResponse>>> response) {
 
                 teamMemberResponseList = response.body().getData();
                 initRecyclerView();
@@ -153,7 +161,8 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
         recylerviewTeamMember.setNestedScrollingEnabled(false);
         TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberResponseList);
-        recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager.VERTICAL, false));
+        recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager
+                .VERTICAL, false));
         recylerviewTeamMember.setAdapter(teamMemberListAdapter);
 
     }
