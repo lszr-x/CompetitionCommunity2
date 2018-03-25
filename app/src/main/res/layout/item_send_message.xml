@@ -20,11 +20,13 @@
         android:paddingTop="8dp"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
+
+        android:id="@+id/img_chat_avatar"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/txt_message"
         android:layout_marginRight="8dp"
-        android:src="@drawable/bg_about_us"/>
+        android:src="@drawable/defult"/>
 
 </RelativeLayout>

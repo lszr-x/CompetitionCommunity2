@@ -5,6 +5,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.hyphenate.chat.EMMessage;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -12,6 +14,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.Unbinder;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.fragments.BaseFragment;
@@ -88,7 +91,7 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
                     }
                 });
             }
-        }, 2000);
+        }, 200);
 
     }
 
@@ -121,20 +124,34 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
                                        Response<APIResponse<List<FriendModel>>> response) {
 
                 List<FriendModel> responseList = response.body().getData();
-                friendModelList.clear();
-                friendModelList.addAll(responseList);
-                mAdapter.notifyDataSetChanged();
-                lyRefreshFriends.setRefreshing(false);
+
+                if (responseList != null) {
+
+                    for (int i = 0; i < responseList.size(); i++) {
+                        if (responseList.get(i).getPic() != null) {
+
+                            //将好友的头像图片地址缓存到本地
+                            NEUQerCCApplication.getInstance().getCacheUtil().putString(responseList.get(i).getPhone()
+                                    + "_avatar_url", responseList.get(i).getPic());
+                        }
+                    }
+
+                    friendModelList.clear();
+                    friendModelList.addAll(responseList);
+                    mAdapter.notifyDataSetChanged();
+                }
             }
 
             @Override
             public void onDataFailure(Call<APIResponse<List<FriendModel>>> call, Throwable t) {
+
 
             }
 
             @Override
             public void dismissDialog() {
 
+                lyRefreshFriends.setRefreshing(false);
             }
         });
     }
@@ -148,7 +165,7 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
     @Override
     public void onAvaterClick(int pos) {
 
-        FriendInfoActivity.startActivity(getContext(), friendModelList.get(pos).getUsername());
+        FriendInfoActivity.startActivity(getContext(), friendModelList.get(pos).getPhone());
     }
 
 
@@ -160,7 +177,8 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
     @Override
     public void onSendMessageClick(int pos) {
 
-        ChatWindowActivity.startActivity(getContext(), friendModelList.get(pos).getPhone());
+        ChatWindowActivity.startActivity(getContext(), friendModelList.get(pos).getPhone(),friendModelList.get(pos)
+                .getUsername());
     }
 
 
@@ -209,7 +227,7 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
                     }
                 });
             }
-        }, 2000);
+        }, 200);
     }
 }
 

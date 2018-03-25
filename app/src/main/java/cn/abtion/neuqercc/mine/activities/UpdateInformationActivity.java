@@ -106,7 +106,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
     private int flagTempGrade = 0;
 
 
-    private boolean flagUpLoad = false;
+    private boolean flagUpLoad;
     private String photoPath;
 
 
@@ -142,7 +142,7 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     private GridHonorAdapter gridHonorAdapter;
     private boolean isShowDelete;
-    private List<ShowHonorResponse> showHonorResponseList = new ArrayList<ShowHonorResponse>();
+    private List<ShowHonorResponse> showHonorResponseList;
     private String[] studentGradeList;
     private String[] goodAtList;
 
@@ -154,6 +154,10 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
     @Override
     protected void initVariable() {
+
+
+        flagUpLoad = false;
+        showHonorResponseList = new ArrayList<>();
 
 
         //动态申请权限
@@ -178,10 +182,9 @@ public class UpdateInformationActivity extends ToolBarActivity {
 
 
     @Override
-    protected void onPostResume() {
-
+    protected void onResume() {
+        super.onResume();
         initHonorWall();
-        super.onPostResume();
     }
 
     /**
@@ -383,13 +386,31 @@ public class UpdateInformationActivity extends ToolBarActivity {
         }
 
 
-
         if (informationResponse.getGender() == 0) {
             checkBoxBoy.setChecked(true);
             checkBoxGirl.setChecked(false);
         } else {
             checkBoxBoy.setChecked(false);
             checkBoxGirl.setChecked(true);
+        }
+
+
+
+        //初始化眼睛图标
+
+        flagNameEye = informationResponse.getNameSee();
+        flagPhoneEye = informationResponse.getPhoneSee();
+
+        if (flagNameEye == FLAG_EYE_OPEN) {
+            imgNameEye.setSelected(false);
+        } else if (flagNameEye == FLAG_EYE_CLOSE) {
+            imgNameEye.setSelected(true);
+        }
+
+        if (flagPhoneEye == FLAG_EYE_OPEN) {
+            imgPhoneEye.setSelected(false);
+        } else if (flagPhoneEye == FLAG_EYE_CLOSE) {
+            imgPhoneEye.setSelected(true);
         }
     }
 
@@ -817,21 +838,15 @@ public class UpdateInformationActivity extends ToolBarActivity {
                 case FileUtil.CAMERA_REQUEST:
 
                     Log.i("", "onActivityResult: " + photoPath);
-
                     imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(photoPath));
-
-
                     flagUpLoad = true;
                     break;
                 //相册回调
                 case FileUtil.ALBUM_REQUEST:
-
                     photoPath = FileUtil.getSelectedPicturePath(data, UpdateInformationActivity.this);
                     Log.i("", "onActivityResult: " + photoPath);
-
                     imgUpdateAvatar.setImageBitmap(BitmapFactory.decodeFile(photoPath));
                     flagUpLoad = true;
-
                     break;
                 default:
                     break;

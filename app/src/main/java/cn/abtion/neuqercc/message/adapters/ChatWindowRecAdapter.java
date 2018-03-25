@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
@@ -19,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author fhyPayaso
@@ -39,12 +41,18 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
     private LayoutInflater inflater;
     private Context context;
     private EMConversation conversation;
+    private String mRecvAvatarUrl;
+    private String mSendAvatarUrl;
 
-    public ChatWindowRecAdapter(Context context, EMConversation conversation) {
+
+    public ChatWindowRecAdapter(Context context, EMConversation conversation, String recvAvatarUrl, String
+            sendAvatarUrl) {
         this.context = context;
         this.conversation = conversation;
         messages = new ArrayList<>();
         inflater = LayoutInflater.from(context);
+        mRecvAvatarUrl = recvAvatarUrl;
+        mSendAvatarUrl = sendAvatarUrl;
     }
 
     @Override
@@ -91,13 +99,18 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
         return -1;
     }
 
+
     public EMMessage getItem(int position) {
         return messages.get(position);
     }
 
     class ItemHolder extends BaseRecyclerViewAdapter.ViewHolder<EMMessage> {
+
         @BindView(R.id.txt_message)
         TextView txtMessage;
+        @BindView(R.id.img_chat_avatar)
+        CircleImageView imgChatAvatar;
+
 
         public ItemHolder(View itemView) {
             super(itemView);
@@ -108,6 +121,15 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
         protected void onBind(EMMessage emMessage) {
             EMTextMessageBody textMessageBody = (EMTextMessageBody) emMessage.getBody();
             txtMessage.setText(textMessageBody.getMessage());
+
+
+            //渲染头像
+            int type = getItemViewType();
+            if (type == MESSAGE_TYPE_RECV_TXT && mRecvAvatarUrl != null) {
+                Glide.with(context).load(mRecvAvatarUrl).into(imgChatAvatar);
+            } else if (type == MESSAGE_TYPE_SENT_TXT && mSendAvatarUrl != null) {
+                Glide.with(context).load(mSendAvatarUrl).into(imgChatAvatar);
+            }
         }
     }
 
@@ -129,7 +151,19 @@ public class ChatWindowRecAdapter extends RecyclerView.Adapter<BaseRecyclerViewA
     };
 
     private void refreshList() {
-        messages = conversation.getAllMessages();
+
+
+        //获取最新消息
+        List<EMMessage> newMessage = conversation.getAllMessages();
+        String msgId = newMessage.get(newMessage.size() - 1).getMsgId();
+        int pageSize = 20;
+
+        //从数据库里获取更多消息记录
+        List<EMMessage> dbMessage = conversation.loadMoreMsgFromDB(msgId, pageSize);
+        messages.clear();
+        messages.addAll(dbMessage);
+        messages.addAll(newMessage);
+
         conversation.markAllMessagesAsRead();
         notifyDataSetChanged();
     }

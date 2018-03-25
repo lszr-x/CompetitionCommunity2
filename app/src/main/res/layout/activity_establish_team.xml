@@ -68,104 +68,18 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="100dp"
                 android:layout_below="@id/txt_team_member_adept"
                 android:layout_marginTop="5dp">
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <EditText
+                    android:id="@+id/edit_want_good_at"
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
                     android:layout_marginLeft="30dp"
-                    android:layout_marginTop="5dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginTop="5dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="50dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
 
                     />
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="50dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginTop="50dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="95dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginTop="95dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="95dp"
-                    android:checked="false"
-                    android:text="@string/chk_html"
-                    android:textColor="@color/text_black"
-                    android:textSize="16sp" />
 
             </RelativeLayout>
 
@@ -174,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="330dp"
+                android:layout_marginTop="250dp"
                 android:text="@string/txt_team_declaration"
                 android:textColor="@color/text_black"
                 android:textSize="16sp" />

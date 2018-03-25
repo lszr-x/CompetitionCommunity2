@@ -76,11 +76,11 @@ public class HomeFragment extends BaseFragment {
 
     private static int page = 1;
     private HomeAdapter homeAdapter;
-    private LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+    private LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager
+            .VERTICAL, false);
 
 
-    @BindView(R.id.spinner_home)
-    Spinner spinnerHome;
+
     @BindView(R.id.search_home)
     SearchView searchHome;
     @BindView(R.id.rec_home)
@@ -125,24 +125,32 @@ public class HomeFragment extends BaseFragment {
         progressDialog.show();
 
         //网络请求
-        RestClient.getService().initContestRecylerView(page,Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
+        RestClient.getService().initContestRecylerView(page, Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Response<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> response) {
+            public void onDataResponse
+                    (Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>
+                             call, Response<APIResponse<InitContestRecylerViewDataRequest<List
+                            <InitContestRecylerViewItemRequest>>>> response) {
                 List<InitContestRecylerViewItemRequest> list = response.body().getData().getItem();
 
-                for (int i = 0; i < list.size(); i++) {
-                    contestListModels.add(new ContestListModel(
-                            list.get(i).getId(),
-                            list.get(i).getName(),
-                            list.get(i).getShort_desc(),
-                            list.get(i).getRegistration_time(),
-                            list.get(i).getCompetition_time()));
+
+                if (list != null) {
+                    for (int i = 0; i < list.size(); i++) {
+                        contestListModels.add(new ContestListModel(
+                                list.get(i).getId(),
+                                list.get(i).getName(),
+                                list.get(i).getShort_desc(),
+                                list.get(i).getRegistration_time(),
+                                list.get(i).getCompetition_time()));
+                    }
+                    initAdapter(contestListModels);
+
                 }
-                initAdapter(contestListModels);
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List
+                    <InitContestRecylerViewItemRequest>>>> call, Throwable t) {
 
             }
 
@@ -178,7 +186,8 @@ public class HomeFragment extends BaseFragment {
         homeAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<ContestListModel>() {
 
             @Override
-            public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder viewHolder) {
+            public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder
+                    viewHolder) {
                 Intent intent = new Intent(getContext(), CompetitionActivity.class);
                 intent.putExtra("contestId", contestListModel.getId());
                 startActivity(intent);
@@ -187,11 +196,14 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void loadMoreData() {
-        RestClient.getService().initContestRecylerView(++page,Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
+        RestClient.getService().initContestRecylerView(++page, Config.size).enqueue(new DataCallback<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Response<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> response) {
+            public void onDataResponse
+                    (Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>>
+                             call, Response<APIResponse<InitContestRecylerViewDataRequest<List
+                            <InitContestRecylerViewItemRequest>>>> response) {
                 List<InitContestRecylerViewItemRequest> list = response.body().getData().getItem();
-                if (list!=null){
+                if (list != null) {
 
                     for (int i = 0; i < list.size(); i++) {
                         contestListModels.add(new ContestListModel(
@@ -208,7 +220,8 @@ public class HomeFragment extends BaseFragment {
             }
 
             @Override
-            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List<InitContestRecylerViewItemRequest>>>> call, Throwable t) {
+            public void onDataFailure(Call<APIResponse<InitContestRecylerViewDataRequest<List
+                    <InitContestRecylerViewItemRequest>>>> call, Throwable t) {
 
             }
 
@@ -231,7 +244,8 @@ public class HomeFragment extends BaseFragment {
         //网络请求
         RestClient.getService().initCrouselFigure().enqueue(new DataCallback<APIResponse<List<InitCrouselFigureRequest>>>() {
             @Override
-            public void onDataResponse(Call<APIResponse<List<InitCrouselFigureRequest>>> call, Response<APIResponse<List<InitCrouselFigureRequest>>> response) {
+            public void onDataResponse(Call<APIResponse<List<InitCrouselFigureRequest>>> call,
+                                       Response<APIResponse<List<InitCrouselFigureRequest>>> response) {
                 List<InitCrouselFigureRequest> list = response.body().getData();
                 for (int i = 0; i < list.size(); i++) {
                     ImageView imageView = new ImageView(getContext());
@@ -269,16 +283,22 @@ public class HomeFragment extends BaseFragment {
         vfContest.setOutAnimation(outToLeftAnimation());
         vfContest.setFlipInterval(Config.FLIPPER_TIME_INTERVAL);
         vfContest.startFlipping();
+
         vfContest.setOnTouchListener(new View.OnTouchListener() {
+
+
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
+
+
                 //解决viewFlipper和view的冲突
                 vfContest.getParent().requestDisallowInterceptTouchEvent(true);
                 //手势滑动
                 int x;
                 long downTime = 0;
                 switch (event.getAction()) {
-
                     case MotionEvent.ACTION_DOWN:
                         //记录点击时的坐标
                         downX = (int) event.getRawX();
@@ -306,14 +326,17 @@ public class HomeFragment extends BaseFragment {
 
                         } else {
 
-                            Intent intent = new Intent(getContext(), CompetitionActivity.class);
-                            startActivity(intent);
-
-                            vfContest.showNext();
-                            vfContest.startFlipping();
+//                            Intent intent = new Intent(getContext(), CompetitionActivity.class);
+//                            startActivity(intent);
+//
+//                            vfContest.showNext();
+//                            vfContest.startFlipping();
                         }
                         break;
+
+
                     default:
+
                         break;
                 }
 
@@ -380,11 +403,6 @@ public class HomeFragment extends BaseFragment {
         outtoRight.setInterpolator(new AccelerateInterpolator());
         return outtoRight;
     }
-
-
-
-
-
 
 
     @OnClick(R.id.search_home)

@@ -47,7 +47,7 @@ import retrofit2.Response;
 public class FriendInfoActivity extends NoBarActivity {
 
 
-    public static String mFriendPhoneNumber;
+    public String mFriendPhoneNumber;
     @BindView(R.id.friend_header_bg)
     LinearLayout friendHeaderBg;
     @BindView(R.id.img_friend_gender)
@@ -109,7 +109,6 @@ public class FriendInfoActivity extends NoBarActivity {
 
     private List<ShowHonorResponse> showHonorResponseList = new ArrayList<ShowHonorResponse>();
     private PersonInformationResponse informationResponse;
-    private String imgAvatarUrl;
 
     @Override
     protected int getLayoutId() {
@@ -119,11 +118,19 @@ public class FriendInfoActivity extends NoBarActivity {
     @Override
     protected void initVariable() {
 
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            mFriendPhoneNumber = intent.getStringExtra("friend_phone_number");
+        }
+
     }
 
     @Override
     protected void initView() {
 
+        initPersonalInformation();
+        initHonorWall();
     }
 
     @Override
@@ -166,11 +173,21 @@ public class FriendInfoActivity extends NoBarActivity {
      */
     public void setPersonalInformation() {
 
-        txtFriendPhoneNumber.setText(informationResponse.getPhone().trim());
-        txtFriendUserName.setText(informationResponse.getUsername().trim());
-        txtFriendName.setText(informationResponse.getName().trim());
-        txtFriendGoodAt.setText(informationResponse.getGoodAt().trim());
-        txtFriendMajor.setText(informationResponse.getMajor().trim());
+        if (informationResponse.getNameSee() == 1) {
+            txtFriendName.setText(informationResponse.getName() == null ? "" : informationResponse.getName());
+        } else {
+            txtFriendName.setText("不可见");
+        }
+
+        if (informationResponse.getPhoneSee() == 1) {
+            txtFriendPhoneNumber.setText(informationResponse.getPhone() == null ? "" : informationResponse.getPhone());
+        } else {
+            txtFriendPhoneNumber.setText("不可见");
+        }
+
+        txtFriendUserName.setText(informationResponse.getUsername() == null ? "" : informationResponse.getUsername());
+        txtFriendGoodAt.setText(informationResponse.getGoodAt() == null ? "" : informationResponse.getGoodAt());
+        txtFriendMajor.setText(informationResponse.getMajor() == null ? "" : informationResponse.getMajor());
         txtFriendTeamNum.setText(String.valueOf(informationResponse.getTeamNum()));
         txtFriendGrade.setText(String.valueOf(informationResponse.getGrade()));
         txtFriendStudentId.setText(String.valueOf(informationResponse.getStudentId()));
@@ -181,7 +198,7 @@ public class FriendInfoActivity extends NoBarActivity {
             imgFriendGender.setImageResource(R.drawable.ic_mine_woman);
         }
 
-        imgAvatarUrl = informationResponse.getPicture();
+        String imgAvatarUrl = informationResponse.getPicture();
         if (imgAvatarUrl != null) {
             Glide.with(this).load(imgAvatarUrl).into(friendAvatar);
         }
@@ -239,8 +256,10 @@ public class FriendInfoActivity extends NoBarActivity {
 
 
     public static void startActivity(Context context, String friendPhoneNumber) {
-        context.startActivity(new Intent(context, FriendInfoActivity.class));
-        FriendInfoActivity.mFriendPhoneNumber = friendPhoneNumber;
+
+        Intent intent = new Intent(context, FriendInfoActivity.class);
+        intent.putExtra("friend_phone_number", friendPhoneNumber);
+        context.startActivity(intent);
     }
 
 

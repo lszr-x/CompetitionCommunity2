@@ -7,13 +7,15 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import butterknife.BindView;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.adapters.BaseRecyclerViewAdapter;
-import cn.abtion.neuqercc.message.activities.ChatWindowActivity;
 import cn.abtion.neuqercc.message.models.MessageModel;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author fhyPayaso
@@ -21,6 +23,7 @@ import cn.abtion.neuqercc.message.models.MessageModel;
  * fhyPayaso@qq.com
  */
 public class MessageRecAdapter extends BaseRecyclerViewAdapter<MessageModel> {
+
 
 
     private FriendItemListener mFriendItemListener;
@@ -56,11 +59,15 @@ public class MessageRecAdapter extends BaseRecyclerViewAdapter<MessageModel> {
         RelativeLayout rlMessageMain;
         @BindView(R.id.txt_delete_message)
         TextView txtDeleteMessage;
+        @BindView(R.id.message_avatar)
+        CircleImageView messageAvatar;
 
 
         public ItemHolder(final View itemView) {
             super(itemView);
 
+            rlMessageMain.setOnClickListener(this);
+            txtDeleteMessage.setOnClickListener(this);
         }
 
         @Override
@@ -69,8 +76,13 @@ public class MessageRecAdapter extends BaseRecyclerViewAdapter<MessageModel> {
             mMessageName.setText(messageModel.getUserName() == null ? "N/A" : messageModel.getUserName());
             mMessageLast.setText(messageModel.getLastMessage() == null ? "N/A" : messageModel.getLastMessage());
             mTxtLastTime.setText(messageModel.getLastTime() == null ? "N/A" : messageModel.getLastTime());
-        }
 
+            if (messageModel.getImgRes() != null) {
+                Glide.with(context).load(messageModel.getImgRes()).into(messageAvatar);
+            }
+
+
+        }
         @Override
         public void onClick(View v) {
 

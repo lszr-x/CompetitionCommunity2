@@ -2,14 +2,11 @@ package cn.abtion.neuqercc.message.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -18,13 +15,14 @@ import com.hyphenate.chat.EMMessage;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.abtion.neuqercc.NEUQerCCApplication;
 import cn.abtion.neuqercc.R;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.message.adapters.ChatWindowRecAdapter;
+import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.utils.Utility;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author fhyPayaso
@@ -44,7 +42,9 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
     private EMMessage emMessage;
     private EMConversation conversation;
     private ChatWindowRecAdapter mRecAdapter;
-    public static String chatId = "";
+    private String friendPhone;
+
+
 
     @Override
     protected int getLayoutId() {
@@ -54,7 +54,10 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
     @Override
     protected void initVariable() {
 
-        setActivityTitle(chatId);
+        Intent intent = getIntent();
+        friendPhone = intent.getStringExtra("friend_phone");
+        String friendUsername = intent.getStringExtra("friend_username");
+        setActivityTitle(friendUsername);
     }
 
     @Override
@@ -69,24 +72,31 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
 
     }
 
+
     private void initChatRec() {
 
+        //从缓存中取出头像地址
+        String mSendAvatarUrl = NEUQerCCApplication.getInstance().getCacheUtil().getString("person_avatar_url");
+        String mRecvAvatarUrl = NEUQerCCApplication.getInstance().getCacheUtil().getString(friendPhone+"_avatar_url");
 
         //添加信息监听
         EMClient.getInstance().chatManager().addMessageListener(this);
-        conversation = EMClient.getInstance().chatManager().getConversation(chatId,
+        conversation = EMClient.getInstance().chatManager().getConversation(friendPhone,
                 EMConversation.EMConversationType.Chat, true);
 
-        mRecAdapter = new ChatWindowRecAdapter(ChatWindowActivity.this, conversation);
+        mRecAdapter = new ChatWindowRecAdapter(ChatWindowActivity.this, conversation,mRecvAvatarUrl,mSendAvatarUrl);
         recChat.setAdapter(mRecAdapter);
         recChat.setLayoutManager(new LinearLayoutManager(ChatWindowActivity.this, LinearLayoutManager.VERTICAL, false));
         refresh();
     }
 
 
-    public static void startActivity(Context context,String chatId) {
-        context.startActivity(new Intent(context, ChatWindowActivity.class));
-        ChatWindowActivity.chatId = chatId;
+    public static void startActivity(Context context, String chatId, String username) {
+
+        Intent intent = new Intent(context, ChatWindowActivity.class);
+        intent.putExtra("friend_phone", chatId);
+        intent.putExtra("friend_username", username);
+        context.startActivity(intent);
     }
 
 
@@ -109,14 +119,22 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
     }
 
 
-
     //发送信息按钮点击事件
     @OnClick(R.id.btn_send)
     public void onViewClicked() {
-        emMessage = EMMessage.createTxtSendMessage(editChatContent.getText().toString(), chatId);
-        EMClient.getInstance().chatManager().sendMessage(emMessage);
-        editChatContent.setText("");
-        refresh();
+
+
+        if(!"".equals(editChatContent.getText().toString())) {
+            emMessage = EMMessage.createTxtSendMessage(editChatContent.getText().toString(), friendPhone);
+            EMClient.getInstance().chatManager().sendMessage(emMessage);
+            editChatContent.setText("");
+            refresh();
+        } else {
+
+            ToastUtil.showToast("发送信息不能为空");
+        }
+
+
     }
 
 
@@ -145,4 +163,10 @@ public class ChatWindowActivity extends ToolBarActivity implements EMMessageList
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EMClient.getInstance().chatManager().removeMessageListener(this);
+    }
 }

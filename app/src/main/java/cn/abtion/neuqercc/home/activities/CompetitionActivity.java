@@ -55,9 +55,9 @@ public class CompetitionActivity<T> extends ToolBarActivity {
         Intent intent = getIntent();
         if (intent != null) {
             contestItemId = intent.getExtras().getInt("contestId");
+            processGetRaidersAndDetails();
         }
 
-        processGetRaidersAndDetails();
 
 
     }

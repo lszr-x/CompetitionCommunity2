@@ -23,6 +23,7 @@ import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.message.data.ChatHelper;
 import cn.abtion.neuqercc.utils.CacheUtil;
 
+import static android.content.ContentValues.TAG;
 import static cn.abtion.neuqercc.BuildConfig.DEBUG;
 
 /**
@@ -155,8 +156,12 @@ public class NEUQerCCApplication extends Application {
     public void exitAccount() {
         getCacheUtil().clear();
         removeAllActivity();
+
+        Log.i(TAG, "exitAccount: 退出账户成功，缓存已经清除");
         Intent intent = new Intent(this,LoginActivity.class);
+        Log.i(TAG, "exitAccount: 重新进入登录界面");
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+        Log.i(TAG, "exitAccount: 重新进入登录界面");
     }
 }

@@ -1,5 +1,6 @@
 package cn.abtion.neuqercc.message.activities;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -15,6 +16,7 @@ import cn.abtion.neuqercc.message.models.SearchUserModel;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -68,6 +70,8 @@ public class SearchUseResActivity extends ToolBarActivity {
         mAdapter.setOnItemClickedListener(new BaseRecyclerViewAdapter.OnItemClicked<SearchUserModel>() {
             @Override
             public void onItemClicked(SearchUserModel searchUserModel, BaseRecyclerViewAdapter.ViewHolder holder) {
+
+
                 FriendInfoActivity.startActivity(SearchUseResActivity.this, searchUserModel.getPhone());
             }
         });
@@ -94,6 +98,7 @@ public class SearchUseResActivity extends ToolBarActivity {
             @Override
             public void onDataFailure(Call<APIResponse<List<SearchUserModel>>> call, Throwable t) {
 
+                ToastUtil.showToast("没有符合条件的用户");
             }
 
             @Override

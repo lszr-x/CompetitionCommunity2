@@ -17,6 +17,7 @@ import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.message.data.ChatHelper;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
@@ -189,8 +190,7 @@ public class RegisterActivity extends NoBarActivity {
                         ToastUtil.showToast(getString(R.string.toast_register_successful));
                         Log.i(TAG, "onDataResponse: 注册+登录成功");
                         captchaTimer.cancel();
-                        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-                        finish();
+                        ChatHelper.loginEM(RegisterActivity.this);
                     }
 
                     @Override

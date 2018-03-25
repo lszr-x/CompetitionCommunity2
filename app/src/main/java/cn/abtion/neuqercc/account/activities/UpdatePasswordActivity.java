@@ -18,6 +18,7 @@ import cn.abtion.neuqercc.base.activities.NoBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.common.constants.CacheKey;
 import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.message.data.ChatHelper;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
@@ -268,8 +269,11 @@ public class UpdatePasswordActivity extends NoBarActivity {
                         ToastUtil.showToast(getString(R.string.toast_update_successful));
                         Log.i(TAG, "onDataResponse: 更新密码+登录成功");
                         captchaTimer.cancel();
-                        startActivity(new Intent(UpdatePasswordActivity.this, MainActivity.class));
-                        finish();
+
+                        ChatHelper.loginEM(UpdatePasswordActivity.this);
+
+//                        startActivity(new Intent(UpdatePasswordActivity.this, MainActivity.class));
+//                        finish();
                     }
 
                     @Override

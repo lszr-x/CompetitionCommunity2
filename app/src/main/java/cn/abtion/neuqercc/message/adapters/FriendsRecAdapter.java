@@ -4,7 +4,10 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * fhyPayaso@qq.com
  */
 public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> {
+
 
 
     private FriendItemListener mFriendItemListener;
@@ -52,24 +56,28 @@ public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> {
         TextView txtSendMessage;
         @BindView(R.id.txt_delete_friend)
         TextView txtDeleteFriend;
-
+        @BindView(R.id.ly_friend_info)
+        LinearLayout lyFriendInfo;
 
         public ItemHolder(View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(this);
-            mImgFriendsAvatar.setOnClickListener(this);
+            //mImgFriendsAvatar.setOnClickListener(this);
+            lyFriendInfo.setOnClickListener(this);
             txtDeleteFriend.setOnClickListener(this);
             txtSendMessage.setOnClickListener(this);
-
         }
 
         @Override
         protected void onBind(FriendModel friendModel) {
 
             mTxtFriendName.setText(friendModel.getUsername() == null ? "N/A" : friendModel.getUsername());
-        }
 
+            if (friendModel.getPic() != null) {
+                Glide.with(context).load(friendModel.getPic()).into(mImgFriendsAvatar);
+            }
+        }
 
         @Override
         public void onClick(View v) {
@@ -77,7 +85,7 @@ public class FriendsRecAdapter extends BaseRecyclerViewAdapter<FriendModel> {
             int pos = getAdapterPosition();
             switch (v.getId()) {
                 //好友信息跳转回调
-                case R.id.img_friends_avatar:
+                case R.id.ly_friend_info:
                     mFriendItemListener.onAvaterClick(pos);
                     break;
                 //发送信息回调

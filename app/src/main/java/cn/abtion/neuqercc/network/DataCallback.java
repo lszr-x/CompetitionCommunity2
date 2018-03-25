@@ -40,14 +40,14 @@ public abstract class DataCallback<T> implements Callback<T> {
         onDataFailure(call, t);
         dismissDialog();
 
-        ToastUtil.showToast(t.toString());
+        //ToastUtil.showToast(t.toString());
         Log.i(TAG, "onFailure: "+t.toString());
 
 
         if (t instanceof ResultException) {
             GlobalAPIErrorHandler.handler((ResultException) t);
         } else {
-            ToastUtil.showToast("网络连接失败，请稍后再试");
+            //ToastUtil.showToast("网络连接失败，请稍后再试");
         }
     }
 }
