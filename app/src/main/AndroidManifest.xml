@@ -86,6 +86,7 @@
         <activity android:name=".team.activities.TeamInformationActivity"/>
         <activity android:name=".team.activities.EstablishTeamActivity"/>
         <activity android:name=".team.activities.EstablishTeamFinishActivity"/>
+        <activity android:name=".home.activities.EstablishTeamActivity"/>
         <activity android:name=".mine.activities.MineTeamIfromationActivity"/>
         <activity
             android:name=".mine.activities.UpdateTeamInformationActivity"

@@ -19,12 +19,10 @@ import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.common.Config;
 import cn.abtion.neuqercc.home.adapters.CompetitionViewPagerAdapter;
 import cn.abtion.neuqercc.home.models.RaidersAndDetailsRequest;
-import cn.abtion.neuqercc.main.MainActivity;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.team.activities.SearchTeamActivity;
-import cn.abtion.neuqercc.utils.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -59,15 +57,20 @@ public class CompetitionActivity<T> extends ToolBarActivity {
         }
 
 
-
     }
 
     @Override
     protected void initView() {
 
         this.setActivityTitle(getString(R.string.title_competition));
-
-
+        this.setImage(R.drawable.ic_search);
+        this.setOnImageListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CompetitionActivity.this, SearchTeamActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         //修改tab指示器长度
@@ -113,12 +116,6 @@ public class CompetitionActivity<T> extends ToolBarActivity {
         }
     }
 
-    @OnClick(R.id.btn_search)
-    public void onBtnSearchViewClicked() {
-        Intent intent = new Intent(CompetitionActivity.this, SearchTeamActivity.class);
-        startActivity(intent);
-    }
-
 
     public void processGetRaidersAndDetails() {
 
@@ -132,7 +129,7 @@ public class CompetitionActivity<T> extends ToolBarActivity {
             public void onDataResponse(Call<APIResponse<RaidersAndDetailsRequest>> call, Response<APIResponse<RaidersAndDetailsRequest>> response) {
 
 
-                CompetitionViewPagerAdapter competitionPagerAdapter = new CompetitionViewPagerAdapter(getSupportFragmentManager(),response.body().getData());
+                CompetitionViewPagerAdapter competitionPagerAdapter = new CompetitionViewPagerAdapter(getSupportFragmentManager(), response.body().getData());
                 competitionViewPager.setAdapter(competitionPagerAdapter);
                 //tabLayout和ViewPager联动
                 headerTitleTable.setupWithViewPager(competitionViewPager);
@@ -157,6 +154,14 @@ public class CompetitionActivity<T> extends ToolBarActivity {
 
 
 
+    @OnClick(R.id.btn_establish_team)
+    public void onViewClicked() {
+
+        Intent intent=getIntent();
+        String contestName=intent.getStringExtra("contestName");
+
+        EstablishTeamActivity.startEstablishActivity(CompetitionActivity.this,contestName);
 
 
+    }
 }

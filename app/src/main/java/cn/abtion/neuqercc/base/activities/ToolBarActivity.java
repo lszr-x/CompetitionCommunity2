@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,8 @@ public abstract class ToolBarActivity extends BaseActivity {
      * activity 页面Toolbar
      */
     private Toolbar toolbar;
+    @BindView(R.id.img_toolbar)
+    ImageView imgToolbar;
     @BindView(R.id.txt_toolbar_title)
     protected TextView toolBarTitle;
     @BindView(R.id.txt_toolbar_over)
@@ -67,6 +70,7 @@ public abstract class ToolBarActivity extends BaseActivity {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         toolBarOver = (TextView) toolbar.findViewById(R.id.txt_toolbar_over);
+        imgToolbar=(ImageView) toolbar .findViewById(R.id.img_toolbar) ;
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
@@ -115,6 +119,14 @@ public abstract class ToolBarActivity extends BaseActivity {
         }
     }
 
+    protected void setImage(@Nullable int image){
+        if(toolbar!=null){
+            imgToolbar=(ImageView) imgToolbar.findViewById(R.id.img_toolbar) ;
+
+            imgToolbar.setImageResource(image);
+
+        }
+    }
 
 
     /**
@@ -124,7 +136,10 @@ public abstract class ToolBarActivity extends BaseActivity {
         this.finish();
     }
 
-    protected void setOnOverTextListener(View.OnClickListener listener)  {
+    protected void setOnOverTextListener(View.OnClickListener listener) {
         toolBarOver.setOnClickListener(listener);
+    }
+    protected void setOnImageListener(View.OnClickListener listener){
+        imgToolbar.setOnClickListener(listener);
     }
 }

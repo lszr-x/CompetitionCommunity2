@@ -34,6 +34,16 @@
 
             />
 
+        <ImageView
+            android:id="@+id/img_toolbar"
+            android:layout_width="30dp"
+            android:layout_height="24dp"
+            android:textSize="18sp"
+            android:layout_gravity="end"
+            android:layout_marginRight="15dp"
+
+            />
+
 
     </android.support.v7.widget.Toolbar>
 

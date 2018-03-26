@@ -39,20 +39,26 @@
         </android.support.v4.view.ViewPager>
 
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_establish_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_team_button"
+            app:borderWidth="0dp"
+            app:backgroundTint="#FF4011"
+            app:rippleColor="#33728dff"
+            app:elevation="8dp"
+            app:pressedTranslationZ="16dp"
+            android:layout_marginTop="470dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            />
 
-    <Button
-        android:id="@+id/btn_search"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_gravity="bottom"
-        android:background="@color/bg_white"
-        android:drawableTop="@drawable/ic_contest_back_search"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:text="@string/btn_search_team"
-        android:textColor="@color/text_no_selected"
-        android:textSize="10sp">
+    </RelativeLayout>
 
-    </Button>
+
 
 </android.support.design.widget.CoordinatorLayout>

@@ -56,6 +56,8 @@ public class MainActivity extends NoBarActivity {
     @BindView(R.id.vp_main_container)
     MainViewPager mainViewPager;
 
+
+
     private long startTime = 0;
 
     public static void start(BaseActivity context, int flag) {
