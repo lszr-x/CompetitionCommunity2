@@ -95,7 +95,7 @@ public class AllTeamFragment extends BaseFragment {
             @Override
             public void onDataResponse(Call<APIResponse<InitAllTeamDataResponse<List<InitAllTeamResponse>>>> call, Response<APIResponse<InitAllTeamDataResponse<List<InitAllTeamResponse>>>> response) {
                 if(response.body().getData()!=null){
-                    allTeamListModels=new ArrayList<>();
+//                    allTeamListModels=new ArrayList<>();
                     for (int i=0;i<response.body().getData().getItem().size();i++){
                         allTeamListModels.add(new AllTeamListModel(
                                 response.body().getData().getItem().get(i).getTeam_name(),

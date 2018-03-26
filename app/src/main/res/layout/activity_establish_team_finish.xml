@@ -149,15 +149,4 @@
     </android.support.v4.widget.NestedScrollView>
 
 
-    <Button
-        android:id="@+id/btn_invite_friend"
-        android:layout_width="328dp"
-        android:layout_height="36dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/bg_account_btn"
-        android:text="@string/btn_invite_friend"
-        android:textColor="@color/text_white"
-        android:textSize="16sp" />
-</RelativeLayout>
+    </RelativeLayout>
