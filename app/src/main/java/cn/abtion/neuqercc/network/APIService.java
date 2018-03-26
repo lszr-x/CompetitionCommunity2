@@ -22,6 +22,7 @@ import cn.abtion.neuqercc.message.models.AddFriendRequest;
 import cn.abtion.neuqercc.message.models.FriendModel;
 import cn.abtion.neuqercc.message.models.NoticeModel;
 import cn.abtion.neuqercc.message.models.SearchUserModel;
+import cn.abtion.neuqercc.mine.models.AddTeamMemberRequest;
 import cn.abtion.neuqercc.team.models.EstablishTeamRequest;
 import cn.abtion.neuqercc.team.models.InitAllTeamDataResponse;
 import cn.abtion.neuqercc.team.models.InitAllTeamResponse;
@@ -259,6 +260,15 @@ public interface APIService {
 
 
     /**
+     * 添加队伍成员
+     *
+     * @return
+     */
+    @POST("saiyou/public/index.php/team/member_add")
+    Call<APIResponse> addTeamMember(@Body AddTeamMemberRequest request);
+
+
+    /**
      * 修改我的队伍信息
      *
      * @return
@@ -326,16 +336,14 @@ public interface APIService {
     Call<APIResponse<List<SearchUserModel>>> searchUser(@Query("content") String content);
 
 
-
-
     /**
      * 加载通知列表
      *
      * @param phoneNumber
      * @return
      */
-    @GET("saiyou/public/index.php/")
-    Call<APIResponse<List<NoticeModel>>> loadNotice(@Query("phoneNumber") String phoneNumber);
+    @GET("saiyou/public/index.php/notice/get")
+    Call<APIResponse<List<NoticeModel>>> loadNotice(@Query("recvNum") String phoneNumber);
 
     /**
      * 添加通知
@@ -343,16 +351,17 @@ public interface APIService {
      * @param noticeModel
      * @return
      */
-    @POST("saiyou/public/index.php/")
+    @POST("saiyou/public/index.php/notice/add")
     Call<APIResponse> addNotice(@Body NoticeModel noticeModel);
 
 
     /**
      * 删除通知
-     * @param teamId
+     *
+     * @param noticeId
      * @return
      */
-    @GET("saiyou/public/index.php/")
-    Call<APIResponse> deleteNotice(@Query("teamId") int teamId);
+    @DELETE("saiyou/public/index.php/notice/del")
+    Call<APIResponse> deleteNotice(@Query("noticeId") String noticeId);
 
 }

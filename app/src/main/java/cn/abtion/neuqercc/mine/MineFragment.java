@@ -41,6 +41,7 @@ import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.utils.DensityUtil;
+import cn.abtion.neuqercc.utils.ToastUtil;
 import cn.abtion.neuqercc.widget.GradientScrollView;
 import cn.abtion.neuqercc.widget.HonorGridView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -116,7 +117,7 @@ public class MineFragment extends BaseFragment {
     RelativeLayout mineHonor;
 
 
-    private List<ShowHonorResponse> showHonorResponseList = new ArrayList<ShowHonorResponse>();
+    private List<ShowHonorResponse> showHonorResponseList;
     private PersonInformationResponse informationResponse;
     private String imgAvatarUrl;
 
@@ -128,6 +129,7 @@ public class MineFragment extends BaseFragment {
     @Override
     protected void initVariable() {
 
+        showHonorResponseList = new ArrayList<>();
     }
 
     @Override
@@ -286,6 +288,9 @@ public class MineFragment extends BaseFragment {
 
         GridHonorAdapter gridHonorAdapter = new GridHonorAdapter(getContext(), showHonorResponseList, false);
         gridHonor.setAdapter(gridHonorAdapter);
+
+        Log.i(TAG, "initGrid: "+showHonorResponseList.size());
+
         gridHonor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override

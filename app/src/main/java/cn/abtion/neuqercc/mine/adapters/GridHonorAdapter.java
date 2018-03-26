@@ -101,7 +101,6 @@ public class GridHonorAdapter extends BaseAdapter {
             Glide.with(context).load(R.drawable.bg_add_honor).into(imgHonor);
             viewHolder.imgDelete = (ImageView) convertView.findViewById(R.id.img_show_delete);
             viewHolder.imgDelete.setVisibility(View.GONE);
-
             return convertView;
 
         } else {

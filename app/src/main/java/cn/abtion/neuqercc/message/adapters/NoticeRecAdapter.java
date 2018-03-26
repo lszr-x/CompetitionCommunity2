@@ -120,7 +120,7 @@ public class NoticeRecAdapter extends BaseRecyclerViewAdapter<NoticeModel> {
                     setButton(1);
                     break;
                 case FLAG_REFUSE_FOR_INVITE:
-                    txtNoticeAction.setText("拒绝您加入");
+                    txtNoticeAction.setText("拒绝加入");
                     setButton(1);
                     break;
                 default:

@@ -1,5 +1,6 @@
 package cn.abtion.neuqercc.message.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -103,6 +104,8 @@ public class FriendListFragment extends BaseFragment implements FriendItemListen
      * 加载好友列表
      */
     private void loadFriendList() {
+
+
 
 
         RestClient.getService().loadFriendList(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<FriendModel>>>() {

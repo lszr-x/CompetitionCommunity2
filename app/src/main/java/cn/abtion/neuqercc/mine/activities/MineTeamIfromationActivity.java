@@ -20,7 +20,6 @@ import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.team.adapters.TeamMemberListAdapter;
-import cn.abtion.neuqercc.team.models.TeamMemberListModel;
 import cn.abtion.neuqercc.widget.CustomLinearLayoutManager;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -35,11 +34,12 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
     @BindView(R.id.txt_team_declaration)
     TextView txtTeamDeclaration;
     @BindView(R.id.recylerview_team_member)
-    RecyclerView recylerviewTeamMember;
+    RecyclerView recyclerViewTeamMember;
 
-    private List<TeamMemberResponse> teamMemberResponseList = new ArrayList<TeamMemberResponse>();
+    private List<TeamMemberResponse> teamMemberResponseList;
     MineTeamInformationRequest teamInformationRequest;
-    public static int teamId;
+    private int teamId;
+    private String teamName;
 
     @Override
     protected int getLayoutId() {
@@ -48,6 +48,8 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
     @Override
     protected void initVariable() {
+
+        teamMemberResponseList = new ArrayList<>();
 
     }
 
@@ -99,6 +101,7 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
         Intent intent = getIntent();
         teamId = intent.getIntExtra("teamId", -1);
+        teamName = intent.getStringExtra("teamName");
 
         RestClient.getService().mineTeamInformation(teamId).enqueue(new DataCallback<APIResponse<MineTeamInformationRequest>>() {
             @Override
@@ -153,24 +156,21 @@ public class MineTeamIfromationActivity extends ToolBarActivity {
 
             }
         });
-
     }
 
 
     protected void initRecyclerView() {
 
-        recylerviewTeamMember.setNestedScrollingEnabled(false);
+        recyclerViewTeamMember.setNestedScrollingEnabled(false);
         TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberResponseList);
-        recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager
+        recyclerViewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager
                 .VERTICAL, false));
-        recylerviewTeamMember.setAdapter(teamMemberListAdapter);
-
+        recyclerViewTeamMember.setAdapter(teamMemberListAdapter);
     }
 
 
     @OnClick(R.id.btn_join_team)
-    public void onButtonJoinTeamClicked() {
-
+    public void onButtonInviteFriendClicked() {
+        InviteFriendListActivity.startActivity(MineTeamIfromationActivity.this,teamId,teamName);
     }
-
 }

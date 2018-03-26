@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@color/white">
 
     <TextView
         android:id="@+id/txt_user_name"
@@ -11,6 +12,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp"
         android:text="fhyPayaso"
+        android:textColor="@color/bg_black"
         />
 
     <TextView
@@ -20,10 +22,9 @@
         android:layout_alignLeft="@id/txt_user_name"
         android:layout_below="@+id/txt_user_name"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="申请加入"
-        android:textColor="@color/bg_black"
-        />
+        android:textSize="12sp"/>
 
 
     <TextView
@@ -33,7 +34,10 @@
         android:layout_alignTop="@id/txt_notice_action"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/txt_notice_action"
-        android:text="提交什么都不队"/>
+        android:text="提交什么都不队"
+        android:textSize="12sp"
+
+        />
 
 
     <TextView

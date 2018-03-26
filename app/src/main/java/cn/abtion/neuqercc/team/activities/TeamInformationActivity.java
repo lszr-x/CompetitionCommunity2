@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -160,7 +161,7 @@ public class TeamInformationActivity extends ToolBarActivity {
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-                addNotice();
+
             }
         });
 
@@ -171,6 +172,7 @@ public class TeamInformationActivity extends ToolBarActivity {
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
+                addNotice();
             }
         });
     }
@@ -184,7 +186,7 @@ public class TeamInformationActivity extends ToolBarActivity {
 
         String username = NEUQerCCApplication.getInstance().getCacheUtil().getString(CacheKey.USER_NAME);
 
-        NoticeModel noticeRequest = new NoticeModel(-1
+        NoticeModel noticeRequest = new NoticeModel(""
                 , LoginActivity.phoneNumber
                 , null
                 , teamId
@@ -203,6 +205,8 @@ public class TeamInformationActivity extends ToolBarActivity {
             @Override
             public void onDataFailure(Call<APIResponse> call, Throwable t) {
 
+
+                Log.i("", "onDataFailure: "+t.toString());
             }
 
             @Override

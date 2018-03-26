@@ -95,6 +95,7 @@
         <activity android:name=".message.activities.ChatWindowActivity" />
         <activity android:name=".message.activities.SearchUserActivity" />
         <activity android:name=".message.activities.SearchUseResActivity" />
+        <activity android:name=".mine.activities.InviteFriendListActivity"/>
         <activity android:name=".account.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

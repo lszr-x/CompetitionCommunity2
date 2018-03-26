@@ -11,48 +11,47 @@ package cn.abtion.neuqercc.message.models;
 public class NoticeModel {
 
 
-    private int noticeId;
-    private String sendPhoneNumber;
-    private String recivePhoneNumber;
+    private String noticeId;
+    private String sendNum;
+    private String recvNum;
     private int teamId;
     private String teamName;
-    private int noticeType;
-    private String sendUserName;
+    private int type;
+    private String userName;
 
 
-    public NoticeModel(int noticeId, String sendPhoneNumber, String recivePhoneNumber, int teamId, String teamName,
-                       int noticeType, String sendUserName) {
+    public NoticeModel(String noticeId, String sendNum, String recvNum, int teamId, String teamName, int type, String userName) {
         this.noticeId = noticeId;
-        this.sendPhoneNumber = sendPhoneNumber;
-        this.recivePhoneNumber = recivePhoneNumber;
+        this.sendNum = sendNum;
+        this.recvNum = recvNum;
         this.teamId = teamId;
         this.teamName = teamName;
-        this.noticeType = noticeType;
-        this.sendUserName = sendUserName;
+        this.type = type;
+        this.userName = userName;
     }
 
-    public int getNoticeId() {
+    public String getNoticeId() {
         return noticeId;
     }
 
-    public void setNoticeId(int noticeId) {
+    public void setNoticeId(String noticeId) {
         this.noticeId = noticeId;
     }
 
     public String getSendPhoneNumber() {
-        return sendPhoneNumber;
+        return sendNum;
     }
 
     public void setSendPhoneNumber(String sendPhoneNumber) {
-        this.sendPhoneNumber = sendPhoneNumber;
+        this.sendNum = sendPhoneNumber;
     }
 
     public String getRecivePhoneNumber() {
-        return recivePhoneNumber;
+        return recvNum;
     }
 
     public void setRecivePhoneNumber(String recivePhoneNumber) {
-        this.recivePhoneNumber = recivePhoneNumber;
+        this.recvNum = recivePhoneNumber;
     }
 
     public int getTeamId() {
@@ -72,18 +71,18 @@ public class NoticeModel {
     }
 
     public int getNoticeType() {
-        return noticeType;
+        return type;
     }
 
     public void setNoticeType(int noticeType) {
-        this.noticeType = noticeType;
+        this.type = noticeType;
     }
 
     public String getSendUserName() {
-        return sendUserName;
+        return userName;
     }
 
     public void setSendUserName(String sendUserName) {
-        this.sendUserName = sendUserName;
+        this.userName = sendUserName;
     }
 }

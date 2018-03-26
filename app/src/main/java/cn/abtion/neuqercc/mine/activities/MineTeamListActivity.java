@@ -3,6 +3,7 @@ package cn.abtion.neuqercc.mine.activities;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,6 @@ public class MineTeamListActivity extends ToolBarActivity {
     }
 
 
-
     public void initMineTeamList() {
 
         RestClient.getService().mineTeamList(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<List<MineTeamListResponse>>>() {
@@ -95,9 +95,7 @@ public class MineTeamListActivity extends ToolBarActivity {
 
     }
 
-
     public void initContestRecyclerView() {
-
 
         recMineTeam.setNestedScrollingEnabled(false);
         MineTeamListAdapter mineTeamListAdapter = new MineTeamListAdapter(MineTeamListActivity.this,
@@ -112,11 +110,11 @@ public class MineTeamListActivity extends ToolBarActivity {
             @Override
             public void onItemClicked(MineTeamListResponse mineTeamListModel, BaseRecyclerViewAdapter.ViewHolder
                     viewHolder) {
-
                 Intent intent = new Intent(MineTeamListActivity.this, MineTeamIfromationActivity.class);
                 intent.putExtra("teamId", mineTeamListResponseList.get(viewHolder.getAdapterPosition()).getTeamId());
+                intent.putExtra("teamName", mineTeamListResponseList.get(viewHolder.getAdapterPosition()).getTeamName
+                        ());
                 startActivity(intent);
-
             }
         });
     }
