@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
@@ -35,19 +33,12 @@ import cn.abtion.neuqercc.home.activities.CompetitionActivity;
 import cn.abtion.neuqercc.home.activities.SearchContestActivity;
 import cn.abtion.neuqercc.home.adapters.HomeAdapter;
 import cn.abtion.neuqercc.home.models.ContestListModel;
-import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
-import cn.abtion.neuqercc.network.APIResponse;
-import cn.abtion.neuqercc.network.DataCallback;
-import cn.abtion.neuqercc.network.RestClient;
 import cn.abtion.neuqercc.home.models.InitContestRecylerViewDataRequest;
 import cn.abtion.neuqercc.home.models.InitContestRecylerViewItemRequest;
 import cn.abtion.neuqercc.home.models.InitCrouselFigureRequest;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
-import cn.abtion.neuqercc.utils.ToastUtil;
-import retrofit2.Call;
-import retrofit2.Response;
 import cn.abtion.neuqercc.widget.EndLessOnScrollListener;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -67,6 +58,7 @@ public class HomeFragment extends BaseFragment {
 
     @BindView(R.id.vf_contest)
     ViewFlipper vfContest;
+    Unbinder unbinder;
 
     private ArrayList<ContestListModel> contestListModels;
 
@@ -80,9 +72,6 @@ public class HomeFragment extends BaseFragment {
             .VERTICAL, false);
 
 
-
-    @BindView(R.id.search_home)
-    SearchView searchHome;
     @BindView(R.id.rec_home)
     RecyclerView recHome;
     @BindView(R.id.view_container)
@@ -189,6 +178,7 @@ public class HomeFragment extends BaseFragment {
             public void onItemClicked(ContestListModel contestListModel, BaseRecyclerViewAdapter.ViewHolder
                     viewHolder) {
                 Intent intent = new Intent(getContext(), CompetitionActivity.class);
+                intent.putExtra("contestName",contestListModel.getTitle());
                 intent.putExtra("contestId", contestListModel.getId());
                 startActivity(intent);
             }
@@ -287,10 +277,8 @@ public class HomeFragment extends BaseFragment {
         vfContest.setOnTouchListener(new View.OnTouchListener() {
 
 
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
 
 
                 //解决viewFlipper和view的冲突
@@ -403,6 +391,8 @@ public class HomeFragment extends BaseFragment {
         outtoRight.setInterpolator(new AccelerateInterpolator());
         return outtoRight;
     }
+
+
 
 
     @OnClick(R.id.search_home)

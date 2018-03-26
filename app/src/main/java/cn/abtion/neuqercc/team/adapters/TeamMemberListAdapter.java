@@ -53,7 +53,7 @@ public class TeamMemberListAdapter extends BaseRecyclerViewAdapter<TeamMemberRes
 
             txtMemberName.setText(teamMemberListModel.getName() == null ? "N/A" : teamMemberListModel.getName());
             txtTeamPosition.setText(teamMemberListModel.getTeamPosition() == null ? "N/A" : teamMemberListModel.getTeamPosition());
-            txtGoodAt.setText(teamMemberListModel.getGoodAt() == null ? "N/A" : teamMemberListModel.getGoodAt());
+            txtGoodAt.setText(teamMemberListModel.getGoodAt() == null ? "无" : teamMemberListModel.getGoodAt());
         }
 
     }

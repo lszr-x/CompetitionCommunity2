@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="cn.abtion.neuqercc.main.MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="cn.abtion.neuqercc.main.MainActivity">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@id/ly_tab_menu"
+        android:background="@color/bg_gray"/>
 
     <LinearLayout
         android:id="@+id/ly_tab_menu"
@@ -23,15 +30,15 @@
                 android:id="@+id/img_tab_menu_home"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/img_home_selector" />
+                android:src="@drawable/img_home_selector"/>
 
             <TextView
                 android:id="@+id/txt_tab_menu_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tab_bottom_home"
-                android:textColor="#9b9b9b" />
-
+                android:textSize="10sp"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -42,13 +49,14 @@
                 android:id="@+id/img_tab_menu_order"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/img_team_selector" />
+                android:src="@drawable/img_team_selector"/>
 
             <TextView
                 android:id="@+id/txt_tab_menu_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_bottom_team" />
+                android:textSize="10sp"
+                android:text="@string/tab_bottom_team"/>
 
         </LinearLayout>
 
@@ -60,13 +68,14 @@
                 android:id="@+id/img_tab_menu_message"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/img_message_selector" />
+                android:src="@drawable/img_message_selector"/>
 
             <TextView
                 android:id="@+id/txt_tab_menu_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_bottom_message" />
+                android:textSize="10sp"
+                android:text="@string/tab_bottom_message"/>
 
         </LinearLayout>
 
@@ -79,15 +88,15 @@
                 android:id="@+id/img_tab_menu_mine"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/img_mine_selector" />
-
+                android:src="@drawable/img_mine_selector"/>
 
 
             <TextView
                 android:id="@+id/txt_tab_menu_mine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_bottom_mine" />
+                android:textSize="10sp"
+                android:text="@string/tab_bottom_mine"/>
 
         </LinearLayout>
 

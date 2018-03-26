@@ -46,7 +46,7 @@ public class SearchContestActivity extends NoBarActivity {
     }
 
     private void searchContest() {
-        SpannableString ss = new SpannableString(getString(R.string.edit_search_contest));
+        SpannableString ss = new SpannableString(getString(R.string.search_contest_null));
         // 新建一个属性对象,设置文字的大小
         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(15, true);
         // 附加属性到文本

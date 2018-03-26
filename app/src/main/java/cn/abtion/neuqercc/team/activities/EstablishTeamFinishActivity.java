@@ -14,8 +14,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.abtion.neuqercc.R;
+import cn.abtion.neuqercc.account.activities.LoginActivity;
 import cn.abtion.neuqercc.base.activities.ToolBarActivity;
 import cn.abtion.neuqercc.main.MainActivity;
+import cn.abtion.neuqercc.mine.models.PersonInformationResponse;
 import cn.abtion.neuqercc.network.APIResponse;
 import cn.abtion.neuqercc.network.DataCallback;
 import cn.abtion.neuqercc.network.RestClient;
@@ -67,18 +69,40 @@ public class EstablishTeamFinishActivity extends ToolBarActivity {
         initTitle();
 
 
-        recylerviewTeamMember.setNestedScrollingEnabled(false);
-        teamMemberListModels = new ArrayList<>();
+        RestClient.getService().personalInformation(LoginActivity.phoneNumber).enqueue(new DataCallback<APIResponse<PersonInformationResponse>>() {
 
-        for (int i = 0; i < 20; i++) {
+            @Override
+            public void onDataResponse(Call<APIResponse<PersonInformationResponse>> call,
+                                       Response<APIResponse<PersonInformationResponse>> response) {
 
-            TeamMemberResponse teamMemberResponse = new TeamMemberResponse("asfmca", 12, "asfhnc", "ausfa");
-            teamMemberListModels.add(teamMemberResponse);
-        }
+                recylerviewTeamMember.setNestedScrollingEnabled(false);
+                teamMemberListModels = new ArrayList<>();
 
-        TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(this, teamMemberListModels);
-        recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(this, CustomLinearLayoutManager.VERTICAL, false));
-        recylerviewTeamMember.setAdapter(teamMemberListAdapter);
+                for (int i = 0; i < 1; i++) {
+
+                    TeamMemberResponse teamMemberResponse = new TeamMemberResponse(response.body().getData().getName(), 12, response.body().getData().getGoodAt(), "职务");
+                    teamMemberListModels.add(teamMemberResponse);
+                }
+
+                TeamMemberListAdapter teamMemberListAdapter = new TeamMemberListAdapter(EstablishTeamFinishActivity.this, teamMemberListModels);
+                recylerviewTeamMember.setLayoutManager(new CustomLinearLayoutManager(EstablishTeamFinishActivity.this, CustomLinearLayoutManager.VERTICAL, false));
+                recylerviewTeamMember.setAdapter(teamMemberListAdapter);
+            }
+
+            @Override
+            public void onDataFailure(Call<APIResponse<PersonInformationResponse>> call, Throwable t) {
+
+            }
+
+            @Override
+            public void dismissDialog() {
+
+            }
+
+        });
+
+
+
     }
 
     private void initTeamInformation() {
@@ -99,10 +123,7 @@ public class EstablishTeamFinishActivity extends ToolBarActivity {
     }
 
 
-    @OnClick(R.id.btn_invite_friend)
-    public void onInviteFriendViewClicked() {
 
-    }
 
     public void initTitle() {
         setActivityTitle(getString(R.string.title_team_information));
@@ -151,10 +172,5 @@ public class EstablishTeamFinishActivity extends ToolBarActivity {
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }
